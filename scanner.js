@@ -159,3 +159,34 @@ setTimeout(()=>{
 },5000);
 
 }
+//==================================
+// BEEP
+//==================================
+function beep(jumlah = 1){
+
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+    for(let i=0;i<jumlah;i++){
+
+        setTimeout(()=>{
+
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.type = "sine";
+            osc.frequency.value = 900;
+
+            gain.gain.setValueAtTime(0.2, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+
+            osc.start();
+            osc.stop(ctx.currentTime + 0.12);
+
+        }, i * 180);
+
+    }
+
+}
