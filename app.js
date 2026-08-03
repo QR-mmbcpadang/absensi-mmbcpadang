@@ -1,5 +1,3 @@
-<script>
-
 //==============================
 // JAM DIGITAL
 //==============================
@@ -48,7 +46,6 @@ function updateClock(){
 }
 
 setInterval(updateClock,1000);
-
 updateClock();
 
 
@@ -60,9 +57,9 @@ function setStatus(type,text){
 
     const el = document.getElementById("status");
 
-    el.className="status-box "+type;
+    el.className = "status-box " + type;
 
-    el.innerHTML=text;
+    el.innerHTML = text;
 
 }
 
@@ -75,29 +72,27 @@ function beep(){
 
     try{
 
-        const audio=new AudioContext();
+        const audio = new AudioContext();
 
-        const osc=audio.createOscillator();
+        const osc = audio.createOscillator();
 
-        const gain=audio.createGain();
+        const gain = audio.createGain();
 
         osc.connect(gain);
 
         gain.connect(audio.destination);
 
-        osc.frequency.value=900;
+        osc.frequency.value = 900;
 
         osc.start();
 
         gain.gain.exponentialRampToValueAtTime(
             0.0001,
-            audio.currentTime+0.20
+            audio.currentTime + 0.20
         );
 
-        osc.stop(audio.currentTime+0.20);
+        osc.stop(audio.currentTime + 0.20);
 
     }catch(e){}
 
 }
-
-</script>
