@@ -1,5 +1,3 @@
-<script>
-
 let html5QrCode = null;
 let scanning = false;
 
@@ -73,19 +71,21 @@ function onScanSuccess(qr){
 
     html5QrCode.stop().then(()=>{
 
-        fetch(
-    GAS_URL +
-    "?action=scan&id=" +
-    encodeURIComponent(qr)
-)
-  .then(res => res.json())
-  .then(showResult)
-  .catch(err => {
-      console.error(err);
-      setStatus("error","🔴 Gagal terhubung ke server");
-  });
+    fetch(
+        GAS_URL +
+        "?action=scan&id=" +
+        encodeURIComponent(qr)
+    )
+    .then(res => res.json())
+    .then(showResult)
+    .catch(err => {
+        console.error(err);
+        setStatus("error","🔴 Gagal terhubung ke server");
+    });
 
-}
+});   // <- ini yang hilang
+
+}      // <- penutup fungsi onScanSuccess
 
 //==================================
 // TAMPILKAN HASIL
@@ -129,5 +129,3 @@ function showResult(res){
     },5000);
 
 }
-
-</script>
