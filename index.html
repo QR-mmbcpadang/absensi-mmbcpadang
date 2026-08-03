@@ -1,17 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 
 <head>
 
-  <base target="_top">
+    <meta charset="UTF-8">
 
-  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABSENSI QR MMBC PADANG</title>
 
-  <title>ABSENSI QR MMBC PADANG</title>
-
-  <?!= include("CSS"); ?>
+    <link rel="stylesheet" href="css.css">
 
 </head>
 
@@ -19,28 +17,20 @@
 
 <div class="container">
 
-    <!-- LOGO -->
-    <img src="Logo.jpeg" class="logo">
+    <img src="Logo.jpeg" class="logo" alt="Logo">
 
-    <!-- JUDUL -->
     <h1>ABSENSI QR</h1>
 
     <h2>MMBC PADANG</h2>
 
-    <!-- TANGGAL -->
     <div id="tanggal" class="tanggal"></div>
 
-    <!-- JAM -->
     <div id="jam" class="jam"></div>
 
-    <!-- STATUS -->
     <div id="status" class="status-box">
-
         🟡 Menunggu Scan
-
     </div>
 
-    <!-- AREA SCANNER -->
     <div id="scannerArea">
 
         <div class="scan-box">
@@ -51,7 +41,6 @@
 
     </div>
 
-    <!-- HASIL -->
     <div id="hasil"></div>
 
     <div class="footer">
@@ -62,9 +51,14 @@
 
 </div>
 
-<?!= include("Javascript"); ?>
+<!-- Library Scanner -->
+<script src="https://unpkg.com/html5-qrcode"></script>
 
-<?!= include("Scanner"); ?>
+<!-- Javascript -->
+<script src="app.js"></script>
+
+<!-- Scanner -->
+<script src="scanner.js"></script>
 
 </body>
 
