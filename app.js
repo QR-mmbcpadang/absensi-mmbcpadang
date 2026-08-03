@@ -69,31 +69,47 @@ function setStatus(type,text){
 // BEEP
 //==============================
 
-function beep(){
+function beep(jumlah = 1){
 
-    try{
+    function bunyi(delay){
 
-        const audio = new AudioContext();
+        setTimeout(()=>{
 
-        const osc = audio.createOscillator();
+            try{
 
-        const gain = audio.createGain();
+                const audio = new AudioContext();
 
-        osc.connect(gain);
+                const osc = audio.createOscillator();
 
-        gain.connect(audio.destination);
+                const gain = audio.createGain();
 
-        osc.frequency.value = 900;
+                osc.connect(gain);
 
-        osc.start();
+                gain.connect(audio.destination);
 
-        gain.gain.exponentialRampToValueAtTime(
-            0.0001,
-            audio.currentTime + 0.20
-        );
+                osc.frequency.value = 900;
 
-        osc.stop(audio.currentTime + 0.20);
+                osc.start();
 
-    }catch(e){}
+                gain.gain.setValueAtTime(1,audio.currentTime);
+
+                gain.gain.exponentialRampToValueAtTime(
+                    0.0001,
+                    audio.currentTime + 0.15
+                );
+
+                osc.stop(audio.currentTime + 0.15);
+
+            }catch(e){}
+
+        },delay);
+
+    }
+
+    for(let i=0;i<jumlah;i++){
+
+        bunyi(i*220);
+
+    }
 
 }
