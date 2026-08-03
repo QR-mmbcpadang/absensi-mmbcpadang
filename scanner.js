@@ -73,7 +73,11 @@ function onScanSuccess(qr){
 
     html5QrCode.stop().then(()=>{
 
-        fetch(GAS_URL + "?id=" + encodeURIComponent(qr))
+        fetch(
+    GAS_URL +
+    "?action=scan&id=" +
+    encodeURIComponent(qr)
+)
   .then(res => res.json())
   .then(showResult)
   .catch(err => {
