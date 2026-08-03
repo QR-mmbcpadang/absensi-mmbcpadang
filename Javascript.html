@@ -1,48 +1,49 @@
 <script>
 
-let scanner = null;
+//==============================
+// JAM DIGITAL
+//==============================
 
-// ===========================
-// Ambil Setting
-// ===========================
-google.script.run
-.withSuccessHandler(function(data){
-
-    document.getElementById("perusahaan").innerHTML =
-        data["Nama Perusahaan"] || "MMBC PADANG";
-
-})
-.getSetting();
-
-
-// ===========================
-// Jam Realtime
-// ===========================
 function updateClock(){
 
     const now = new Date();
 
     const hari = [
-        "Minggu","Senin","Selasa","Rabu",
-        "Kamis","Jumat","Sabtu"
+        "Minggu",
+        "Senin",
+        "Selasa",
+        "Rabu",
+        "Kamis",
+        "Jumat",
+        "Sabtu"
     ];
 
     const bulan = [
-        "Januari","Februari","Maret",
-        "April","Mei","Juni",
-        "Juli","Agustus",
-        "September","Oktober",
-        "November","Desember"
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember"
     ];
 
-    document.getElementById("tanggal").innerHTML =
+    const tanggal =
         hari[now.getDay()] + ", " +
         now.getDate() + " " +
         bulan[now.getMonth()] + " " +
         now.getFullYear();
 
-    document.getElementById("jam").innerHTML =
+    const jam =
         now.toLocaleTimeString("id-ID");
+
+    document.getElementById("tanggal").innerHTML = tanggal;
+    document.getElementById("jam").innerHTML = jam;
 
 }
 
@@ -51,30 +52,51 @@ setInterval(updateClock,1000);
 updateClock();
 
 
-// ===========================
-// Status
-// ===========================
+//==============================
+// STATUS
+//==============================
+
 function setStatus(type,text){
 
-    const el=document.getElementById("status");
+    const el = document.getElementById("status");
 
-    el.className="status "+type;
+    el.className="status-box "+type;
 
     el.innerHTML=text;
 
 }
 
 
-// ===========================
-// Beep
-// ===========================
+//==============================
+// BEEP
+//==============================
+
 function beep(){
 
-    const audio = new Audio(
-      "https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"
-    );
+    try{
 
-    audio.play();
+        const audio=new AudioContext();
+
+        const osc=audio.createOscillator();
+
+        const gain=audio.createGain();
+
+        osc.connect(gain);
+
+        gain.connect(audio.destination);
+
+        osc.frequency.value=900;
+
+        osc.start();
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.0001,
+            audio.currentTime+0.20
+        );
+
+        osc.stop(audio.currentTime+0.20);
+
+    }catch(e){}
 
 }
 
