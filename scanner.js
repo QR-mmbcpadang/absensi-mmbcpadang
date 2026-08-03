@@ -96,36 +96,61 @@ function showResult(res){
 
     let html="";
 
-    if(res.status){
+   if(res.status){
 
-        html=`
-        <div class="success-box">
-            <h1>✅</h1>
-            <h2>${res.statusAbsen}</h2>
-            <h3>${res.nama}</h3>
-            <p>Absensi berhasil direkam.</p>
-        </div>
-        `;
+    let icon = "";
+    let judul = "";
+    let pesan = "";
+
+    if(res.statusAbsen == "MASUK"){
+
+        icon = "👋";
+        judul = "Selamat Datang";
+        pesan = "Semoga harimu menyenangkan 😊";
 
     }else{
 
-        html=`
-        <div class="error-box">
-            <h1>❌</h1>
-            <h2>${res.pesan}</h2>
-        </div>
-        `;
+        icon = "🌙";
+        judul = "Sampai Jumpa";
+        pesan = "Hati-hati di jalan 🚗";
 
     }
+const jam = new Date().toLocaleTimeString("id-ID");
+    html = `
+<div class="success-box ${res.statusAbsen.toLowerCase()}">
 
-    document.getElementById("hasil").innerHTML=html;
+    <h1>${icon}</h1>
 
-    setTimeout(()=>{
+    <h2>${judul}</h2>
 
-        document.getElementById("hasil").innerHTML="";
+    <h3>${res.nama}</h3>
 
-        startScanner();
+    <p><b>${res.statusAbsen}</b> • ${jam}</p>
 
-    },5000);
+    <p>${pesan}</p>
+
+</div>
+`;
+
+}else{
+
+    html = `
+    <div class="error-box">
+        <h1>⚠️</h1>
+        <h2>${res.pesan}</h2>
+    </div>
+    `;
+
+}
+
+document.getElementById("hasil").innerHTML = html;
+
+setTimeout(()=>{
+
+    document.getElementById("hasil").innerHTML = "";
+
+    startScanner();
+
+},5000);
 
 }
