@@ -1,3 +1,4 @@
+const GAS_URL = "https://script.google.com/macros/s/AKfycbyokn5uN2NyiHanuwjafc158puU5B6SMR2HBWu2sCsM1e5k4VGwv_8oLuwJtg1_wpF9/exec";
 //==============================
 // JAM DIGITAL
 //==============================
