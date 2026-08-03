@@ -83,9 +83,9 @@ function onScanSuccess(qr){
         setStatus("error","🔴 Gagal terhubung ke server");
     });
 
-});   // <- ini yang hilang
+});
 
-}      // <- penutup fungsi onScanSuccess
+}
 
 //==================================
 // TAMPILKAN HASIL
