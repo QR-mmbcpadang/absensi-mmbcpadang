@@ -7,10 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
     startScanner();
 });
 
-//======================================
+//==================================
 // START SCANNER
-//======================================
-
+//==================================
 async function startScanner(){
 
     if(scanning) return;
@@ -18,6 +17,8 @@ async function startScanner(){
     scanning = true;
 
     document.getElementById("hasil").innerHTML = "";
+
+    document.getElementById("scannerArea").style.display = "block";
 
     setStatus("warning","🟡 Menunggu Scan");
 
@@ -30,6 +31,7 @@ async function startScanner(){
         if(cameras.length==0){
 
             setStatus("error","🔴 Kamera tidak ditemukan");
+
             return;
 
         }
@@ -37,23 +39,18 @@ async function startScanner(){
         const cameraId = cameras[cameras.length-1].id;
 
         await html5QrCode.start(
-
             cameraId,
-
             {
                 fps:10,
                 qrbox:{width:250,height:250}
             },
-
             onScanSuccess,
-
             ()=>{}
-
         );
 
-    }catch(e){
+    }catch(err){
 
-        console.log(e);
+        console.error(err);
 
         setStatus("error","🔴 Tidak dapat membuka kamera");
 
@@ -61,11 +58,9 @@ async function startScanner(){
 
 }
 
-
-//======================================
-// SAAT QR TERBACA
-//======================================
-
+//==================================
+// QR BERHASIL DIBACA
+//==================================
 function onScanSuccess(qr){
 
     if(!scanning) return;
@@ -74,7 +69,7 @@ function onScanSuccess(qr){
 
     beep();
 
-    setStatus("warning","🟡 Sedang memproses scan...");
+    setStatus("warning","🟡 Sedang Memproses...");
 
     html5QrCode.stop().then(()=>{
 
@@ -86,55 +81,40 @@ function onScanSuccess(qr){
 
 }
 
-
-//======================================
-// HASIL
-//======================================
-
+//==================================
+// TAMPILKAN HASIL
+//==================================
 function showResult(res){
+
+    document.getElementById("scannerArea").style.display="none";
 
     let html="";
 
     if(res.status){
 
         html=`
-
         <div class="success-box">
-
-            <h2>✅ ABSEN BERHASIL</h2>
-
+            <h1>✅</h1>
+            <h2>${res.statusAbsen}</h2>
             <h3>${res.nama}</h3>
-
-            <h1>${res.statusAbsen}</h1>
-
+            <p>Absensi berhasil direkam.</p>
         </div>
-
         `;
-
-        setStatus("success","🟢 Berhasil");
 
     }else{
 
         html=`
-
         <div class="error-box">
-
-            <h2>❌ ABSEN GAGAL</h2>
-
-            <h3>${res.pesan}</h3>
-
+            <h1>❌</h1>
+            <h2>${res.pesan}</h2>
         </div>
-
         `;
-
-        setStatus("error","🔴 Gagal");
 
     }
 
     document.getElementById("hasil").innerHTML=html;
 
-    // tampil 5 detik
-    setTimeout(function(){
+    setTimeout(()=>{
 
         document.getElementById("hasil").innerHTML="";
 
