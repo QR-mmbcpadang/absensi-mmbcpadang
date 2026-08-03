@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<base target="_top">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+<?!= include("CSS"); ?>
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<div class="card">
+
+<div class="title">
+
+ABSENSI QR
+
+</div>
+
+<div class="company" id="perusahaan">
+
+MMBC PADANG
+
+</div>
+
+<div class="datetime">
+
+<div id="tanggal"></div>
+
+<div id="jam"></div>
+
+</div>
+
+<div id="status" class="status waiting">
+
+🟡 Menunggu Scan
+
+</div>
+
+<div class="scan-box">
+
+<div id="reader"></div>
+
+</div>
+
+<div id="hasil"></div>
+
+<div class="footer">
+
+© MMBC PADANG
+
+</div>
+
+</div>
+
+</div>
+
+<?!= include("Javascript"); ?>
+
+<?!= include("Scanner"); ?>
+
+</body>
+
+</html>
