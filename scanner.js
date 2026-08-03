@@ -92,6 +92,8 @@ function showResult(res){
     document.getElementById("scannerArea").style.display="none";
 
     let html="";
+
+   if(res.status){
 if(res.statusAbsen == "MASUK"){
 
     beep(1);
@@ -101,8 +103,6 @@ if(res.statusAbsen == "MASUK"){
     beep(2);
 
 }
-   if(res.status){
-
     let icon = "";
     let judul = "";
     let pesan = "";
