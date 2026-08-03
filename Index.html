@@ -3,65 +3,62 @@
 
 <head>
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <base target="_top">
 
-<base target="_top">
+  <meta charset="UTF-8">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <title>ABSENSI QR MMBC PADANG</title>
 
-<?!= include("CSS"); ?>
+  <?!= include("CSS"); ?>
 
 </head>
 
 <body>
 
-<div class="wrapper">
+<div class="container">
 
-<div class="card">
+    <!-- LOGO -->
+    <img src="Logo.jpeg" class="logo">
 
-<div class="title">
+    <!-- JUDUL -->
+    <h1>ABSENSI QR</h1>
 
-ABSENSI QR
+    <h2>MMBC PADANG</h2>
 
-</div>
+    <!-- TANGGAL -->
+    <div id="tanggal" class="tanggal"></div>
 
-<div class="company" id="perusahaan">
+    <!-- JAM -->
+    <div id="jam" class="jam"></div>
 
-MMBC PADANG
+    <!-- STATUS -->
+    <div id="status" class="status-box">
 
-</div>
+        🟡 Menunggu Scan
 
-<div class="datetime">
+    </div>
 
-<div id="tanggal"></div>
+    <!-- AREA SCANNER -->
+    <div id="scannerArea">
 
-<div id="jam"></div>
+        <div class="scan-box">
 
-</div>
+            <div id="reader"></div>
 
-<div id="status" class="status waiting">
+        </div>
 
-🟡 Menunggu Scan
+    </div>
 
-</div>
+    <!-- HASIL -->
+    <div id="hasil"></div>
 
-<div class="scan-box">
+    <div class="footer">
 
-<div id="reader"></div>
+        © MMBC PADANG
 
-</div>
-
-<div id="hasil"></div>
-
-<div class="footer">
-
-© MMBC PADANG
-
-</div>
-
-</div>
+    </div>
 
 </div>
 
