@@ -1,80 +1,146 @@
 <script>
 
-let html5QrCode;
+let html5QrCode = null;
+let scanning = false;
 
-document.addEventListener("DOMContentLoaded", function () {
-  startScanner();
+document.addEventListener("DOMContentLoaded", () => {
+    startScanner();
 });
 
-function startScanner() {
+//======================================
+// START SCANNER
+//======================================
 
-  html5QrCode = new Html5Qrcode("reader");
+async function startScanner(){
 
-  Html5Qrcode.getCameras()
-    .then(cameras => {
+    if(scanning) return;
 
-      if (!cameras || cameras.length == 0) {
-        setStatus("error","🔴 Kamera tidak ditemukan");
-        return;
-      }
+    scanning = true;
 
-      // Kamera belakang jika ada
-      let cameraId = cameras[cameras.length-1].id;
+    document.getElementById("hasil").innerHTML = "";
 
-      html5QrCode.start(
-        cameraId,
-        {
-          fps:10,
-          qrbox:{width:250,height:250}
-        },
-        onScanSuccess
-      );
+    setStatus("warning","🟡 Menunggu Scan");
 
-    })
-    .catch(function(err){
+    try{
 
-      console.log(err);
+        html5QrCode = new Html5Qrcode("reader");
 
-      setStatus("error","🔴 Tidak dapat membuka kamera");
+        const cameras = await Html5Qrcode.getCameras();
+
+        if(cameras.length==0){
+
+            setStatus("error","🔴 Kamera tidak ditemukan");
+            return;
+
+        }
+
+        const cameraId = cameras[cameras.length-1].id;
+
+        await html5QrCode.start(
+
+            cameraId,
+
+            {
+                fps:10,
+                qrbox:{width:250,height:250}
+            },
+
+            onScanSuccess,
+
+            ()=>{}
+
+        );
+
+    }catch(e){
+
+        console.log(e);
+
+        setStatus("error","🔴 Tidak dapat membuka kamera");
+
+    }
+
+}
+
+
+//======================================
+// SAAT QR TERBACA
+//======================================
+
+function onScanSuccess(qr){
+
+    if(!scanning) return;
+
+    scanning=false;
+
+    beep();
+
+    setStatus("warning","🟡 Sedang memproses scan...");
+
+    html5QrCode.stop().then(()=>{
+
+        google.script.run
+        .withSuccessHandler(showResult)
+        .scanQR(qr);
 
     });
 
 }
 
-function onScanSuccess(decodedText){
 
-  html5QrCode.pause();
+//======================================
+// HASIL
+//======================================
 
-  setStatus("process","🔵 Sedang Memproses...");
+function showResult(res){
 
-  google.script.run
-  .withSuccessHandler(function(res){
+    let html="";
 
-      if(res.status){
+    if(res.status){
 
-          setStatus("success","🟢 "+res.statusAbsen+" Berhasil");
+        html=`
 
-          document.getElementById("hasil").innerHTML=
-          "<b>"+res.nama+"</b><br>"+res.id;
+        <div class="success-box">
 
-      }else{
+            <h2>✅ ABSEN BERHASIL</h2>
 
-          setStatus("error","🔴 "+res.pesan);
+            <h3>${res.nama}</h3>
 
-      }
+            <h1>${res.statusAbsen}</h1>
 
-      setTimeout(function(){
+        </div>
 
-          document.getElementById("hasil").innerHTML="";
+        `;
 
-          setStatus("waiting","🟡 Menunggu Scan");
+        setStatus("success","🟢 Berhasil");
 
-          html5QrCode.resume();
+    }else{
 
-      },2500);
+        html=`
 
-  })
-  .scanQR(decodedText);
+        <div class="error-box">
+
+            <h2>❌ ABSEN GAGAL</h2>
+
+            <h3>${res.pesan}</h3>
+
+        </div>
+
+        `;
+
+        setStatus("error","🔴 Gagal");
+
+    }
+
+    document.getElementById("hasil").innerHTML=html;
+
+    // tampil 5 detik
+    setTimeout(function(){
+
+        document.getElementById("hasil").innerHTML="";
+
+        startScanner();
+
+    },5000);
 
 }
 
