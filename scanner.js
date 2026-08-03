@@ -89,74 +89,62 @@ function onScanSuccess(qr){
 //==================================
 function showResult(res){
 
-    document.getElementById("scannerArea").style.display="none";
+    document.getElementById("scannerArea").style.display = "none";
 
-    let html="";
+    let html = "";
 
-   if(res.status){
-if(res.statusAbsen == "MASUK"){
+    if(res.status){
 
-    beep(1);
+        // Bunyi
+        if(res.statusAbsen == "MASUK"){
+            beep(1);
+        }else{
+            beep(2);
+        }
 
-}else{
+        let icon = "";
+        let judul = "";
+        let pesan = "";
 
-    beep(2);
+        if(res.statusAbsen == "MASUK"){
+            icon = "👋";
+            judul = "Selamat Datang";
+            pesan = "Semoga harimu menyenangkan 😊";
+        }else{
+            icon = "🌙";
+            judul = "Sampai Jumpa";
+            pesan = "Hati-hati di jalan 🚗";
+        }
 
-}
-    let icon = "";
-    let judul = "";
-    let pesan = "";
+        const jam = new Date().toLocaleTimeString("id-ID");
 
-    if(res.statusAbsen == "MASUK"){
-
-        icon = "👋";
-        judul = "Selamat Datang";
-        pesan = "Semoga harimu menyenangkan 😊";
-
-    }else{
-
-        icon = "🌙";
-        judul = "Sampai Jumpa";
-        pesan = "Hati-hati di jalan 🚗";
-
-    }
-const jam = new Date().toLocaleTimeString("id-ID");
-    html = `
+        html = `
 <div class="success-box ${res.statusAbsen.toLowerCase()}">
-
     <h1>${icon}</h1>
-
     <h2>${judul}</h2>
-
     <h3>${res.nama}</h3>
-
     <p><b>${res.statusAbsen}</b> • ${jam}</p>
-
     <p>${pesan}</p>
-
 </div>
 `;
 
-}else{
+    }else{
 
-    html = `
-    <div class="error-box">
-        <h1>⚠️</h1>
-        <h2>${res.pesan}</h2>
-    </div>
-    `;
+        html = `
+<div class="error-box">
+    <h1>⚠️</h1>
+    <h2>${res.pesan}</h2>
+</div>
+`;
 
-}
+    }
 
-document.getElementById("hasil").innerHTML = html;
+    document.getElementById("hasil").innerHTML = html;
 
-setTimeout(()=>{
-
-    document.getElementById("hasil").innerHTML = "";
-
-    startScanner();
-
-},5000);
+    setTimeout(()=>{
+        document.getElementById("hasil").innerHTML = "";
+        startScanner();
+    },5000);
 
 }
 //==================================
