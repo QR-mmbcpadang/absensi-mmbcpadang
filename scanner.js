@@ -73,11 +73,13 @@ function onScanSuccess(qr){
 
     html5QrCode.stop().then(()=>{
 
-        google.script.run
-        .withSuccessHandler(showResult)
-        .scanQR(qr);
-
-    });
+        fetch(GAS_URL + "?id=" + encodeURIComponent(qr))
+  .then(res => res.json())
+  .then(showResult)
+  .catch(err => {
+      console.error(err);
+      setStatus("error","🔴 Gagal terhubung ke server");
+  });
 
 }
 
