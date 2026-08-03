@@ -64,9 +64,6 @@ function onScanSuccess(qr){
     if(!scanning) return;
 
     scanning=false;
-
-    beep();
-
     setStatus("warning","🟡 Sedang Memproses...");
 
     html5QrCode.stop().then(()=>{
@@ -95,7 +92,15 @@ function showResult(res){
     document.getElementById("scannerArea").style.display="none";
 
     let html="";
+if(res.statusAbsen == "MASUK"){
 
+    beep(1);
+
+}else{
+
+    beep(2);
+
+}
    if(res.status){
 
     let icon = "";
