@@ -77,9 +77,9 @@ h2{
 
 .scan-box{
     margin-top:25px;
-    border:4px dashed #1565ff;
-    border-radius:20px;
-    padding:15px;
+    border:2px solid #4da3ff;
+    border-radius:18px;
+    padding:10px;
 }
 
 #reader{
