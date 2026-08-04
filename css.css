@@ -249,18 +249,21 @@ h1{
 
 #selfieArea{
     width:100%;
-    margin-top:20px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:15px;
 }
-
 #video{
     width:100%;
-    height:auto;
-    display:block;
+    max-height:60vh;
+
+    object-fit:cover;
 
     border-radius:18px;
     border:2px solid #ddd;
 
-    object-fit:cover;
+    display:block;
 }
 
 #canvas{
