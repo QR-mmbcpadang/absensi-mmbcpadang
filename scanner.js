@@ -49,9 +49,8 @@ async function startScanner(){
 
     }catch(err){
 
+    alert(err.message);
     console.error(err);
-
-    alert(err);
 
     setStatus("error","🔴 Gagal terhubung ke server");
 
