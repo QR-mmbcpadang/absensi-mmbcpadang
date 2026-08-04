@@ -34,7 +34,7 @@ async function startScanner(){
             return;
 
         }
-
+console.log(cameras);
         const cameraId = cameras[cameras.length-1].id;
 console.log("START SCANNER");
         await html5QrCode.start(
