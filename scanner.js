@@ -219,12 +219,13 @@ document.getElementById("btnSelfie").addEventListener("click", async ()=>{
 
     alert(GAS_URL);
 
-    const res = await fetch(GAS_URL,{
-    method:"POST",
-    body:JSON.stringify({
-        action:"scan",
-        id:currentQR,
-        foto:foto
+    const res = await fetch(GAS_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify({
+        action: "scan",
+        id: currentQR,
+        foto: foto
     })
 });
 
