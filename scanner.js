@@ -251,7 +251,7 @@ console.log("Status =", res.status);
 console.log("Type =", res.type);
 console.log("URL =", res.url);
 
-const hasil = await res.text();
+const hasil = await res.json();
 
 alert("RESPON = " + hasil);
 
