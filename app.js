@@ -143,3 +143,33 @@ function tampilBerhasil(data){
         </p>
     `;
 }
+function tampilBerhasil(data){
+
+    const hasil = document.getElementById("hasil");
+
+    let icon = "🎉";
+    let judul = "SELAMAT DATANG";
+    let warna = "masuk";
+    let pesan = "Semoga hari ini lancar dan semangat bekerja 😊";
+
+    if(data.statusAbsen == "PULANG"){
+        icon = "👋";
+        judul = "SAMPAI JUMPA";
+        warna = "pulang";
+        pesan = "Terima kasih, hati-hati di perjalanan 😊";
+    }
+
+    hasil.innerHTML = `
+        <div class="success-box ${warna}">
+            <h1>${icon}</h1>
+            <h2>${judul}</h2>
+            <h3>✅ ${data.pesan}</h3>
+
+            <p><b>👤 ${data.nama}</b></p>
+            <p>🆔 ${data.id}</p>
+            <p>🕒 ${new Date().toLocaleTimeString("id-ID")}</p>
+
+            <p style="margin-top:15px">${pesan}</p>
+        </div>
+    `;
+}
