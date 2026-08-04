@@ -221,10 +221,6 @@ document.getElementById("btnSelfie").addEventListener("click", async ()=>{
 
     const res = await fetch(GAS_URL,{
     method:"POST",
-    mode:"cors",
-    headers:{
-        "Content-Type":"application/json"
-    },
     body:JSON.stringify({
         action:"scan",
         id:currentQR,
@@ -232,11 +228,12 @@ document.getElementById("btnSelfie").addEventListener("click", async ()=>{
     })
 });
 
-alert("HTTP Status = " + res.status);
+console.log("Status =", res.status);
+console.log("Type =", res.type);
+console.log("URL =", res.url);
 
-const hasil = await res.json();
-
-showResult(hasil);
+const hasil = await res.text();
+console.log("Response =", hasil);
 
     }catch(err){
 
