@@ -245,7 +245,11 @@ console.log(hasil);
 if (hasil.status) {
 
     tampilBerhasil(hasil);
+setTimeout(() => {
 
+    document.getElementById("hasil").innerHTML = "";
+
+}, 3000);
 } else {
 
     setStatus("error", "❌ " + hasil.pesan);
