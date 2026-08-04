@@ -253,7 +253,9 @@ console.log("URL =", res.url);
 
 const hasil = await res.json();
 
-console.log("Response =", hasil);
+alert(JSON.stringify(hasil));
+
+console.log(hasil);
 
 if (hasil.success) {
     setStatus("success", "✅ " + hasil.message);
