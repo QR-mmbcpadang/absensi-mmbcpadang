@@ -36,7 +36,7 @@ async function startScanner(){
         }
 
         const cameraId = cameras[cameras.length-1].id;
-
+console.log("START SCANNER");
         await html5QrCode.start(
     cameraId,
     {
@@ -44,6 +44,7 @@ async function startScanner(){
         qrbox: { width: 250, height: 250 }
     },
     (decodedText) => {
+         alert(decodedText);
         console.log("QR TERBACA =", decodedText);
         onScanSuccess(decodedText);
     },
