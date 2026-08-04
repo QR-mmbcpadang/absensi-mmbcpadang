@@ -70,6 +70,8 @@ async function startScanner(){
 //==================================
 async function onScanSuccess(qr){
 
+    console.log("QR TERBACA:", qr);
+
     if(!scanning) return;
 
     scanning = false;
@@ -83,7 +85,6 @@ async function onScanSuccess(qr){
     document.getElementById("scannerArea").style.display = "none";
 
     bukaSelfie();
-
 }
 //==================================
 // TAMPILKAN HASIL
