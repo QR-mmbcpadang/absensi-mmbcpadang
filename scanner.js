@@ -44,7 +44,6 @@ console.log("START SCANNER");
         qrbox: { width: 250, height: 250 }
     },
     (decodedText) => {
-         alert(decodedText);
         console.log("QR TERBACA =", decodedText);
         onScanSuccess(decodedText);
     },
@@ -53,7 +52,6 @@ console.log("START SCANNER");
 
     }catch(err){
 
-    alert(err.message);
     console.error(err);
 
     setStatus("error","🔴 Gagal terhubung ke server");
@@ -70,7 +68,6 @@ console.log("START SCANNER");
 // QR BERHASIL DIBACA
 //==================================
 async function onScanSuccess(qr){
- alert(qr);
     console.log("QR TERBACA:", qr);
 
     if(!scanning) return;
