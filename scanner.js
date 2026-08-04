@@ -245,14 +245,20 @@ console.log(hasil);
 if (hasil.status) {
 
     tampilBerhasil(hasil);
-setTimeout(() => {
 
-    document.getElementById("hasil").innerHTML = "";
+    setTimeout(() => {
 
-}, 3000);
+        document.getElementById("hasil").innerHTML = "";
+
+        document.getElementById("scannerArea").style.display = "block";
+
+        setStatus("warning","🟡 Menunggu Scan");
+
+    },3000);
+
 } else {
 
-    setStatus("error", "❌ " + hasil.pesan);
+    setStatus("error","❌ " + hasil.pesan);
 
 }
 
