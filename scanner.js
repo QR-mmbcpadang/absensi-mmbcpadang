@@ -214,7 +214,9 @@ document.getElementById("btnSelfie").addEventListener("click", async ()=>{
 
     try{
 
-        const res = await fetch(GAS_URL,{
+    alert(GAS_URL);
+
+    const res = await fetch(GAS_URL,{
             method:"POST",
             headers:{
                 "Content-Type":"application/json"
