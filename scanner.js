@@ -186,7 +186,10 @@ async function bukaSelfie(){
     document.getElementById("video").srcObject = stream;
 
 }
-document.getElementById("btnSelfie").onclick = async function(){
+//==================================
+// AMBIL SELFIE
+//==================================
+document.getElementById("btnSelfie").addEventListener("click", async ()=>{
 
     const video = document.getElementById("video");
     const canvas = document.getElementById("canvas");
@@ -198,28 +201,43 @@ document.getElementById("btnSelfie").onclick = async function(){
 
     ctx.drawImage(video,0,0);
 
-    const foto = canvas.toDataURL("image/jpeg",0.8);
+    const foto = canvas.toDataURL("image/jpeg",0.7);
 
+    // Matikan kamera
     stream.getTracks().forEach(track=>track.stop());
 
     document.getElementById("selfieArea").style.display = "none";
 
-    setStatus("warning","⏳ Mengirim Data...");
+    setStatus("warning","⏳ Mengirim Absensi...");
 
-    fetch(GAS_URL,{
-        method:"POST",
-        body:JSON.stringify({
-            action:"scan",
-            id:currentQR,
-            foto:foto
-        })
-    })
-    .then(r=>r.json())
-    .then(showResult)
-    .catch(err=>{
-        console.log(err);
-        setStatus("error","Gagal kirim");
-        startScanner();
-    });
+    try{
 
-}
+        const res = await fetch(GAS_URL,{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                action:"scan",
+                id:currentQR,
+                foto:foto
+            })
+        });
+
+        const hasil = await res.json();
+
+        showResult(hasil);
+
+    }catch(err){
+
+        console.error(err);
+
+        setStatus("error","🔴 Gagal terhubung ke server");
+
+        setTimeout(()=>{
+            startScanner();
+        },2000);
+
+    }
+
+});
