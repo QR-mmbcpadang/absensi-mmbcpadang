@@ -182,7 +182,10 @@ async function bukaSelfie(){
 
     document.getElementById("scannerArea").style.display = "none";
     document.getElementById("selfieArea").style.display = "block";
-
+document.getElementById("selfieArea").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+});
     stream = await navigator.mediaDevices.getUserMedia({
 
         video:{
