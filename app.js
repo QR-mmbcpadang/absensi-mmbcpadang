@@ -113,3 +113,33 @@ function beep(jumlah = 1){
     }
 
 }
+function tampilBerhasil(data){
+
+    const status = document.getElementById("status");
+
+    let judul = "🎉 Selamat Datang";
+    let pesan = "Semoga hari ini lancar dan semangat bekerja 😊";
+
+    if(data.statusAbsen == "PULANG"){
+        judul = "👋 Sampai Jumpa";
+        pesan = "Terima kasih, hati-hati di perjalanan 😊";
+    }
+
+    status.className = "success-box " + data.statusAbsen.toLowerCase();
+
+    status.innerHTML = `
+        <h1>${judul}</h1>
+
+        <h2>✅ ${data.pesan}</h2>
+
+        <h3>👤 ${data.nama}</h3>
+
+        <p>🆔 ${data.id}</p>
+
+        <p>🕒 ${new Date().toLocaleTimeString('id-ID')}</p>
+
+        <p style="margin-top:15px;">
+            ${pesan}
+        </p>
+    `;
+}
