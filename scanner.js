@@ -243,9 +243,13 @@ const hasil = await res.json();
 console.log(hasil);
 
 if (hasil.status) {
-    setStatus("success", "✅ " + hasil.pesan);
+
+    tampilBerhasil(hasil);
+
 } else {
+
     setStatus("error", "❌ " + hasil.pesan);
+
 }
 
     }catch(err){
