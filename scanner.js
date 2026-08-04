@@ -2,9 +2,9 @@ let html5QrCode = null;
 let scanning = false;
 let currentQR = "";
 let stream = null;
-document.addEventListener("DOMContentLoaded", () => {
-    testSelfie();
-});
+// document.addEventListener("DOMContentLoaded", () => {
+//     testSelfie();
+// });
 
 //==================================
 // START SCANNER
@@ -209,7 +209,9 @@ document.getElementById("btnSelfie").addEventListener("click", async ()=>{
     const foto = canvas.toDataURL("image/jpeg",0.7);
 
     // Matikan kamera
-    stream.getTracks().forEach(track=>track.stop());
+if (stream) {
+    stream.getTracks().forEach(track => track.stop());
+}
 
     document.getElementById("selfieArea").style.display = "none";
 
