@@ -253,7 +253,11 @@ console.log("URL =", res.url);
 
 const hasil = await res.json();
 
-alert(JSON.stringify(hasil));
+alert(
+  "status = " + hasil.status +
+  "\npesan = " + hasil.pesan +
+  "\nmessage = " + hasil.message
+);
 
 console.log(hasil);
 
