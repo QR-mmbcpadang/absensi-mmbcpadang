@@ -253,9 +253,13 @@ console.log("URL =", res.url);
 
 const hasil = await res.json();
 
-alert("RESPON = " + hasil);
-
 console.log("Response =", hasil);
+
+if (hasil.success) {
+    setStatus("success", "✅ " + hasil.message);
+} else {
+    setStatus("error", "❌ " + hasil.message);
+}
 
     }catch(err){
 
