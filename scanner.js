@@ -222,8 +222,6 @@ document.getElementById("btnSelfie").addEventListener("click", async ()=>{
     const res = await fetch(GAS_URL,{
     method:"POST",
     mode:"cors",
-    headers:{
-        "Content-Type":"application/json"
     },
     body:JSON.stringify({
         action:"scan",
