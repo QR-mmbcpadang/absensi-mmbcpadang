@@ -217,20 +217,23 @@ document.getElementById("btnSelfie").addEventListener("click", async ()=>{
     alert(GAS_URL);
 
     const res = await fetch(GAS_URL,{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
-                action:"scan",
-                id:currentQR,
-                foto:foto
-            })
-        });
+    method:"POST",
+    mode:"cors",
+    headers:{
+        "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+        action:"scan",
+        id:currentQR,
+        foto:foto
+    })
+});
 
-        const hasil = await res.json();
+alert("HTTP Status = " + res.status);
 
-        showResult(hasil);
+const hasil = await res.json();
+
+showResult(hasil);
 
     }catch(err){
 
