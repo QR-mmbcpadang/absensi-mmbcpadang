@@ -216,10 +216,7 @@ document.getElementById("btnSelfie").addEventListener("click", async ()=>{
     setStatus("warning","⏳ Mengirim Absensi...");
 
     try{
-
-console.log("GAS_URL =", GAS_URL);
-window.open(GAS_URL, "_blank");
-
+        
 console.log("SEBELUM FETCH");
 
 const res = await fetch(GAS_URL, {
