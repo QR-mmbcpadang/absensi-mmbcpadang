@@ -3,7 +3,7 @@ let scanning = false;
 let currentQR = "";
 let stream = null;
 document.addEventListener("DOMContentLoaded", () => {
-    startScanner();
+    testSelfie();
 });
 
 //==================================
@@ -251,3 +251,12 @@ showResult(hasil);
     }
 
 });
+async function testSelfie(){
+
+    currentQR = "001"; // ganti dengan ID yang ada di DATABASE KARYAWAN
+
+    document.getElementById("scannerArea").style.display = "none";
+
+    await bukaSelfie();
+
+}
