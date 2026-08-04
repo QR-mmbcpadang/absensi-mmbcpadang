@@ -233,7 +233,7 @@ if (stream) {
     try{
         
 console.log("SEBELUM FETCH");
-
+alert("SEBELUM FETCH");
 const res = await fetch(GAS_URL, {
     method: "POST",
     headers: {
@@ -245,6 +245,7 @@ const res = await fetch(GAS_URL, {
         foto: foto
     })
 });
+alert("SESUDAH FETCH");
 console.log("SESUDAH FETCH");
 console.log("Status =", res.status);
 console.log("Type =", res.type);
