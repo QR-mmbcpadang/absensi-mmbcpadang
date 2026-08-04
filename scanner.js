@@ -180,6 +180,7 @@ function beep(jumlah = 1){
 }
 async function bukaSelfie(){
 
+    document.getElementById("scannerArea").style.display = "none";
     document.getElementById("selfieArea").style.display = "block";
 
     stream = await navigator.mediaDevices.getUserMedia({
