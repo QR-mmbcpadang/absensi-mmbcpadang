@@ -257,10 +257,10 @@ alert(JSON.stringify(hasil));
 
 console.log(hasil);
 
-if (hasil.success) {
-    setStatus("success", "✅ " + hasil.message);
+if (hasil.status) {
+    setStatus("success", "✅ " + hasil.pesan);
 } else {
-    setStatus("error", "❌ " + hasil.message);
+    setStatus("error", "❌ " + hasil.pesan);
 }
 
     }catch(err){
