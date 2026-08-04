@@ -11,16 +11,22 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
+
+    overflow:hidden;
 }
 
 .container{
     width:430px;
     max-width:95%;
+    height:95vh;
+
     background:#fff;
     border-radius:25px;
-    padding:30px;
+    padding:25px;
+
+    overflow:hidden;
+
     text-align:center;
-    box-shadow:0 15px 35px rgba(0,0,0,.2);
 }
 
 .logo{
