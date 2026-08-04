@@ -243,3 +243,26 @@ h1{
     }
 
 }
+/* ==========================
+   AREA SELFIE
+========================== */
+
+#selfieArea{
+    width:100%;
+    margin-top:20px;
+}
+
+#video{
+    width:100%;
+    height:auto;
+    display:block;
+
+    border-radius:18px;
+    border:2px solid #ddd;
+
+    object-fit:cover;
+}
+
+#canvas{
+    display:none;
+}
