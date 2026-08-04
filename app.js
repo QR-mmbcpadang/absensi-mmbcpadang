@@ -146,7 +146,9 @@ function tampilBerhasil(data){
 function tampilBerhasil(data){
 
     const hasil = document.getElementById("hasil");
+const scanner = document.getElementById("scannerArea");
 
+scanner.style.display = "none";
     let icon = "🎉";
     let judul = "SELAMAT DATANG";
     let warna = "masuk";
