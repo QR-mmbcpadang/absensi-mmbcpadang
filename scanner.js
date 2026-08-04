@@ -217,9 +217,10 @@ document.getElementById("btnSelfie").addEventListener("click", async ()=>{
 
     try{
 
-    alert(GAS_URL);
+console.log("GAS_URL =", GAS_URL);
+window.open(GAS_URL, "_blank");
 
-    const res = await fetch(GAS_URL, {
+const res = await fetch(GAS_URL, {
     method: "POST",
     mode: "no-cors",
     body: JSON.stringify({
