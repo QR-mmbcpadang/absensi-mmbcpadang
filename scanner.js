@@ -49,11 +49,13 @@ async function startScanner(){
 
     }catch(err){
 
-        console.error(err);
+    console.error(err);
 
-        setStatus("error","🔴 Tidak dapat membuka kamera");
+    alert(err);
 
-    }
+    setStatus("error","🔴 Gagal terhubung ke server");
+
+}
 
 }
 
