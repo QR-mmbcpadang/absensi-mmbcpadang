@@ -220,6 +220,8 @@ document.getElementById("btnSelfie").addEventListener("click", async ()=>{
 console.log("GAS_URL =", GAS_URL);
 window.open(GAS_URL, "_blank");
 
+console.log("SEBELUM FETCH");
+
 const res = await fetch(GAS_URL, {
     method: "POST",
     mode: "no-cors",
@@ -229,7 +231,7 @@ const res = await fetch(GAS_URL, {
         foto: foto
     })
 });
-
+console.log("SESUDAH FETCH");
 console.log("Status =", res.status);
 console.log("Type =", res.type);
 console.log("URL =", res.url);
