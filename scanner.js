@@ -1,6 +1,7 @@
 let html5QrCode = null;
 let scanning = false;
-
+let currentQR = "";
+let stream = null;
 document.addEventListener("DOMContentLoaded", () => {
     startScanner();
 });
@@ -59,31 +60,23 @@ async function startScanner(){
 //==================================
 // QR BERHASIL DIBACA
 //==================================
-function onScanSuccess(qr){
+async function onScanSuccess(qr){
 
     if(!scanning) return;
 
-    scanning=false;
-    setStatus("warning","🟡 Sedang Memproses...");
+    scanning = false;
 
-    html5QrCode.stop().then(()=>{
+    currentQR = qr;
 
-    fetch(
-        GAS_URL +
-        "?action=scan&id=" +
-        encodeURIComponent(qr)
-    )
-    .then(res => res.json())
-    .then(showResult)
-    .catch(err => {
-        console.error(err);
-        setStatus("error","🔴 Gagal terhubung ke server");
-    });
+    setStatus("warning","📸 Ambil Selfie");
 
-});
+    await html5QrCode.stop();
+
+    document.getElementById("scannerArea").style.display = "none";
+
+    bukaSelfie();
 
 }
-
 //==================================
 // TAMPILKAN HASIL
 //==================================
@@ -176,5 +169,57 @@ function beep(jumlah = 1){
         }, i * 180);
 
     }
+
+}
+async function bukaSelfie(){
+
+    document.getElementById("selfieArea").style.display = "block";
+
+    stream = await navigator.mediaDevices.getUserMedia({
+
+        video:{
+            facingMode:"user"
+        }
+
+    });
+
+    document.getElementById("video").srcObject = stream;
+
+}
+document.getElementById("btnSelfie").onclick = async function(){
+
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("canvas");
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const ctx = canvas.getContext("2d");
+
+    ctx.drawImage(video,0,0);
+
+    const foto = canvas.toDataURL("image/jpeg",0.8);
+
+    stream.getTracks().forEach(track=>track.stop());
+
+    document.getElementById("selfieArea").style.display = "none";
+
+    setStatus("warning","⏳ Mengirim Data...");
+
+    fetch(GAS_URL,{
+        method:"POST",
+        body:JSON.stringify({
+            action:"scan",
+            id:currentQR,
+            foto:foto
+        })
+    })
+    .then(r=>r.json())
+    .then(showResult)
+    .catch(err=>{
+        console.log(err);
+        setStatus("error","Gagal kirim");
+        startScanner();
+    });
 
 }
