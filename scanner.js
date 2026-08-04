@@ -252,6 +252,9 @@ console.log("Type =", res.type);
 console.log("URL =", res.url);
 
 const hasil = await res.text();
+
+alert("RESPON = " + hasil);
+
 console.log("Response =", hasil);
 
     }catch(err){
