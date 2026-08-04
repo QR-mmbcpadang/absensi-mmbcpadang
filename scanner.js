@@ -201,8 +201,13 @@ async function bukaSelfie(){
 //==================================
 document.getElementById("btnSelfie").addEventListener("click", async ()=>{
 
+    alert("BUTTON DIKLIK");
+    console.log("BUTTON DIKLIK");
+
     const video = document.getElementById("video");
     const canvas = document.getElementById("canvas");
+
+    alert("SEBELUM DRAW IMAGE");
 
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
@@ -211,8 +216,11 @@ document.getElementById("btnSelfie").addEventListener("click", async ()=>{
 
     ctx.drawImage(video,0,0);
 
+    alert("SESUDAH DRAW IMAGE");
+
     const foto = canvas.toDataURL("image/jpeg",0.7);
 
+    alert("SESUDAH FOTO");
     // Matikan kamera
 if (stream) {
     stream.getTracks().forEach(track => track.stop());
