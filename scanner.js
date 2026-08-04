@@ -55,6 +55,10 @@ async function startScanner(){
 
     setStatus("error","🔴 Gagal terhubung ke server");
 
+    setTimeout(()=>{
+        startScanner();
+    },2000);
+
 }
 
 }
