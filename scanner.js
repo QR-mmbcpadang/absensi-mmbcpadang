@@ -201,13 +201,10 @@ async function bukaSelfie(){
 //==================================
 document.getElementById("btnSelfie").addEventListener("click", async ()=>{
 
-    alert("BUTTON DIKLIK");
     console.log("BUTTON DIKLIK");
 
     const video = document.getElementById("video");
     const canvas = document.getElementById("canvas");
-
-    alert("SEBELUM DRAW IMAGE");
 
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
@@ -216,11 +213,7 @@ document.getElementById("btnSelfie").addEventListener("click", async ()=>{
 
     ctx.drawImage(video,0,0);
 
-    alert("SESUDAH DRAW IMAGE");
-
     const foto = canvas.toDataURL("image/jpeg",0.7);
-
-    alert("SESUDAH FOTO");
     // Matikan kamera
 if (stream) {
     stream.getTracks().forEach(track => track.stop());
@@ -233,7 +226,6 @@ if (stream) {
     try{
         
 console.log("SEBELUM FETCH");
-alert("SEBELUM FETCH");
 const res = await fetch(GAS_URL, {
     method: "POST",
     headers: {
@@ -245,20 +237,12 @@ const res = await fetch(GAS_URL, {
         foto: foto
     })
 });
-alert("SESUDAH FETCH");
 console.log("SESUDAH FETCH");
 console.log("Status =", res.status);
 console.log("Type =", res.type);
 console.log("URL =", res.url);
 
 const hasil = await res.json();
-
-alert(
-  "status = " + hasil.status +
-  "\npesan = " + hasil.pesan +
-  "\nmessage = " + hasil.message
-);
-
 console.log(hasil);
 
 if (hasil.status) {
