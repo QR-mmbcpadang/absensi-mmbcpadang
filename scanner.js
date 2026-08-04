@@ -69,7 +69,7 @@ async function startScanner(){
 // QR BERHASIL DIBACA
 //==================================
 async function onScanSuccess(qr){
-
+ alert(qr);
     console.log("QR TERBACA:", qr);
 
     if(!scanning) return;
