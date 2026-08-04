@@ -102,22 +102,21 @@ h2{
 
 .success-box h1{
 
-    font-size:70px;
+    font-size:90px;
     margin-bottom:10px;
 
 }
 
 .success-box h2{
 
-    font-size:34px;
-    font-weight:700;
-    margin:10px 0;
+    font-size:38px;
+    font-weight:bold;
 
 }
 
 .success-box h3{
 
-    font-size:28px;
+    font-size:30px;
     margin:8px 0;
 
 }
@@ -213,4 +212,28 @@ h1{
     font-weight:700;
 
     cursor:pointer;
+}
+#hasil{
+    margin-top:20px;
+    display:flex;
+    justify-content:center;
+}
+
+.success-box{
+    width:100%;
+    animation:muncul .35s ease;
+}
+
+@keyframes muncul{
+
+    from{
+        opacity:0;
+        transform:scale(.8);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+
 }
