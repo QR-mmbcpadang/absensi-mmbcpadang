@@ -252,14 +252,12 @@ h1{
 }
 #video{
     width:100%;
-    max-height:60vh;
+    height:45vh;
 
     object-fit:cover;
 
     border-radius:18px;
     border:2px solid #ddd;
-
-    display:block;
 }
 
 #canvas{
