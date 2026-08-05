@@ -323,10 +323,10 @@ const res = await fetch(GAS_URL, {
         "Content-Type": "text/plain;charset=utf-8"
     },
     body: JSON.stringify({
-        action: "scan",
-        id: currentQR,
-        foto: foto
-    })
+    id: currentQR,
+    foto: foto,
+    lokasi: lokasiAbsen
+})
 });
 console.log("SESUDAH FETCH");
 console.log("Status =", res.status);
