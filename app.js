@@ -185,7 +185,7 @@ document.getElementById("infoLokasi").style.display = "none";
 const scanner = document.getElementById("scannerArea");
 scanner.style.display = "block";
 scanner.classList.add("fadeShow");
-
+const scanner = document.getElementById("scannerArea");
 startScanner();
 
 };
@@ -199,7 +199,7 @@ document.getElementById("infoLokasi").style.display = "none";
 const scanner = document.getElementById("scannerArea");
 scanner.style.display = "block";
 scanner.classList.add("fadeShow");
-
+document.getElementById("status").style.display = "block";
 startScanner();
 
 };
