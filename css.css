@@ -246,6 +246,27 @@ h1{
     }
 
 }
+/* =========================
+SCANNER AREA
+========================= */
+
+#scannerArea{
+
+    display:none;
+
+    opacity:0;
+
+    transition:opacity .35s ease;
+
+}
+
+#scannerArea.fadeShow{
+
+    display:block;
+
+    opacity:1;
+
+}
 /* ==========================
    AREA SELFIE
 ========================== */
