@@ -205,14 +205,17 @@ document.getElementById("btnSelfie").addEventListener("click", async ()=>{
 
 alert(JSON.stringify(window.dataAbsen));
     console.log("BUTTON DIKLIK");
-
+alert("1");
     const video = document.getElementById("video");
+alert("2");
     const canvas = document.getElementById("canvas");
-
+alert("3");
     canvas.width = video.videoWidth;
+alert("4");
     canvas.height = video.videoHeight;
-
+alert("5");
     const ctx = canvas.getContext("2d");
+alert("6");
     ctx.drawImage(
     video,
     0,
