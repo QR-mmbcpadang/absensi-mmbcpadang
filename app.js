@@ -178,8 +178,13 @@ scanner.style.display = "none";
 }
 document.getElementById("btnKantor").onclick = function(){
 
-    lokasiAbsen = "KANTOR";
-    document.getElementById("pilihanLokasi").style.display = "none";
+   lokasiAbsen = "KANTOR";
+
+document.getElementById("pilihanLokasi").style.display = "none";
+
+const scanner = document.getElementById("scannerArea");
+scanner.style.display = "block";
+scanner.classList.add("fadeShow");
 
 startScanner();
 
@@ -188,7 +193,12 @@ startScanner();
 document.getElementById("btnLapangan").onclick = function(){
 
     lokasiAbsen = "LAPANGAN";
-    document.getElementById("pilihanLokasi").style.display = "none";
+
+document.getElementById("pilihanLokasi").style.display = "none";
+
+const scanner = document.getElementById("scannerArea");
+scanner.style.display = "block";
+scanner.classList.add("fadeShow");
 
 startScanner();
 
