@@ -183,10 +183,21 @@ document.getElementById("btnKantor").onclick = function(){
 document.getElementById("pilihanLokasi").style.display = "none";
 
 const scanner = document.getElementById("scannerArea");
-scanner.style.display = "block";
-scanner.classList.add("fadeShow");
-document.getElementById("status").style.display = "block";
-startScanner();
+
+document.getElementById("loadingCamera").style.display="block";
+
+setTimeout(function(){
+
+    document.getElementById("loadingCamera").style.display="none";
+
+    scanner.style.display="block";
+    scanner.classList.add("fadeShow");
+
+    document.getElementById("status").style.display="block";
+
+    startScanner();
+
+},500);
 
 };
 
@@ -197,10 +208,21 @@ document.getElementById("btnLapangan").onclick = function(){
 document.getElementById("pilihanLokasi").style.display = "none";
 
 const scanner = document.getElementById("scannerArea");
-scanner.style.display = "block";
-scanner.classList.add("fadeShow");
-document.getElementById("status").style.display = "block";
-startScanner();
+
+document.getElementById("loadingCamera").style.display="block";
+
+setTimeout(function(){
+
+    document.getElementById("loadingCamera").style.display="none";
+
+    scanner.style.display="block";
+    scanner.classList.add("fadeShow");
+
+    document.getElementById("status").style.display="block";
+
+    startScanner();
+
+},500);
 
 };
 window.addEventListener("load", function(){
