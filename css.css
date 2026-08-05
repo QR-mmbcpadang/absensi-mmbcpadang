@@ -286,8 +286,12 @@ h1{
     cursor:pointer;
     color:#fff;
     transition:.2s;
+    transition: all .18s ease;
 }
-
+.btnLokasi:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 18px rgba(0,0,0,.18);
+}
 #btnKantor{
     background:#1565ff;
 }
