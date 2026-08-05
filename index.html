@@ -44,7 +44,17 @@ if ("serviceWorker" in navigator) {
     <div id="tanggal" class="tanggal"></div>
 
     <div id="jam" class="jam"></div>
+<div id="pilihanLokasi">
 
+    <button id="btnKantor" class="btnLokasi">
+        🏢 ABSEN KANTOR
+    </button>
+
+    <button id="btnLapangan" class="btnLokasi">
+        🚗 ABSEN LAPANGAN
+    </button>
+
+</div>
     <div id="status" class="status-box">
         🟡 Menunggu Scan
     </div>
@@ -60,17 +70,7 @@ if ("serviceWorker" in navigator) {
     </div>
 
     <div id="hasil"></div>
-    <div id="pilihanLokasi">
-
-    <button id="btnKantor" class="btnLokasi">
-        🏢 ABSEN KANTOR
-    </button>
-
-    <button id="btnLapangan" class="btnLokasi">
-        🚗 ABSEN LAPANGAN
-    </button>
-
-</div>
+    
 <div id="selfieArea" style="display:none;">
 
     <video id="video" autoplay playsinline></video>
