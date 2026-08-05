@@ -220,11 +220,6 @@ document.getElementById("btnSelfie").addEventListener("click", async ()=>{
         );
 ctx.fillStyle = "red";
 ctx.fillRect(20,20,250,120);
-
-ctx.fillStyle = "white";
-ctx.font = "40px Arial";
-ctx.fillText("TEST",40,90);
-
 // ===== WATERMARK =====
 const tinggiBox = 110;
 
