@@ -403,3 +403,9 @@ WELCOME CARD
     opacity:1;
     transform:translateY(0);
 }
+#infoLokasi{
+    text-align:center;
+    font-size:15px;
+    color:#666;
+    margin:12px 0 20px;
+}
