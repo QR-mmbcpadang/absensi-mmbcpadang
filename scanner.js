@@ -68,6 +68,7 @@ console.log("START SCANNER");
 // QR BERHASIL DIBACA
 //==================================
 async function onScanSuccess(qr){
+
     console.log("QR TERBACA:", qr);
 
     if(!scanning) return;
@@ -76,13 +77,51 @@ async function onScanSuccess(qr){
 
     currentQR = qr;
 
-    setStatus("warning","📸 Ambil Selfie");
+    setStatus("warning","📸 Menyiapkan Kamera...");
 
     await html5QrCode.stop();
 
-    document.getElementById("scannerArea").style.display = "none";
+    try{
 
-    bukaSelfie();
+        const res = await fetch(GAS_URL,{
+            method:"POST",
+            headers:{
+                "Content-Type":"text/plain;charset=utf-8"
+            },
+            body:JSON.stringify({
+                action:"getKaryawan",
+                id:currentQR
+            })
+        });
+
+        const hasil = await res.json();
+
+        if(!hasil.status){
+
+            setStatus("error","❌ QR Tidak Terdaftar");
+
+            setTimeout(startScanner,2000);
+
+            return;
+        }
+
+        // Simpan data karyawan
+        window.dataAbsen = hasil;
+
+        document.getElementById("scannerArea").style.display = "none";
+
+        bukaSelfie();
+
+    }catch(err){
+
+        console.error(err);
+
+        setStatus("error","🔴 Gagal mengambil data");
+
+        setTimeout(startScanner,2000);
+
+    }
+
 }
 //==================================
 // TAMPILKAN HASIL
@@ -202,10 +241,6 @@ document.getElementById("selfieArea").scrollIntoView({
 //==================================
 document.getElementById("btnSelfie").addEventListener("click", async ()=>{
 
-    window.dataAbsen = {
-        id: currentQR,
-        nama: "MEMPROSES..."
-    };
     console.log("BUTTON DIKLIK");
     const video = document.getElementById("video");
     const canvas = document.getElementById("canvas");
