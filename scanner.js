@@ -348,7 +348,7 @@ window.dataAbsen = hasil;
 
         setStatus("warning","🟡 Menunggu Scan");
 
-    },3000);
+    },10000);
 
 } else {
 
