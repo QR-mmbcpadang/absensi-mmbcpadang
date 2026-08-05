@@ -176,3 +176,26 @@ scanner.style.display = "none";
         </div>
     `;
 }
+document.getElementById("btnKantor").onclick = function(){
+
+    lokasiAbsen = "KANTOR";
+
+    document.getElementById("pilihanLokasi").style.display = "none";
+
+    document.getElementById("scannerArea").style.display = "block";
+
+    startScanner();
+
+};
+
+document.getElementById("btnLapangan").onclick = function(){
+
+    lokasiAbsen = "LAPANGAN";
+
+    document.getElementById("pilihanLokasi").style.display = "none";
+
+    document.getElementById("scannerArea").style.display = "block";
+
+    startScanner();
+
+};
