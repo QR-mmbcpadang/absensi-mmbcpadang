@@ -260,13 +260,11 @@ SCANNER AREA
 
 }
 
-#scannerArea{
+#scannerArea.fadeShow{
 
-    display:none;
+    display:block;
 
-    opacity:0;
-
-    transition:opacity .35s ease;
+    opacity:1;
 
 }
 /* ==========================
