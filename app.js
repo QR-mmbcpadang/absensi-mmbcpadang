@@ -182,7 +182,8 @@ document.getElementById("btnKantor").onclick = function(){
 
     document.getElementById("pilihanLokasi").style.display = "none";
 
-    document.getElementById("scannerArea").style.display = "block";
+    const scanner = document.getElementById("scannerArea");
+scanner.classList.add("fadeShow");
 
     startScanner();
 
@@ -194,7 +195,8 @@ document.getElementById("btnLapangan").onclick = function(){
 
     document.getElementById("pilihanLokasi").style.display = "none";
 
-    document.getElementById("scannerArea").style.display = "block";
+    const scanner = document.getElementById("scannerArea");
+scanner.classList.add("fadeShow");
 
     startScanner();
 
