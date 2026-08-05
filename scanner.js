@@ -211,8 +211,63 @@ document.getElementById("btnSelfie").addEventListener("click", async ()=>{
     canvas.height = video.videoHeight;
 
     const ctx = canvas.getContext("2d");
+    ctx.drawImage(
+    video,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+);
+// ===== WATERMARK =====
+const tinggiBox = 110;
 
-    ctx.drawImage(video,0,0);
+ctx.fillStyle = "rgba(0,0,0,0.65)";
+ctx.fillRect(
+    0,
+    canvas.height - tinggiBox,
+    canvas.width,
+    tinggiBox
+);
+
+ctx.fillStyle = "#ffffff";
+
+ctx.font = "bold 26px Arial";
+ctx.fillText(
+    "MMBC PADANG",
+    20,
+    canvas.height - 70
+);
+
+ctx.font = "22px Arial";
+ctx.fillText(
+    window.dataAbsen.nama,
+    20,
+    canvas.height - 40
+);
+
+ctx.fillText(
+    window.dataAbsen.id,
+    20,
+    canvas.height - 10
+);
+
+const sekarang = new Date();
+
+ctx.textAlign = "right";
+
+ctx.fillText(
+    sekarang.toLocaleDateString("id-ID"),
+    canvas.width - 20,
+    canvas.height - 40
+);
+
+ctx.fillText(
+    sekarang.toLocaleTimeString("id-ID"),
+    canvas.width - 20,
+    canvas.height - 10
+);
+
+ctx.textAlign = "left";
 
     const foto = canvas.toDataURL("image/jpeg",0.7);
     // Matikan kamera
@@ -249,7 +304,7 @@ console.log(hasil);
 if (hasil.status) {
 
     tampilBerhasil(hasil);
-
+window.dataAbsen = hasil;
     setTimeout(() => {
 
         document.getElementById("hasil").innerHTML = "";
