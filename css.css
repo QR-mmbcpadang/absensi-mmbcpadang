@@ -442,3 +442,21 @@ opacity:.5;
 }
 
 }
+.loading-spinner{
+    width:32px;
+    height:32px;
+    margin:0 auto 12px;
+    border:4px solid #d6e9ff;
+    border-top:4px solid #1565ff;
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+    from{
+        transform:rotate(0deg);
+    }
+    to{
+        transform:rotate(360deg);
+    }
+}
