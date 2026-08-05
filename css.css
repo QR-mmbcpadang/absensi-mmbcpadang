@@ -391,3 +391,15 @@ WELCOME CARD
     font-size:14px;
 
 }
+#scannerArea{
+    display:none;
+    opacity:0;
+    transform:translateY(15px);
+    transition:all .35s ease;
+}
+
+#scannerArea.fadeShow{
+    display:block;
+    opacity:1;
+    transform:translateY(0);
+}
