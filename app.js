@@ -150,6 +150,7 @@ function tampilBerhasil(data){
 const scanner = document.getElementById("scannerArea");
 
 scanner.style.display = "none";
+document.getElementById("status").style.display = "none";
     let icon = "🎉";
     let judul = "SELAMAT DATANG";
     let warna = "masuk";
