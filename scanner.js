@@ -218,8 +218,7 @@ document.getElementById("btnSelfie").addEventListener("click", async ()=>{
     canvas.width,
     canvas.height
         );
-ctx.fillStyle = "red";
-ctx.fillRect(20,20,250,120);
+
 // ===== WATERMARK =====
 const tinggiBox = 110;
 
