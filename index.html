@@ -10,9 +10,15 @@
     <title>ABSENSI QR MMBC PADANG</title>
 
     <link rel="stylesheet" href="css.css">
-
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1565ff">
 </head>
-
+    
+<script>
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js");
+}
+</script>
 <body>
 
 <div class="container">
