@@ -200,8 +200,27 @@ h1{
 
 }
 #btnSelfie{
-    position:relative;
-    z-index:9999;
+    width:100%;
+    padding:18px;
+
+    margin-top:15px;
+
+    border:none;
+    border-radius:12px;
+
+    background:#FFD54F;
+    color:#333;
+
+    font-size:22px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+#btnSelfie:active{
+    transform:scale(.98);
 }
 #hasil{
     margin-top:20px;
