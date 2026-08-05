@@ -223,7 +223,7 @@ alert("6");
     canvas.width,
     canvas.height
         );
-
+alert("7");
 // ===== WATERMARK =====
 const tinggiBox = 110;
 
@@ -274,8 +274,9 @@ ctx.fillText(
 );
 
 ctx.textAlign = "left";
-
+alert("8");
     const foto = canvas.toDataURL("image/jpeg",0.7);
+alert("9");
     // Matikan kamera
 if (stream) {
     stream.getTracks().forEach(track => track.stop());
