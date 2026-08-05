@@ -201,9 +201,6 @@ document.getElementById("selfieArea").scrollIntoView({
 // AMBIL SELFIE
 //==================================
 document.getElementById("btnSelfie").addEventListener("click", async ()=>{
-window.dataAbsen = {
-    id: currentQR,
-    nama: "MEMPROSES..."
 };
     console.log("BUTTON DIKLIK");
 
