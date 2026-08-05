@@ -352,3 +352,42 @@ h1{
     }
 
 }
+/* ===========================
+WELCOME CARD
+=========================== */
+
+.welcomeCard{
+
+    text-align:center;
+
+    margin:20px 0;
+
+    animation:fadeUp .5s ease;
+
+}
+
+.welcomeLogo{
+
+    width:90px;
+
+    margin-bottom:12px;
+
+}
+
+.welcomeCard h2{
+
+    color:#1565ff;
+
+    margin:0;
+
+}
+
+.welcomeCard p{
+
+    color:#666;
+
+    margin-top:8px;
+
+    font-size:14px;
+
+}
