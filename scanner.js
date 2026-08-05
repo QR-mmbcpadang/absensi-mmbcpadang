@@ -201,7 +201,7 @@ document.getElementById("selfieArea").scrollIntoView({
 // AMBIL SELFIE
 //==================================
 document.getElementById("btnSelfie").addEventListener("click", async ()=>{
-};
+    
     console.log("BUTTON DIKLIK");
 
     const video = document.getElementById("video");
