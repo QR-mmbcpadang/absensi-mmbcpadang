@@ -201,7 +201,10 @@ document.getElementById("selfieArea").scrollIntoView({
 // AMBIL SELFIE
 //==================================
 document.getElementById("btnSelfie").addEventListener("click", async ()=>{
-
+window.dataAbsen = {
+    id: currentQR,
+    nama: "MEMPROSES..."
+};
     console.log("BUTTON DIKLIK");
 
     const video = document.getElementById("video");
@@ -277,10 +280,6 @@ ctx.fillText(
 ctx.textAlign = "left";
 
     const foto = canvas.toDataURL("image/jpeg",0.7);
-    window.dataAbsen = {
-    id: currentQR,
-    nama: "MEMPROSES..."
-};
     // Matikan kamera
 if (stream) {
     stream.getTracks().forEach(track => track.stop());
