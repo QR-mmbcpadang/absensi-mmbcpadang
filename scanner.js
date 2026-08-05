@@ -206,22 +206,12 @@ document.getElementById("btnSelfie").addEventListener("click", async ()=>{
         id: currentQR,
         nama: "MEMPROSES..."
     };
-
-    alert("TOMBOL DIKLIK");
-
-alert(JSON.stringify(window.dataAbsen));
     console.log("BUTTON DIKLIK");
-alert("1");
     const video = document.getElementById("video");
-alert("2");
     const canvas = document.getElementById("canvas");
-alert("3");
     canvas.width = video.videoWidth;
-alert("4");
     canvas.height = video.videoHeight;
-alert("5");
     const ctx = canvas.getContext("2d");
-alert("6");
     ctx.drawImage(
     video,
     0,
@@ -229,7 +219,6 @@ alert("6");
     canvas.width,
     canvas.height
         );
-alert("7");
 // ===== WATERMARK =====
 const tinggiBox = 110;
 
@@ -280,9 +269,7 @@ ctx.fillText(
 );
 
 ctx.textAlign = "left";
-alert("8");
     const foto = canvas.toDataURL("image/jpeg",0.7);
-alert("9");
     // Matikan kamera
 if (stream) {
     stream.getTracks().forEach(track => track.stop());
