@@ -413,3 +413,32 @@ WELCOME CARD
     color:#666;
     margin:12px 0 20px;
 }
+#loadingCamera{
+    display:none;
+    margin:20px auto;
+    padding:15px;
+    width:85%;
+    background:#e8f3ff;
+    color:#1565c0;
+    border-radius:12px;
+    font-size:18px;
+    font-weight:bold;
+    text-align:center;
+    animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+
+0%{
+opacity:.5;
+}
+
+50%{
+opacity:1;
+}
+
+100%{
+opacity:.5;
+}
+
+}
