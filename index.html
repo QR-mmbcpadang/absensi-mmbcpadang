@@ -10,16 +10,25 @@
     <title>ABSENSI QR MMBC PADANG</title>
 
     <link rel="stylesheet" href="css.css">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1565ff">
+
+    <link rel="manifest" href="manifest.json">
+
+    <meta name="theme-color" content="#1565ff">
+
 </head>
-    
+
 <script>
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js");
 }
 </script>
+
 <body>
+
+<!-- ==========================================
+     LOADING SCREEN
+========================================== -->
+
 <div id="loadingScreen">
 
     <img src="Logo.jpeg" class="loadingLogo">
@@ -31,75 +40,358 @@ if ("serviceWorker" in navigator) {
     <div class="loader"></div>
 
 </div>
+
+
+<!-- ==========================================
+     CONTAINER UTAMA
+========================================== -->
+
 <div class="container">
-<div class="welcomeCard">
 
-    <img src="Logo.jpeg" class="welcomeLogo">
 
-    <h2>ABSENSI MMBC PADANG</h2>
+    <!-- ======================================
+         HEADER
+    ======================================= -->
 
-  </div>
-    <div id="tanggal" class="tanggal"></div>
+    <div class="welcomeCard">
 
-    <div id="jam" class="jam"></div>
-<div id="pilihanLokasi">
-👇 Silakan pilih lokasi absensi
-    <button id="btnKantor" class="btnLokasi">
-        🏢 ABSEN KANTOR
-    </button>
+        <img src="Logo.jpeg" class="welcomeLogo">
 
-    <button id="btnLapangan" class="btnLokasi">
-        🚗 ABSEN LAPANGAN
-    </button>
+        <h2>ABSENSI MMBC PADANG</h2>
 
-</div>
-    <div id="loadingCamera" style="display:none;">
-    <div class="loading-spinner"></div>
-    <div>📷 Mengaktifkan kamera...</div>
-</div>
-   <div id="status" class="status-box" style="display:none;">
-        🟡 Menunggu Scan
     </div>
 
-    <div id="scannerArea">
 
-        <div class="scan-box">
+    <!-- ======================================
+         TAB MENU
+    ======================================= -->
 
-            <div id="reader"></div>
+    <div id="tabMenu" class="tab-menu">
+
+        <button
+            id="tabAbsensi"
+            class="tab-button active"
+            type="button">
+
+            📷 ABSENSI QR
+
+        </button>
+
+
+        <button
+            id="tabJadwal"
+            class="tab-button"
+            type="button">
+
+            📅 JADWAL KERJA
+
+        </button>
+
+
+        <button
+            id="tabLog"
+            class="tab-button"
+            type="button">
+
+            📋 LOG HARIAN
+
+        </button>
+
+    </div>
+
+
+    <!-- ======================================
+         HALAMAN 1
+         ABSENSI QR
+    ======================================= -->
+
+    <div
+        id="absensiPage"
+        class="tab-page active-page">
+
+
+        <!-- TANGGAL -->
+
+        <div
+            id="tanggal"
+            class="tanggal">
+        </div>
+
+
+        <!-- JAM -->
+
+        <div
+            id="jam"
+            class="jam">
+        </div>
+
+
+        <!-- PILIHAN LOKASI -->
+
+        <div id="pilihanLokasi">
+
+            👇 Silakan pilih lokasi absensi
+
+
+            <button
+                id="btnKantor"
+                class="btnLokasi">
+
+                🏢 ABSEN KANTOR
+
+            </button>
+
+
+            <button
+                id="btnLapangan"
+                class="btnLokasi">
+
+                🚗 ABSEN LAPANGAN
+
+            </button>
+
+        </div>
+
+
+        <!-- LOADING KAMERA -->
+
+        <div
+            id="loadingCamera"
+            style="display:none;">
+
+            <div class="loading-spinner"></div>
+
+            <div>
+                📷 Mengaktifkan kamera...
+            </div>
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div
+            id="status"
+            class="status-box"
+            style="display:none;">
+
+            🟡 Menunggu Scan
+
+        </div>
+
+
+        <!-- SCANNER -->
+
+        <div id="scannerArea">
+
+            <div class="scan-box">
+
+                <div id="reader"></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- HASIL ABSENSI -->
+
+        <div id="hasil"></div>
+
+
+        <!-- SELFIE -->
+
+        <div
+            id="selfieArea"
+            style="display:none;">
+
+            <video
+                id="video"
+                autoplay
+                playsinline>
+            </video>
+
+
+            <canvas
+                id="canvas"
+                style="display:none;">
+            </canvas>
+
+
+            <button
+                id="btnSelfie">
+
+                📸 Ambil Selfie
+
+            </button>
 
         </div>
 
     </div>
 
-    <div id="hasil"></div>
-    
-<div id="selfieArea" style="display:none;">
 
-    <video id="video" autoplay playsinline></video>
+    <!-- ======================================
+         HALAMAN 2
+         JADWAL KERJA
+    ======================================= -->
 
-    <canvas id="canvas" style="display:none;"></canvas>
+    <div
+        id="jadwalPage"
+        class="tab-page"
+        style="display:none;">
 
-    <button id="btnSelfie">
-        📸 Ambil Selfie
-    </button>
+        <div class="page-title">
 
-</div>
+            <div class="page-icon">
+                📅
+            </div>
+
+            <h2>
+                JADWAL KERJA
+            </h2>
+
+            <p>
+                Jadwal kerja bulanan karyawan
+            </p>
+
+        </div>
+
+
+        <!-- LOADING JADWAL -->
+
+        <div
+            id="loadingJadwal"
+            class="page-loading"
+            style="display:none;">
+
+            <div class="loading-spinner"></div>
+
+            <p>
+                Memuat jadwal kerja...
+            </p>
+
+        </div>
+
+
+        <!-- ISI JADWAL -->
+
+        <div
+            id="jadwalContent"
+            class="data-content">
+
+            <div class="empty-data">
+
+                📅
+
+                <p>
+                    Jadwal kerja belum dimuat
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================
+         HALAMAN 3
+         LOG HARIAN
+    ======================================= -->
+
+    <div
+        id="logPage"
+        class="tab-page"
+        style="display:none;">
+
+        <div class="page-title">
+
+            <div class="page-icon">
+                📋
+            </div>
+
+            <h2>
+                LOG HARIAN
+            </h2>
+
+            <p>
+                Riwayat absensi karyawan
+            </p>
+
+        </div>
+
+
+        <!-- LOADING LOG -->
+
+        <div
+            id="loadingLog"
+            class="page-loading"
+            style="display:none;">
+
+            <div class="loading-spinner"></div>
+
+            <p>
+                Memuat log absensi...
+            </p>
+
+        </div>
+
+
+        <!-- ISI LOG -->
+
+        <div
+            id="logContent"
+            class="data-content">
+
+            <div class="empty-data">
+
+                📋
+
+                <p>
+                    Log harian belum dimuat
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================
+         FOOTER
+    ======================================= -->
+
     <div class="footer">
 
         © MMBC PADANG
 
     </div>
 
+
 </div>
 
-<!-- Library Scanner -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
 
-<!-- Javascript -->
+<!-- ==========================================
+     LIBRARY SCANNER
+========================================== -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js">
+</script>
+
+
+<!-- ==========================================
+     JAVASCRIPT UTAMA
+========================================== -->
+
 <script src="app.js"></script>
 
-<!-- Scanner -->
+
+<!-- ==========================================
+     SCANNER
+========================================== -->
+
 <script src="scanner.js"></script>
+
 
 </body>
 
