@@ -460,3 +460,271 @@ opacity:.5;
         transform:rotate(360deg);
     }
 }
+/* =========================================
+   TAB NAVIGASI UTAMA
+========================================= */
+
+.top-tabs{
+    display:flex;
+    gap:6px;
+    margin-bottom:20px;
+    padding:5px;
+    background:#eef4ff;
+    border-radius:14px;
+}
+
+.tab-btn{
+    flex:1;
+    border:none;
+    background:transparent;
+    padding:13px 8px;
+    border-radius:10px;
+
+    font-size:14px;
+    font-weight:bold;
+
+    color:#52709b;
+
+    cursor:pointer;
+
+    transition:all .2s ease;
+}
+
+.tab-btn:hover{
+    background:#dceaff;
+}
+
+.tab-btn.active{
+    background:#1565ff;
+    color:white;
+    box-shadow:0 4px 10px rgba(21,101,255,.25);
+}
+
+
+/* =========================================
+   PANEL DATA
+========================================= */
+
+.tab-panel{
+    width:100%;
+}
+
+.panel-header{
+    text-align:center;
+    margin:10px 0 18px;
+}
+
+.panel-header h2{
+    color:#1565ff;
+    margin-bottom:5px;
+}
+
+.panel-header p{
+    color:#777;
+    font-size:14px;
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.data-loading{
+    padding:20px;
+    text-align:center;
+
+    background:#eef6ff;
+    border-radius:12px;
+
+    color:#1565ff;
+    font-weight:bold;
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.data-error{
+    padding:15px;
+
+    background:#ffeaea;
+    border-radius:12px;
+
+    color:#d63031;
+
+    text-align:center;
+    font-weight:bold;
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.table-wrapper{
+    width:100%;
+    overflow:auto;
+
+    max-height:65vh;
+
+    border-radius:12px;
+    border:1px solid #dbe5f2;
+
+    background:white;
+}
+
+.data-table{
+    border-collapse:separate;
+    border-spacing:0;
+
+    width:max-content;
+    min-width:100%;
+
+    font-size:13px;
+}
+
+.data-table th{
+    position:sticky;
+    top:0;
+
+    background:#1565ff;
+    color:white;
+
+    padding:10px 8px;
+
+    border-right:1px solid rgba(255,255,255,.25);
+
+    white-space:nowrap;
+
+    z-index:5;
+}
+
+.data-table td{
+    padding:9px 8px;
+
+    border-right:1px solid #e5e7eb;
+    border-bottom:1px solid #e5e7eb;
+
+    white-space:nowrap;
+
+    text-align:center;
+}
+
+.data-table tbody tr:nth-child(even){
+    background:#f7faff;
+}
+
+.data-table tbody tr:hover{
+    background:#edf5ff;
+}
+
+
+/* =========================================
+   JADWAL
+========================================= */
+
+.jadwal-table td{
+    min-width:42px;
+}
+
+.jadwal-table td:nth-child(2){
+    text-align:left;
+    font-weight:bold;
+    min-width:120px;
+}
+
+
+/* =========================================
+   STATUS JADWAL
+========================================= */
+
+.cell-off{
+    background:#ff4d4d !important;
+    color:white;
+    font-weight:bold;
+}
+
+.cell-s1{
+    background:#e8f3ff !important;
+    color:#1565ff;
+    font-weight:bold;
+}
+
+.cell-s2{
+    background:#dff7ff !important;
+    color:#0077a8;
+    font-weight:bold;
+}
+
+.cell-cuti{
+    background:#fff3b0 !important;
+    color:#806600;
+    font-weight:bold;
+}
+
+
+/* =========================================
+   LOG ABSENSI
+========================================= */
+
+.log-table th{
+    position:sticky;
+    top:0;
+}
+
+.log-table td{
+    text-align:center;
+}
+
+.log-table td:nth-child(3){
+    text-align:left;
+    font-weight:bold;
+}
+
+.log-ok{
+    color:#166534;
+    font-weight:bold;
+}
+
+.log-terlambat{
+    color:#c2410c;
+    font-weight:bold;
+}
+
+.foto-link{
+    color:#1565ff;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media(max-width:600px){
+
+    .top-tabs{
+        gap:4px;
+    }
+
+    .tab-btn{
+        padding:12px 5px;
+        font-size:12px;
+    }
+
+    .panel-header h2{
+        font-size:24px;
+    }
+
+    .data-table{
+        font-size:12px;
+    }
+
+    .data-table th,
+    .data-table td{
+        padding:8px 7px;
+    }
+
+}
