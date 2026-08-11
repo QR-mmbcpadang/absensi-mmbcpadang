@@ -248,30 +248,13 @@
             ).catch(err => alert("Gagal membuka kamera scanner. Pastikan izin kamera aktif."));
         }
 
-        function prosesQRData(idStaff) {
+function prosesQRData(idStaff) {
             activeStaffId = idStaff;
-            tampilkanLoading("Mengecek Status...", "Memeriksa data karyawan...");
-
-            fetch(API, {
-                method: "POST",
-                body: JSON.stringify({ action: "getKaryawan", id: idStaff })
-            })
-            .then(r => r.json())
-            .then(res => {
-                tutupLoading();
-                if (!res.status) {
-                    tampilkanPesanError("ID Karyawan tidak terdaftar dalam database.");
-                    return;
-                }
-                
-                // Jika ID terdaftar, langsung buka kamera selfie untuk proses absen masuk/pulang
-                bukaKameraSelfie(res.nama);
-            })
-            .catch(err => {
-                tutupLoading();
-                tampilkanPesanError("Gangguan koneksi ke server.");
-            });
-        }
+            
+            // Langsung buka kamera selfie untuk staff yang QR-nya berhasil di-scan
+            // (karena validasi terdaftar atau tidaknya sudah ditangani langsung saat proses kirim absen di Apps Script)
+            bukaKameraSelfie(idStaff);
+        }   
         function eksekusiAbsenFinal(fotoUrl) {
             tampilkanLoading("Menyimpan Absen...", "Mohon tunggu sebentar...");
 
@@ -325,8 +308,8 @@
             });
         }
 
-        function bukaKameraSelfie(namaStaff) {
-            document.getElementById("selfieStaffName").innerText = "Halo, " + namaStaff;
+        function bukaKameraSelfie(idStaff) {
+            document.getElementById("selfieStaffName").innerText = "ID: " + idStaff;
             const modal = document.getElementById("selfieModal");
             modal.style.display = "flex";
 
@@ -359,10 +342,8 @@
             }
             document.getElementById("selfieModal").style.display = "none";
 
-            tampilkanLoading("Mengupload Foto...", "Menyimpan foto selfie ke Google Drive...");
+            tampilkanLoading("Mengunggah Foto...", "Menyimpan data absensi ke Google Sheet...");
 
-            // Karena Apps Script kita langsung handle upload & simpan di fungsi simpanAbsensi lewat action scanQR, 
-            // kita kirim langsung base64 fotonya ke simpanAbsensi
             fetch(API, {
                 method: "POST",
                 body: JSON.stringify({ action: "simpanAbsensi", id: activeStaffId, foto: base64Image, lokasi: selectedLokasi })
@@ -375,30 +356,56 @@
                     const tglFormat = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " | " + nowWib.toLocaleTimeString("id-ID");
 
                     const overlay = document.getElementById("fullScreenOverlay");
-                    overlay.className = "theme-masuk";
-                    document.getElementById("overlayIcon").innerText = "🏢";
-                    document.getElementById("overlayTitle").innerText = "Absen Masuk Berhasil";
-                    document.getElementById("overlayName").innerText = res.nama;
-                    document.getElementById("overlayTime").innerText = "📅 " + tglFormat;
-                    document.getElementById("overlayMsg").innerHTML = `Selamat bekerja, semoga harinya menyenangkan! <span class="waving-hand">👋</span>`;
+                    const icon = document.getElementById("overlayIcon");
+                    const title = document.getElementById("overlayTitle");
+                    const nameEl = document.getElementById("overlayName");
+                    const timeEl = document.getElementById("overlayTime");
+                    const msgEl = document.getElementById("overlayMsg");
+
+                    if (res.statusAbsen === "PULANG") {
+                        overlay.className = "theme-pulang";
+                        icon.innerText = "🏡";
+                        title.innerText = "Absen Pulang Berhasil";
+                        msgEl.innerHTML = `Hati-hati di jalan, selamat beristirahat! <span class="waving-hand">👋</span>`;
+                    } else {
+                        overlay.className = "theme-masuk";
+                        icon.innerText = "🏢";
+                        title.innerText = "Absen Masuk Berhasil";
+                        msgEl.innerHTML = `Selamat bekerja, semoga harinya menyenangkan! <span class="waving-hand">👋</span>`;
+                    }
+
+                    nameEl.innerText = res.nama;
+                    timeEl.innerText = "📅 " + tglFormat;
                     overlay.style.display = "flex";
+
+                    try {
+                        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(659.25, ctx.currentTime);
+                        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                        osc.start();
+                        osc.stop(ctx.currentTime + 0.18);
+                    } catch(e) {}
 
                     setTimeout(() => {
                         overlay.style.display = "none";
                         mulaiScanner();
                         sedangProses = false;
                     }, 5000);
+
                 } else {
                     tampilkanPesanError(res.pesan);
                 }
             })
             .catch(err => {
                 tutupLoading();
-                tampilkanPesanError("Gagal mengirim data absensi.");
+                tampilkanPesanError("Gagal mengirim data absensi ke server.");
             });
         }
-
-        // Modifikasi alur scanQR di JS agar jika absen MASUK, langsung buka kamera selfie
         function prosesQRData(idStaff) {
             activeStaffId = idStaff;
             tampilkanLoading("Mengecek Status...", "Memeriksa data absensi...");
