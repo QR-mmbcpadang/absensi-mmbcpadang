@@ -9,9 +9,6 @@ let stream = null;
 //==================================
 // START SCANNER
 //==================================
-//==================================
-// START SCANNER
-//==================================
 async function startScanner(){
 
     if(scanning) return;
@@ -355,6 +352,7 @@ const res = await fetch(GAS_URL, {
         "Content-Type": "text/plain;charset=utf-8"
     },
     body: JSON.stringify({
+    action: "simpanAbsensi",
     id: currentQR,
     foto: foto,
     lokasi: lokasiAbsen
