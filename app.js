@@ -1813,8 +1813,6 @@ function buatStyleMenu(){
     );
 
 }
-
-
 //==================================================
 // INITIALIZE MENU
 //==================================================
@@ -1825,12 +1823,8 @@ document.addEventListener(
 
         buatStyleMenu();
 
-        buatMenuTab();
-
     }
 );
-
-
 //==================================================
 // LOADING SCREEN
 //==================================================
@@ -1838,21 +1832,15 @@ document.addEventListener(
 window.addEventListener(
     "load",
     function(){
-
         setTimeout(function(){
-
             const loading =
                 document.getElementById(
                     "loadingScreen"
                 );
-
             if(loading){
-
                 loading.style.display =
                     "none";
-
             }
-
         },800);
 
     }
