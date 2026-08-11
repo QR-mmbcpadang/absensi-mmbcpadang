@@ -2,7 +2,6 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbyokn5uN2NyiHanuwjafc15
 
 let lokasiAbsen = "";
 
-
 //==================================================
 // JAM DIGITAL
 //==================================================
@@ -45,8 +44,19 @@ function updateClock(){
     const jam =
         now.toLocaleTimeString("id-ID");
 
-    document.getElementById("tanggal").innerHTML = tanggal;
-    document.getElementById("jam").innerHTML = jam;
+    const elTanggal =
+        document.getElementById("tanggal");
+
+    const elJam =
+        document.getElementById("jam");
+
+    if(elTanggal){
+        elTanggal.innerHTML = tanggal;
+    }
+
+    if(elJam){
+        elJam.innerHTML = jam;
+    }
 
 }
 
@@ -60,9 +70,13 @@ updateClock();
 
 function setStatus(type,text){
 
-    const el = document.getElementById("status");
+    const el =
+        document.getElementById("status");
 
-    el.className = "status-box " + type;
+    if(!el) return;
+
+    el.className =
+        "status-box " + type;
 
     el.innerHTML = text;
 
@@ -81,15 +95,24 @@ function beep(jumlah = 1){
 
             try{
 
-                const audio = new AudioContext();
+                const AudioCtx =
+                    window.AudioContext ||
+                    window.webkitAudioContext;
 
-                const osc = audio.createOscillator();
+                const audio =
+                    new AudioCtx();
 
-                const gain = audio.createGain();
+                const osc =
+                    audio.createOscillator();
+
+                const gain =
+                    audio.createGain();
 
                 osc.connect(gain);
 
-                gain.connect(audio.destination);
+                gain.connect(
+                    audio.destination
+                );
 
                 osc.frequency.value = 900;
 
@@ -136,14 +159,23 @@ function tampilBerhasil(data){
     const scanner =
         document.getElementById("scannerArea");
 
-    scanner.style.display = "none";
+    if(scanner){
+        scanner.style.display = "none";
+    }
 
-    document.getElementById("status")
-        .style.display = "none";
+    const status =
+        document.getElementById("status");
+
+    if(status){
+        status.style.display = "none";
+    }
+
+    if(!hasil) return;
 
     let icon = "🎉";
 
-    let judul = "SELAMAT DATANG";
+    let judul =
+        "SELAMAT DATANG";
 
     let warna = "masuk";
 
@@ -155,7 +187,8 @@ function tampilBerhasil(data){
 
         icon = "👋";
 
-        judul = "SAMPAI JUMPA";
+        judul =
+            "SAMPAI JUMPA";
 
         warna = "pulang";
 
@@ -203,82 +236,162 @@ function tampilBerhasil(data){
 // PILIH ABSEN KANTOR
 //==================================================
 
-document.getElementById("btnKantor").onclick = function(){
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
 
-    lokasiAbsen = "KANTOR";
+        const btnKantor =
+            document.getElementById("btnKantor");
 
-    document.getElementById(
-        "pilihanLokasi"
-    ).style.display = "none";
+        if(!btnKantor) return;
 
-    const scanner =
-        document.getElementById("scannerArea");
+        btnKantor.onclick = function(){
 
-    document.getElementById(
-        "loadingCamera"
-    ).style.display = "block";
+            lokasiAbsen = "KANTOR";
 
+            const pilihan =
+                document.getElementById(
+                    "pilihanLokasi"
+                );
 
-    setTimeout(function(){
+            if(pilihan){
+                pilihan.style.display = "none";
+            }
 
-        document.getElementById(
-            "loadingCamera"
-        ).style.display = "none";
+            const scanner =
+                document.getElementById(
+                    "scannerArea"
+                );
 
-        scanner.style.display = "block";
+            const loading =
+                document.getElementById(
+                    "loadingCamera"
+                );
 
-        scanner.classList.add("fadeShow");
+            if(loading){
+                loading.style.display = "block";
+            }
 
-        document.getElementById(
-            "status"
-        ).style.display = "block";
+            setTimeout(function(){
 
-        startScanner();
+                if(loading){
+                    loading.style.display = "none";
+                }
 
-    },500);
+                if(scanner){
 
-};
+                    scanner.style.display =
+                        "block";
+
+                    scanner.classList.add(
+                        "fadeShow"
+                    );
+
+                }
+
+                const status =
+                    document.getElementById(
+                        "status"
+                    );
+
+                if(status){
+                    status.style.display =
+                        "block";
+                }
+
+                if(typeof startScanner === "function"){
+                    startScanner();
+                }
+
+            },500);
+
+        };
+
+    }
+);
 
 
 //==================================================
 // PILIH ABSEN LAPANGAN
 //==================================================
 
-document.getElementById("btnLapangan").onclick = function(){
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
 
-    lokasiAbsen = "LAPANGAN";
+        const btnLapangan =
+            document.getElementById(
+                "btnLapangan"
+            );
 
-    document.getElementById(
-        "pilihanLokasi"
-    ).style.display = "none";
+        if(!btnLapangan) return;
 
-    const scanner =
-        document.getElementById("scannerArea");
+        btnLapangan.onclick = function(){
 
-    document.getElementById(
-        "loadingCamera"
-    ).style.display = "block";
+            lokasiAbsen = "LAPANGAN";
 
+            const pilihan =
+                document.getElementById(
+                    "pilihanLokasi"
+                );
 
-    setTimeout(function(){
+            if(pilihan){
+                pilihan.style.display = "none";
+            }
 
-        document.getElementById(
-            "loadingCamera"
-        ).style.display = "none";
+            const scanner =
+                document.getElementById(
+                    "scannerArea"
+                );
 
-        scanner.style.display = "block";
+            const loading =
+                document.getElementById(
+                    "loadingCamera"
+                );
 
-        scanner.classList.add("fadeShow");
+            if(loading){
+                loading.style.display =
+                    "block";
+            }
 
-        document.getElementById(
-            "status"
-        ).style.display = "block";
+            setTimeout(function(){
 
-        startScanner();
+                if(loading){
+                    loading.style.display =
+                        "none";
+                }
 
-    },500);
+                if(scanner){
 
-};
+                    scanner.style.display =
+                        "block";
+
+                    scanner.classList.add(
+                        "fadeShow"
+                    );
+
+                }
+
+                const status =
+                    document.getElementById(
+                        "status"
+                    );
+
+                if(status){
+                    status.style.display =
+                        "block";
+                }
+
+                if(typeof startScanner === "function"){
+                    startScanner();
+                }
+
+            },500);
+
+        };
+
+    }
+);
 
 
 //==================================================
@@ -342,7 +455,9 @@ function hentikanSelfie(){
 
             stream
                 .getTracks()
-                .forEach(track => track.stop());
+                .forEach(
+                    track => track.stop()
+                );
 
             stream = null;
 
@@ -351,11 +466,44 @@ function hentikanSelfie(){
     }catch(e){}
 
     const selfie =
-        document.getElementById("selfieArea");
+        document.getElementById(
+            "selfieArea"
+        );
 
     if(selfie){
 
-        selfie.style.display = "none";
+        selfie.style.display =
+            "none";
+
+    }
+
+}
+
+
+//==================================================
+// TAB AKTIF
+//==================================================
+
+function setTabAktif(id){
+
+    document
+        .querySelectorAll(".menuTab")
+        .forEach(function(tab){
+
+            tab.classList.remove(
+                "menuTabAktif"
+            );
+
+        });
+
+    const aktif =
+        document.getElementById(id);
+
+    if(aktif){
+
+        aktif.classList.add(
+            "menuTabAktif"
+        );
 
     }
 
@@ -373,85 +521,82 @@ async function bukaAbsensiQR(){
     hentikanSelfie();
 
 
-    // Sembunyikan halaman jadwal
     const jadwal =
-        document.getElementById("jadwalPage");
+        document.getElementById(
+            "jadwalPage"
+        );
 
     if(jadwal){
-
         jadwal.style.display = "none";
-
     }
 
 
-    // Sembunyikan halaman log
     const log =
-        document.getElementById("logPage");
+        document.getElementById(
+            "logPage"
+        );
 
     if(log){
-
         log.style.display = "none";
-
     }
 
 
-    // Tampilkan halaman utama
     const container =
-        document.querySelector(".container");
+        document.querySelector(
+            ".container"
+        );
 
     if(container){
-
         container.style.display = "block";
-
     }
 
 
-    // Reset hasil
     const hasil =
-        document.getElementById("hasil");
+        document.getElementById(
+            "hasil"
+        );
 
     if(hasil){
-
         hasil.innerHTML = "";
-
     }
 
 
-    // Reset pilihan lokasi
     const pilihan =
-        document.getElementById("pilihanLokasi");
+        document.getElementById(
+            "pilihanLokasi"
+        );
 
     if(pilihan){
-
         pilihan.style.display = "flex";
-
     }
 
 
-    // Sembunyikan scanner
     const scanner =
-        document.getElementById("scannerArea");
+        document.getElementById(
+            "scannerArea"
+        );
 
     if(scanner){
-
         scanner.style.display = "none";
-
+        scanner.classList.remove(
+            "fadeShow"
+        );
     }
 
 
     const status =
-        document.getElementById("status");
+        document.getElementById(
+            "status"
+        );
 
     if(status){
-
         status.style.display = "none";
-
     }
 
 
-    // Aktifkan tab
-    setTabAktif("tabAbsensi");
-
+    setTabAktif(
+        "tabAbsensi"
+    );
 
 }
 
@@ -468,30 +613,43 @@ async function bukaJadwal(){
 
 
     const container =
-        document.querySelector(".container");
+        document.querySelector(
+            ".container"
+        );
 
     if(container){
-
         container.style.display = "none";
-
     }
 
 
     const jadwal =
-        document.getElementById("jadwalPage");
+        document.getElementById(
+            "jadwalPage"
+        );
 
-    if(!jadwal){
-
-        return;
-
-    }
+    if(!jadwal) return;
 
 
     jadwal.style.display = "block";
 
 
+    const log =
+        document.getElementById(
+            "logPage"
+        );
+
+    if(log){
+        log.style.display = "none";
+    }
+
+
     const isi =
-        document.getElementById("isiJadwal");
+        document.getElementById(
+            "isiJadwal"
+        );
+
+    if(!isi) return;
+
 
     isi.innerHTML = `
 
@@ -499,39 +657,45 @@ async function bukaJadwal(){
 
             <div class="loading-spinner"></div>
 
-            <p>📅 Mengambil jadwal kerja...</p>
+            <p>
+                📅 Mengambil jadwal kerja...
+            </p>
 
         </div>
 
     `;
 
 
-    setTabAktif("tabJadwal");
+    setTabAktif(
+        "tabJadwal"
+    );
 
 
     try{
 
-        const res = await fetch(
-            GAS_URL,
-            {
-                method:"POST",
+        const res =
+            await fetch(
+                GAS_URL,
+                {
+                    method:"POST",
 
-                headers:{
-                    "Content-Type":
-                        "text/plain;charset=utf-8"
-                },
+                    headers:{
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
 
-                body:JSON.stringify({
+                    body:JSON.stringify({
 
-                    action:"getJadwal"
+                        action:"getJadwal"
 
-                })
+                    })
 
-            }
-        );
+                }
+            );
 
 
-        const hasil = await res.json();
+        const hasil =
+            await res.json();
 
 
         if(!hasil.status){
@@ -598,10 +762,17 @@ function renderJadwal(
 ){
 
     const isi =
-        document.getElementById("isiJadwal");
+        document.getElementById(
+            "isiJadwal"
+        );
+
+    if(!isi) return;
 
 
-    if(!data || data.length === 0){
+    if(
+        !data ||
+        data.length === 0
+    ){
 
         isi.innerHTML = `
 
@@ -646,40 +817,47 @@ function renderJadwal(
             <table class="dataTable jadwalTable">
 
                 <tbody>
+
     `;
 
 
-    data.forEach(function(row,index){
+    data.forEach(
+        function(row,index){
 
-        html += "<tr>";
-
-
-        row.forEach(function(cell){
-
-            const tag =
-                index === 0
-                ? "th"
-                : "td";
+            html += "<tr>";
 
 
-            let isiCell =
-                cell === ""
-                ? "-"
-                : cell;
+            row.forEach(
+                function(cell){
+
+                    const tag =
+                        index === 0
+                        ? "th"
+                        : "td";
 
 
-            html += `
-                <${tag}>
-                    ${isiCell}
-                </${tag}>
-            `;
-
-        });
+                    const isiCell =
+                        cell === ""
+                        ? "-"
+                        : cell;
 
 
-        html += "</tr>";
+                    html += `
 
-    });
+                        <${tag}>
+                            ${isiCell}
+                        </${tag}>
+
+                    `;
+
+                }
+            );
+
+
+            html += "</tr>";
+
+        }
+    );
 
 
     html += `
@@ -717,31 +895,42 @@ async function bukaLogHarian(){
 
 
     const container =
-        document.querySelector(".container");
+        document.querySelector(
+            ".container"
+        );
 
     if(container){
-
         container.style.display = "none";
-
     }
 
 
     const log =
-        document.getElementById("logPage");
+        document.getElementById(
+            "logPage"
+        );
 
-
-    if(!log){
-
-        return;
-
-    }
+    if(!log) return;
 
 
     log.style.display = "block";
 
 
+    const jadwal =
+        document.getElementById(
+            "jadwalPage"
+        );
+
+    if(jadwal){
+        jadwal.style.display = "none";
+    }
+
+
     const isi =
-        document.getElementById("isiLogHarian");
+        document.getElementById(
+            "isiLogHarian"
+        );
+
+    if(!isi) return;
 
 
     isi.innerHTML = `
@@ -750,39 +939,45 @@ async function bukaLogHarian(){
 
             <div class="loading-spinner"></div>
 
-            <p>📋 Mengambil log absensi...</p>
+            <p>
+                📋 Mengambil log absensi...
+            </p>
 
         </div>
 
     `;
 
 
-    setTabAktif("tabLog");
+    setTabAktif(
+        "tabLog"
+    );
 
 
     try{
 
-        const res = await fetch(
-            GAS_URL,
-            {
-                method:"POST",
+        const res =
+            await fetch(
+                GAS_URL,
+                {
+                    method:"POST",
 
-                headers:{
-                    "Content-Type":
-                        "text/plain;charset=utf-8"
-                },
+                    headers:{
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
 
-                body:JSON.stringify({
+                    body:JSON.stringify({
 
-                    action:"getLogHarian"
+                        action:"getLogHarian"
 
-                })
+                    })
 
-            }
-        );
+                }
+            );
 
 
-        const hasil = await res.json();
+        const hasil =
+            await res.json();
 
 
         if(!hasil.status){
@@ -845,10 +1040,17 @@ async function bukaLogHarian(){
 function renderLogHarian(data){
 
     const isi =
-        document.getElementById("isiLogHarian");
+        document.getElementById(
+            "isiLogHarian"
+        );
+
+    if(!isi) return;
 
 
-    if(!data || data.length === 0){
+    if(
+        !data ||
+        data.length === 0
+    ){
 
         isi.innerHTML = `
 
@@ -893,82 +1095,132 @@ function renderLogHarian(data){
             <table class="dataTable logTable">
 
                 <tbody>
+
     `;
 
 
-    data.forEach(function(row,index){
+    data.forEach(
+        function(row,index){
 
-        html += "<tr>";
-
-
-        row.forEach(function(cell,colIndex){
-
-            const tag =
-                index === 0
-                ? "th"
-                : "td";
+            html += "<tr>";
 
 
-            let isiCell =
-                cell === ""
-                ? "-"
-                : cell;
+            row.forEach(
+                function(cell,colIndex){
+
+                    const tag =
+                        index === 0
+                        ? "th"
+                        : "td";
 
 
-            // FOTO SELFIE
-            // Kolom G = index 6
-            if(
-                index > 0 &&
-                colIndex === 6 &&
-                cell &&
-                cell.includes("http")
-            ){
-
-                isiCell = `
-
-                    <a
-                        href="${cell}"
-                        target="_blank"
-                        class="fotoLink"
-                    >
-                        📷 Lihat Foto
-                    </a>
-
-                `;
-
-            }
+                    let isiCell =
+                        cell === ""
+                        ? "-"
+                        : cell;
 
 
-            // THUMBNAIL
-            // Kolom H = index 7
-            if(
-                index > 0 &&
-                colIndex === 7 &&
-                cell &&
-                cell.includes("IMAGE")
-            ){
+                    // FOTO SELFIE
+                    // Kolom G = index 6
 
-                isiCell = cell;
+                    if(
+                        index > 0 &&
+                        colIndex === 6 &&
+                        cell &&
+                        cell.includes("http")
+                    ){
 
-            }
+                        isiCell = `
+
+                            <a
+                                href="${cell}"
+                                target="_blank"
+                                rel="noopener"
+                                class="fotoLink"
+                            >
+                                📷 Lihat Foto
+                            </a>
+
+                        `;
+
+                    }
 
 
-            html += `
+                    // THUMBNAIL
+                    // Kolom H = index 7
 
-                <${tag}>
+                    if(
+                        index > 0 &&
+                        colIndex === 7 &&
+                        cell &&
+                        cell.includes("IMAGE")
+                    ){
 
-                    ${isiCell}
+                        isiCell = cell;
 
-                </${tag}>
-
-            `;
-
-        });
+                    }
 
 
-        html += "</tr>";
+                    // HASIL SHIFT
+                    // Kolom I = index 8
 
-    });
+                    if(
+                        index > 0 &&
+                        colIndex === 8 &&
+                        cell
+                    ){
+
+                        if(
+                            cell.includes(
+                                "TERLAMBAT"
+                            )
+                        ){
+
+                            isiCell = `
+
+                                <span
+                                    class="log-terlambat"
+                                >
+                                    🔴 ${cell}
+                                </span>
+
+                            `;
+
+                        }else{
+
+                            isiCell = `
+
+                                <span
+                                    class="log-ok"
+                                >
+                                    🟢 ${cell}
+                                </span>
+
+                            `;
+
+                        }
+
+                    }
+
+
+                    html += `
+
+                        <${tag}>
+
+                            ${isiCell}
+
+                        </${tag}>
+
+                    `;
+
+                }
+            );
+
+
+            html += "</tr>";
+
+        }
+    );
 
 
     html += `
@@ -995,57 +1247,23 @@ function renderLogHarian(data){
 
 
 //==================================================
-// SET TAB AKTIF
-//==================================================
-
-function setTabAktif(id){
-
-    document
-        .querySelectorAll(".menuTab")
-        .forEach(function(tab){
-
-            tab.classList.remove(
-                "menuTabAktif"
-            );
-
-        });
-
-
-    const aktif =
-        document.getElementById(id);
-
-
-    if(aktif){
-
-        aktif.classList.add(
-            "menuTabAktif"
-        );
-
-    }
-
-}
-
-
-//==================================================
 // BUAT 3 TAB NAVIGASI
 //==================================================
 
 function buatMenuTab(){
 
     const container =
-        document.querySelector(".container");
+        document.querySelector(
+            ".container"
+        );
+
+    if(!container) return;
 
 
-    if(!container){
-
-        return;
-
-    }
-
-
-    // Jangan buat dua kali
     if(
-        document.getElementById("menuTab")
+        document.getElementById(
+            "menuTab"
+        )
     ){
 
         return;
@@ -1058,9 +1276,12 @@ function buatMenuTab(){
     //================================================
 
     const menu =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     menu.id = "menuTab";
+
 
     menu.innerHTML = `
 
@@ -1099,11 +1320,15 @@ function buatMenuTab(){
     //================================================
 
     const jadwal =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
-    jadwal.id = "jadwalPage";
+    jadwal.id =
+        "jadwalPage";
 
-    jadwal.style.display = "none";
+    jadwal.style.display =
+        "none";
 
     jadwal.innerHTML = `
 
@@ -1117,11 +1342,15 @@ function buatMenuTab(){
     //================================================
 
     const log =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
-    log.id = "logPage";
+    log.id =
+        "logPage";
 
-    log.style.display = "none";
+    log.style.display =
+        "none";
 
     log.innerHTML = `
 
@@ -1130,9 +1359,13 @@ function buatMenuTab(){
     `;
 
 
-    container.appendChild(jadwal);
+    container.appendChild(
+        jadwal
+    );
 
-    container.appendChild(log);
+    container.appendChild(
+        log
+    );
 
 
     //================================================
@@ -1170,7 +1403,6 @@ function buatMenuTab(){
             bukaLogHarian
         );
 
-
 }
 
 
@@ -1192,17 +1424,15 @@ function buatStyleMenu(){
 
 
     const style =
-        document.createElement("style");
+        document.createElement(
+            "style"
+        );
 
     style.id =
         "styleMenuTambahan";
 
 
     style.innerHTML = `
-
-        /* =========================================
-           MENU TAB
-        ========================================= */
 
         #menuTab{
 
@@ -1274,10 +1504,6 @@ function buatStyleMenu(){
         }
 
 
-        /* =========================================
-           PAGE
-        ========================================= */
-
         #jadwalPage,
         #logPage{
 
@@ -1311,10 +1537,6 @@ function buatStyleMenu(){
 
         }
 
-
-        /* =========================================
-           HEADER
-        ========================================= */
 
         .pageHeader{
 
@@ -1388,10 +1610,6 @@ function buatStyleMenu(){
 
         }
 
-
-        /* =========================================
-           TABLE
-        ========================================= */
 
         .tableWrapper{
 
@@ -1476,10 +1694,6 @@ function buatStyleMenu(){
         }
 
 
-        /* =========================================
-           INFO
-        ========================================= */
-
         .tableInfo{
 
             margin-top:12px;
@@ -1496,10 +1710,6 @@ function buatStyleMenu(){
 
         }
 
-
-        /* =========================================
-           LOADING DATA
-        ========================================= */
 
         .loadingData{
 
@@ -1520,10 +1730,6 @@ function buatStyleMenu(){
 
         }
 
-
-        /* =========================================
-           FOTO
-        ========================================= */
 
         .fotoLink{
 
@@ -1550,10 +1756,6 @@ function buatStyleMenu(){
 
         }
 
-
-        /* =========================================
-           MOBILE
-        ========================================= */
 
         @media(max-width:600px){
 
@@ -1606,7 +1808,9 @@ function buatStyleMenu(){
     `;
 
 
-    document.head.appendChild(style);
+    document.head.appendChild(
+        style
+    );
 
 }
 
