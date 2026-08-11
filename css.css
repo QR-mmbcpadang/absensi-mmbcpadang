@@ -491,7 +491,7 @@ opacity:.5;
 }
 
 .tab-btn:hover{
-    background:#dceaff;
+    transform:translateY(-1px);
 }
 
 .tab-btn.active{
@@ -616,12 +616,11 @@ opacity:.5;
 }
 
 .data-table tbody tr:hover{
-    background:#edf5ff;
+    background:#eef6ff;
 }
 
-
 /* =========================================
-   JADWAL
+JADWAL
 ========================================= */
 
 .jadwal-table td{
