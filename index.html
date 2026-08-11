@@ -101,7 +101,7 @@
         <canvas id="canvas" style="display:none;"></canvas>
         <div class="selfie-header">
             <h3 style="font-size: 16px; color: #38bdf8;">📸 Ambil Foto Selfie</h3>
-            <p id="selfieStaffName" style="font-size: 13px; color: #e2e8f0; margin-top: 2px;"></p>
+            <p id="selfieStaffName" style="font-size: 14px; font-weight: bold; color: #ffffff; margin-top: 4px;">Memuat nama...</p>
         </div>
         <div class="selfie-footer">
             <button class="btn-capture" onclick="ambilFotoDanKirim()">
@@ -189,6 +189,7 @@
         let html5QrCode = null;
         let sedangProses = false;
         let activeStaffId = "";
+        let activeStaffName = "";
         let streamSelfie = null;
 
         let rawJadwalData = [];
@@ -258,14 +259,30 @@
 
         function prosesQRData(idStaff) {
             activeStaffId = idStaff;
-            bukaKameraSelfie(idStaff);
-        }
-
-        function bukaKameraSelfie(idStaff) {
-            document.getElementById("selfieStaffName").innerText = "ID Staff: " + idStaff;
+            // Ambil nama staff terlebih dahulu (bisa lewat pengecekan API atau langsung buka modal dengan nama sementara)
+            document.getElementById("selfieStaffName").innerText = "Memeriksa ID: " + idStaff + "...";
             const modal = document.getElementById("selfieModal");
             modal.style.display = "flex";
 
+            // Cek nama via backend atau langsung buka kamera
+            fetch(API, {
+                method: "POST",
+                body: JSON.stringify({ action: "cekNama", id: idStaff })
+            })
+            .then(r => r.json())
+            .then(res => {
+                activeStaffName = res.status ? res.nama : "Staff (" + idStaff + ")";
+                document.getElementById("selfieStaffName").innerText = "👤 " + activeStaffName;
+                bukaKameraSelfieStream();
+            })
+            .catch(err => {
+                activeStaffName = "Staff (" + idStaff + ")";
+                document.getElementById("selfieStaffName").innerText = "👤 " + activeStaffName;
+                bukaKameraSelfieStream();
+            });
+        }
+
+        function bukaKameraSelfieStream() {
             navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false })
                 .then(stream => {
                     streamSelfie = stream;
@@ -275,7 +292,7 @@
                 })
                 .catch(err => {
                     alert("Gagal mengakses kamera depan untuk selfie.");
-                    modal.style.display = "none";
+                    document.getElementById("selfieModal").style.display = "none";
                     mulaiScanner();
                     sedangProses = false;
                 });
@@ -284,28 +301,35 @@
         function ambilFotoDanKirim() {
             const video = document.getElementById("selfieVideo");
             const canvas = document.getElementById("canvas");
-            canvas.width = video.videoWidth || 480;
-            canvas.height = video.videoHeight || 640;
+            
+            // Pastikan video sudah memuat frame gambar
+            if (video.videoWidth === 0 || video.videoHeight === 0) {
+                alert("Kamera sedang bersiap, silakan coba ketuk tombol ambil foto sekali lagi.");
+                return;
+            }
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
             const ctx = canvas.getContext("2d");
             
-            // 1. Gambar foto asli dari video
+            // 1. Gambar foto asli dari video streaming
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-            // 2. Tambahkan Watermark di atas foto (ID Staff, Tanggal, Jam, Lokasi)
+            // 2. Tambahkan Watermark di atas foto (Nama Staff, Tanggal, Jam, Lokasi)
             const nowWib = new Date();
             const tglStr = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " - " + nowWib.toLocaleTimeString("id-ID");
             
-            ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
-            ctx.fillRect(0, canvas.height - 90, canvas.width, 90);
+            ctx.fillStyle = "rgba(0, 0, 0, 0.65)";
+            ctx.fillRect(0, canvas.height - 100, canvas.width, 100);
 
-            ctx.font = "bold 16px Arial";
+            ctx.font = "bold 20px Arial";
             ctx.fillStyle = "#38bdf8";
-            ctx.fillText("ID Staff: " + activeStaffId, 15, canvas.height - 60);
+            ctx.fillText("👤 " + activeStaffName, 20, canvas.height - 65);
 
-            ctx.font = "13px Arial";
+            ctx.font = "15px Arial";
             ctx.fillStyle = "#ffffff";
-            ctx.fillText("📅 " + tglStr, 15, canvas.height - 38);
-            ctx.fillText("📍 Lokasi: " + selectedLokasi + " (MMBC PADANG)", 15, canvas.height - 15);
+            ctx.fillText("📅 " + tglStr, 20, canvas.height - 40);
+            ctx.fillText("📍 Lokasi: " + selectedLokasi + " (MMBC PADANG)", 20, canvas.height - 15);
 
             const base64Image = canvas.toDataURL("image/jpeg", 0.85);
 
@@ -464,7 +488,7 @@
             renderJadwalTable([header1, header2, ...filteredBody], "Hasil Pencarian");
         }
 
-        // LOAD LOG HARIAN (ID & FOTO SELFIE DIHILANGKAN DARI TABEL)
+        // LOAD LOG HARIAN
         function loadLogHarian() {
             const container = document.getElementById('logContent');
             container.innerHTML = "<div style='text-align:center; padding:20px; color:#64748b;'>Memuat log absensi hari ini...</div>";
