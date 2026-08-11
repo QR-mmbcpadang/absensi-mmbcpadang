@@ -35,14 +35,12 @@
         .scan-box { background: #000; border-radius: 12px; overflow: hidden; margin-top: 10px; }
         #reader { width: 100% !important; border: none !important; }
 
-        /* SEARCH BOX */
         .search-box { width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 13px; margin-bottom: 12px; outline: none; transition: border 0.2s; }
         .search-box:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
 
-        /* FULL SCREEN OVERLAY DINAMIS (HASIL SUKSES) */
+        /* FULL SCREEN OVERLAY DINAMIS */
         #fullScreenOverlay {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #0f172a; display: none; flex-direction: column; align-items: center; justify-content: center;
             z-index: 99999; padding: 25px; text-align: center; transition: background 0.4s ease;
         }
@@ -63,7 +61,7 @@
         .overlay-msg-box { background: #f1f5f9; padding: 10px 14px; border-radius: 12px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; font-weight: 600; color: #334155; border: 1px solid #e2e8f0; margin-top: 10px; }
         .waving-hand { display: inline-block; animation: wave 1.2s infinite; transform-origin: 70% 70%; font-size: 18px; }
 
-        /* MODAL KAMERA SELFIE FULL SCREEN */
+        /* MODAL KAMERA SELFIE */
         #selfieModal {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000000;
             display: none; flex-direction: column; align-items: center; justify-content: space-between;
@@ -83,16 +81,9 @@
         table.rekap-table th, table.rekap-table td { border: 1px solid #cbd5e1; padding: 9px 12px; text-align: center; background: #ffffff; }
         table.rekap-table th { background: #f1f5f9; color: #1e293b; position: sticky; top: 0; z-index: 3; font-weight: bold; }
         
-        /* STICKY KOLOM NAMA / KARYAWAN PERTAMA */
         table.rekap-table th:first-child, 
         table.rekap-table td:first-child { 
-            position: sticky; 
-            left: 0; 
-            z-index: 2; 
-            background: #f8fafc; 
-            border-right: 2px solid #cbd5e1;
-            font-weight: 600;
-            text-align: left;
+            position: sticky; left: 0; z-index: 2; background: #f8fafc; border-right: 2px solid #cbd5e1; font-weight: 600; text-align: left;
         }
         table.rekap-table th:first-child { z-index: 4; background: #e2e8f0; }
 
@@ -114,7 +105,7 @@
         </div>
         <div class="selfie-footer">
             <button class="btn-capture" onclick="ambilFotoDanKirim()">
-                <span>📸</span> Ambil & Kirim Absen Masuk
+                <span>📸</span> Ambil Foto & Kirim Absen
             </button>
         </div>
     </div>
@@ -296,15 +287,34 @@
             canvas.width = video.videoWidth || 480;
             canvas.height = video.videoHeight || 640;
             const ctx = canvas.getContext("2d");
+            
+            // 1. Gambar foto asli dari video
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const base64Image = canvas.toDataURL("image/jpeg", 0.8);
+
+            // 2. Tambahkan Watermark di atas foto (ID Staff, Tanggal, Jam, Lokasi)
+            const nowWib = new Date();
+            const tglStr = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " - " + nowWib.toLocaleTimeString("id-ID");
+            
+            ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
+            ctx.fillRect(0, canvas.height - 90, canvas.width, 90);
+
+            ctx.font = "bold 16px Arial";
+            ctx.fillStyle = "#38bdf8";
+            ctx.fillText("ID Staff: " + activeStaffId, 15, canvas.height - 60);
+
+            ctx.font = "13px Arial";
+            ctx.fillStyle = "#ffffff";
+            ctx.fillText("📅 " + tglStr, 15, canvas.height - 38);
+            ctx.fillText("📍 Lokasi: " + selectedLokasi + " (MMBC PADANG)", 15, canvas.height - 15);
+
+            const base64Image = canvas.toDataURL("image/jpeg", 0.85);
 
             if (streamSelfie) {
                 streamSelfie.getTracks().forEach(track => track.stop());
             }
             document.getElementById("selfieModal").style.display = "none";
 
-            tampilkanLoading("Menyimpan Absen...", "Mengunggah foto & memproses absensi...");
+            tampilkanLoading("Menyimpan Absen...", "Memproses absensi...");
 
             fetch(API, {
                 method: "POST",
@@ -314,7 +324,6 @@
             .then(res => {
                 tutupLoading();
                 if (res.status) {
-                    const nowWib = new Date();
                     const tglFormat = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " | " + nowWib.toLocaleTimeString("id-ID");
 
                     const overlay = document.getElementById("fullScreenOverlay");
@@ -341,16 +350,16 @@
                     overlay.style.display = "flex";
 
                     try {
-                        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                        const osc = ctx.createOscillator();
-                        const gain = ctx.createGain();
+                        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
                         osc.connect(gain);
-                        gain.connect(ctx.destination);
+                        gain.connect(audioCtx.destination);
                         osc.type = 'sine';
-                        osc.frequency.setValueAtTime(659.25, ctx.currentTime);
-                        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime);
+                        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
                         osc.start();
-                        osc.stop(ctx.currentTime + 0.18);
+                        osc.stop(audioCtx.currentTime + 0.18);
                     } catch(e) {}
 
                     setTimeout(() => {
@@ -449,14 +458,13 @@
             let bodyRows = rawJadwalData.slice(2);
 
             let filteredBody = bodyRows.filter(row => {
-                // Cari di kolom nama (biasanya index 1 atau 0 tergantung sheet, kita cek semua sel di baris tersebut)
                 return row.some(cell => String(cell).toLowerCase().includes(keyword));
             });
 
             renderJadwalTable([header1, header2, ...filteredBody], "Hasil Pencarian");
         }
 
-        // LOAD LOG HARIAN (ID & FOTO SELFIE DIHILANGKAN DARI TAMPILAN)
+        // LOAD LOG HARIAN (ID & FOTO SELFIE DIHILANGKAN DARI TABEL)
         function loadLogHarian() {
             const container = document.getElementById('logContent');
             container.innerHTML = "<div style='text-align:center; padding:20px; color:#64748b;'>Memuat log absensi hari ini...</div>";
@@ -472,9 +480,6 @@
                     return;
                 }
                 
-                // Saring kolom: Hilangkan kolom "ID" (misal index 1) dan "Foto" (misal index 6)
-                // Berdasarkan struktur: [Timestamp, ID, Nama, Shift, Jam Masuk, Jam Pulang, Foto, Lokasi, Status]
-                // Kita filter agar kolom ID (index 1) dan Foto (index 6) dibuang dari array baris data.
                 let originalRows = res.data;
                 if (originalRows.length <= 1) {
                     container.innerHTML = "<div style='text-align:center; padding:20px; color:#64748b;'>Belum ada karyawan yang absen hari ini.</div>";
@@ -482,8 +487,6 @@
                 }
 
                 rawLogData = originalRows.map(row => {
-                    // Buang elemen index 6 (Foto) dan index 1 (ID)
-                    // Hati-hati urutan index: hapus index terbesar dulu (6) baru index (1)
                     let newRow = [...row];
                     newRow.splice(6, 1); // Hapus kolom Foto
                     newRow.splice(1, 1); // Hapus kolom ID Karyawan
