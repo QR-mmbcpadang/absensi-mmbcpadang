@@ -1244,168 +1244,302 @@ function renderLogHarian(data){
     isi.innerHTML = html;
 
 }
-
-
 //==================================================
-// BUAT 3 TAB NAVIGASI
+// AKTIFKAN TAB NAVIGASI
 //==================================================
 
 function buatMenuTab(){
 
-    const container =
-        document.querySelector(
-            ".container"
-        );
+    const tabAbsensi =
+        document.getElementById("tabAbsensi");
 
-    if(!container) return;
+    const tabJadwal =
+        document.getElementById("tabJadwal");
 
+    const tabLog =
+        document.getElementById("tabLog");
 
-    if(
-        document.getElementById(
-            "menuTab"
-        )
-    ){
-
+    if(!tabAbsensi || !tabJadwal || !tabLog){
+        console.log("TAB TIDAK DITEMUKAN");
         return;
-
     }
 
 
-    //================================================
-    // MENU
-    //================================================
+    // ==========================================
+    // TAB ABSENSI
+    // ==========================================
 
-    const menu =
-        document.createElement(
-            "div"
-        );
+    tabAbsensi.onclick = function(){
 
-    menu.id = "menuTab";
+        bukaAbsensiQR();
 
-
-    menu.innerHTML = `
-
-        <button
-            id="tabAbsensi"
-            class="menuTab menuTabAktif"
-        >
-            📷 Absensi QR
-        </button>
-
-        <button
-            id="tabJadwal"
-            class="menuTab"
-        >
-            📅 Jadwal Kerja
-        </button>
-
-        <button
-            id="tabLog"
-            class="menuTab"
-        >
-            📋 Log Harian
-        </button>
-
-    `;
+    };
 
 
-    container.insertBefore(
-        menu,
-        container.firstChild
-    );
+    // ==========================================
+    // TAB JADWAL
+    // ==========================================
+
+    tabJadwal.onclick = function(){
+
+        bukaJadwal();
+
+    };
 
 
-    //================================================
-    // HALAMAN JADWAL
-    //================================================
+    // ==========================================
+    // TAB LOG
+    // ==========================================
 
-    const jadwal =
-        document.createElement(
-            "div"
-        );
+    tabLog.onclick = function(){
 
-    jadwal.id =
-        "jadwalPage";
+        bukaLogHarian();
 
-    jadwal.style.display =
-        "none";
-
-    jadwal.innerHTML = `
-
-        <div id="isiJadwal"></div>
-
-    `;
-
-
-    //================================================
-    // HALAMAN LOG
-    //================================================
-
-    const log =
-        document.createElement(
-            "div"
-        );
-
-    log.id =
-        "logPage";
-
-    log.style.display =
-        "none";
-
-    log.innerHTML = `
-
-        <div id="isiLogHarian"></div>
-
-    `;
-
-
-    container.appendChild(
-        jadwal
-    );
-
-    container.appendChild(
-        log
-    );
-
-
-    //================================================
-    // EVENT TAB ABSENSI
-    //================================================
-
-    document
-        .getElementById("tabAbsensi")
-        .addEventListener(
-            "click",
-            bukaAbsensiQR
-        );
-
-
-    //================================================
-    // EVENT TAB JADWAL
-    //================================================
-
-    document
-        .getElementById("tabJadwal")
-        .addEventListener(
-            "click",
-            bukaJadwal
-        );
-
-
-    //================================================
-    // EVENT TAB LOG
-    //================================================
-
-    document
-        .getElementById("tabLog")
-        .addEventListener(
-            "click",
-            bukaLogHarian
-        );
+    };
 
 }
 
 
+//==================================================
+// STYLE TAB
+//==================================================
+
+function buatStyleMenu(){
+
+    if(
+        document.getElementById(
+            "styleMenuTambahan"
+        )
+    ){
+        return;
+    }
+
+
+    const style =
+        document.createElement("style");
+
+
+    style.id =
+        "styleMenuTambahan";
+
+
+    style.innerHTML = `
+
+        #tabMenu{
+
+            display:flex;
+
+            width:100%;
+
+            gap:8px;
+
+            margin:12px 0 20px;
+
+            padding:6px;
+
+            background:#eef4ff;
+
+            border-radius:16px;
+
+        }
+
+
+        .tab-button{
+
+            flex:1;
+
+            min-height:54px;
+
+            padding:10px 5px;
+
+            border:none;
+
+            border-radius:12px;
+
+            background:transparent;
+
+            color:#64748b;
+
+            font-size:14px;
+
+            font-weight:800;
+
+            cursor:pointer;
+
+            transition:.2s ease;
+
+        }
+
+
+        .tab-button:hover{
+
+            background:#dfeaff;
+
+            color:#1565ff;
+
+        }
+
+
+        .tab-button.active{
+
+            background:#1565ff;
+
+            color:#fff;
+
+            box-shadow:
+                0 5px 12px
+                rgba(21,101,255,.28);
+
+        }
+
+
+        .tab-page{
+
+            width:100%;
+
+            animation:
+                fadePage .3s ease;
+
+        }
+
+
+        .page-title{
+
+            margin:10px 0 20px;
+
+            padding:18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef6ff,
+                    #f8fbff
+                );
+
+            border-radius:18px;
+
+        }
+
+
+        .page-icon{
+
+            font-size:35px;
+
+            margin-bottom:5px;
+
+        }
+
+
+        .page-title h2{
+
+            color:#1565ff;
+
+            margin:0 0 5px;
+
+            font-size:24px;
+
+        }
+
+
+        .page-title p{
+
+            color:#64748b;
+
+            font-size:13px;
+
+        }
+
+
+        .data-content{
+
+            width:100%;
+
+        }
+
+
+        .page-loading{
+
+            padding:30px;
+
+            text-align:center;
+
+            color:#1565ff;
+
+        }
+
+
+        .empty-data{
+
+            padding:30px 15px;
+
+            background:#f8fafc;
+
+            border-radius:15px;
+
+            color:#64748b;
+
+        }
+
+
+        @media(max-width:600px){
+
+            #tabMenu{
+
+                gap:4px;
+
+                padding:5px;
+
+            }
+
+
+            .tab-button{
+
+                min-height:50px;
+
+                font-size:11px;
+
+                padding:8px 3px;
+
+            }
+
+        }
+
+    `;
+
+
+    document.head.appendChild(style);
+
+}
+
+
+//==================================================
+// UPDATE TAB AKTIF
+//==================================================
+
+function setTabAktif(id){
+
+    document
+        .querySelectorAll(
+            "#tabMenu .tab-button"
+        )
+        .forEach(function(tab){
+
+            tab.classList.remove("active");
+
+        });
+
+
+    const aktif =
+        document.getElementById(id);
+
+
+    if(aktif){
+
+        aktif.classList.add("active");
+
+    }
+
+}
 //==================================================
 // STYLE MENU & HALAMAN TAMBAHAN
 //==================================================
