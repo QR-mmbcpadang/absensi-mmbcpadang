@@ -11,7 +11,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background: #0f172a; color: #333; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; }
 
-        .container { width: 100%; max-width: 600px; background: #ffffff; border-radius: 20px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); overflow: hidden; display: flex; flex-direction: column; position: relative; }
+        .container { width: 100%; max-width: 900px; background: #ffffff; border-radius: 20px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); overflow: hidden; display: flex; flex-direction: column; position: relative; }
         
         .welcomeCard { background: #f8fafc; padding: 20px; text-align: center; border-bottom: 1px solid #e2e8f0; }
         .welcomeLogo { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; margin-bottom: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
@@ -34,6 +34,10 @@
 
         .scan-box { background: #000; border-radius: 12px; overflow: hidden; margin-top: 10px; }
         #reader { width: 100% !important; border: none !important; }
+
+        /* SEARCH BOX */
+        .search-box { width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 13px; margin-bottom: 12px; outline: none; transition: border 0.2s; }
+        .search-box:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
 
         /* FULL SCREEN OVERLAY DINAMIS (HASIL SUKSES) */
         #fullScreenOverlay {
@@ -74,10 +78,23 @@
         .page-title h2 { font-size: 16px; color: #1e293b; font-weight: 700; }
         .page-title p { font-size: 12px; color: #64748b; }
 
-        .rekap-wrapper { overflow-x: auto; max-height: 60vh; }
-        table.rekap-table { width: 100%; border-collapse: collapse; font-size: 11px; white-space: nowrap; }
-        table.rekap-table th, table.rekap-table td { border: 1px solid #cbd5e1; padding: 8px; text-align: center; background: #ffffff; }
-        table.rekap-table th { background: #f1f5f9; color: #1e293b; position: sticky; top: 0; z-index: 2; font-weight: bold; }
+        .rekap-wrapper { overflow-x: auto; max-height: 65vh; border: 1px solid #cbd5e1; border-radius: 10px; }
+        table.rekap-table { width: 100%; border-collapse: collapse; font-size: 12px; white-space: nowrap; }
+        table.rekap-table th, table.rekap-table td { border: 1px solid #cbd5e1; padding: 9px 12px; text-align: center; background: #ffffff; }
+        table.rekap-table th { background: #f1f5f9; color: #1e293b; position: sticky; top: 0; z-index: 3; font-weight: bold; }
+        
+        /* STICKY KOLOM NAMA / KARYAWAN PERTAMA */
+        table.rekap-table th:first-child, 
+        table.rekap-table td:first-child { 
+            position: sticky; 
+            left: 0; 
+            z-index: 2; 
+            background: #f8fafc; 
+            border-right: 2px solid #cbd5e1;
+            font-weight: 600;
+            text-align: left;
+        }
+        table.rekap-table th:first-child { z-index: 4; background: #e2e8f0; }
 
         .footer { text-align: center; padding: 15px; font-size: 12px; color: #64748b; background: #f8fafc; border-top: 1px solid #e2e8f0; }
 
@@ -88,7 +105,6 @@
 </head>
 <body>
 
-    <!-- MODAL KAMERA SELFIE -->
     <div id="selfieModal">
         <video id="selfieVideo" autoplay playsinline></video>
         <canvas id="canvas" style="display:none;"></canvas>
@@ -103,7 +119,6 @@
         </div>
     </div>
 
-    <!-- FULL SCREEN OVERLAY HASIL ABSEN -->
     <div id="fullScreenOverlay">
         <div class="overlay-card">
             <div class="overlay-icon" id="overlayIcon">✅</div>
@@ -128,7 +143,6 @@
             <button id="tabLog" class="tab-button" onclick="switchTab('log', this)">📋 LOG HARIAN</button>
         </div>
 
-        <!-- HALAMAN 1: ABSENSI QR -->
         <div id="absensiPage" class="tab-page active-page">
             <div id="tanggal" class="tanggal">Memuat tanggal...</div>
             <div id="jam" class="jam">00:00:00</div>
@@ -149,25 +163,25 @@
             </div>
         </div>
 
-        <!-- HALAMAN 2: JADWAL KERJA -->
         <div id="jadwalPage" class="tab-page">
             <div class="page-title">
                 <div class="page-icon">📅</div>
                 <h2>JADWAL KERJA</h2>
                 <p>Jadwal kerja bulanan karyawan</p>
             </div>
+            <input type="text" id="searchJadwal" class="search-box" placeholder="🔍 Cari nama karyawan..." onkeyup="filterTabelJadwal()">
             <div class="rekap-wrapper" id="jadwalContent">
                 <div style="text-align:center; padding:20px; color:#64748b;">Memuat jadwal kerja...</div>
             </div>
         </div>
 
-        <!-- HALAMAN 3: LOG HARIAN -->
         <div id="logPage" class="tab-page">
             <div class="page-title">
                 <div class="page-icon">📋</div>
                 <h2>LOG HARIAN</h2>
                 <p>Riwayat absensi karyawan hari ini</p>
             </div>
+            <input type="text" id="searchLog" class="search-box" placeholder="🔍 Cari nama karyawan, status, atau lokasi..." onkeyup="filterTabelLog()">
             <div class="rekap-wrapper" id="logContent">
                 <div style="text-align:center; padding:20px; color:#64748b;">Memuat log absensi...</div>
             </div>
@@ -185,6 +199,9 @@
         let sedangProses = false;
         let activeStaffId = "";
         let streamSelfie = null;
+
+        let rawJadwalData = [];
+        let rawLogData = [];
 
         function updateClock(){
             const now = new Date();
@@ -384,6 +401,7 @@
             }, 4000);
         }
 
+        // LOAD JADWAL KERJA
         function loadJadwalKerja() {
             const container = document.getElementById('jadwalContent');
             container.innerHTML = "<div style='text-align:center; padding:20px; color:#64748b;'>Memuat jadwal kerja dari Google Sheet...</div>";
@@ -398,25 +416,47 @@
                     container.innerHTML = `<div style='text-align:center; padding:20px; color:#dc2626;'>${res.pesan}</div>`;
                     return;
                 }
-                let rows = res.data;
-                let html = `<div style="font-weight: bold; font-size: 13px; color: #1e293b; margin-bottom: 8px; text-align: center;">📅 Periode: ${res.namaSheet}</div>`;
-                html += '<table class="rekap-table">';
-                rows.forEach((row, idx) => {
-                    html += '<tr>';
-                    row.forEach(cell => {
-                        let tag = idx === 0 || idx === 1 ? 'th' : 'td';
-                        html += `<${tag}>${cell !== null ? cell : ''}</${tag}>`;
-                    });
-                    html += '</tr>';
-                });
-                html += '</table>';
-                container.innerHTML = html;
+                rawJadwalData = res.data;
+                renderJadwalTable(rawJadwalData, res.namaSheet);
             })
             .catch(err => {
                 container.innerHTML = "<div style='text-align:center; padding:20px; color:#dc2626;'>Gagal memuat jadwal kerja.</div>";
             });
         }
 
+        function renderJadwalTable(rows, namaSheet) {
+            const container = document.getElementById('jadwalContent');
+            let html = `<div style="font-weight: bold; font-size: 13px; color: #1e293b; margin-bottom: 8px; text-align: center;">📅 Periode: ${namaSheet}</div>`;
+            html += '<table class="rekap-table" id="tabelJadwalIsi">';
+            rows.forEach((row, idx) => {
+                html += '<tr>';
+                row.forEach(cell => {
+                    let tag = idx === 0 || idx === 1 ? 'th' : 'td';
+                    html += `<${tag}>${cell !== null ? cell : ''}</${tag}>`;
+                });
+                html += '</tr>';
+            });
+            html += '</table>';
+            container.innerHTML = html;
+        }
+
+        function filterTabelJadwal() {
+            const keyword = document.getElementById('searchJadwal').value.toLowerCase();
+            if (rawJadwalData.length === 0) return;
+
+            let header1 = rawJadwalData[0];
+            let header2 = rawJadwalData[1];
+            let bodyRows = rawJadwalData.slice(2);
+
+            let filteredBody = bodyRows.filter(row => {
+                // Cari di kolom nama (biasanya index 1 atau 0 tergantung sheet, kita cek semua sel di baris tersebut)
+                return row.some(cell => String(cell).toLowerCase().includes(keyword));
+            });
+
+            renderJadwalTable([header1, header2, ...filteredBody], "Hasil Pencarian");
+        }
+
+        // LOAD LOG HARIAN (ID & FOTO SELFIE DIHILANGKAN DARI TAMPILAN)
         function loadLogHarian() {
             const container = document.getElementById('logContent');
             container.innerHTML = "<div style='text-align:center; padding:20px; color:#64748b;'>Memuat log absensi hari ini...</div>";
@@ -431,26 +471,59 @@
                     container.innerHTML = `<div style='text-align:center; padding:20px; color:#dc2626;'>${res.pesan}</div>`;
                     return;
                 }
-                let rows = res.data;
-                if (rows.length <= 1) {
+                
+                // Saring kolom: Hilangkan kolom "ID" (misal index 1) dan "Foto" (misal index 6)
+                // Berdasarkan struktur: [Timestamp, ID, Nama, Shift, Jam Masuk, Jam Pulang, Foto, Lokasi, Status]
+                // Kita filter agar kolom ID (index 1) dan Foto (index 6) dibuang dari array baris data.
+                let originalRows = res.data;
+                if (originalRows.length <= 1) {
                     container.innerHTML = "<div style='text-align:center; padding:20px; color:#64748b;'>Belum ada karyawan yang absen hari ini.</div>";
                     return;
                 }
-                let html = '<table class="rekap-table">';
-                rows.forEach((row, idx) => {
-                    html += '<tr>';
-                    row.forEach((cell, colIdx) => {
-                        let tag = idx === 0 ? 'th' : 'td';
-                        html += `<${tag}>${cell !== null ? cell : ''}</${tag}>`;
-                    });
-                    html += '</tr>';
+
+                rawLogData = originalRows.map(row => {
+                    // Buang elemen index 6 (Foto) dan index 1 (ID)
+                    // Hati-hati urutan index: hapus index terbesar dulu (6) baru index (1)
+                    let newRow = [...row];
+                    newRow.splice(6, 1); // Hapus kolom Foto
+                    newRow.splice(1, 1); // Hapus kolom ID Karyawan
+                    return newRow;
                 });
-                html += '</table>';
-                container.innerHTML = html;
+
+                renderLogTable(rawLogData);
             })
             .catch(err => {
                 container.innerHTML = "<div style='text-align:center; padding:20px; color:#dc2626;'>Gagal memuat log harian.</div>";
             });
+        }
+
+        function renderLogTable(rows) {
+            const container = document.getElementById('logContent');
+            let html = '<table class="rekap-table" id="tabelLogIsi">';
+            rows.forEach((row, idx) => {
+                html += '<tr>';
+                row.forEach(cell => {
+                    let tag = idx === 0 ? 'th' : 'td';
+                    html += `<${tag}>${cell !== null ? cell : ''}</${tag}>`;
+                });
+                html += '</tr>';
+            });
+            html += '</table>';
+            container.innerHTML = html;
+        }
+
+        function filterTabelLog() {
+            const keyword = document.getElementById('searchLog').value.toLowerCase();
+            if (rawLogData.length === 0) return;
+
+            let header = rawLogData[0];
+            let bodyRows = rawLogData.slice(1);
+
+            let filteredBody = bodyRows.filter(row => {
+                return row.some(cell => String(cell).toLowerCase().includes(keyword));
+            });
+
+            renderLogTable([header, ...filteredBody]);
         }
     </script>
 </body>
