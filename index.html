@@ -1,398 +1,536 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>ABSENSI QR MMBC PADANG</title>
-
-    <link rel="stylesheet" href="css.css">
-
     <link rel="manifest" href="manifest.json">
-
     <meta name="theme-color" content="#1565ff">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #0f172a; color: #333; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; }
 
+        .container { width: 100%; max-width: 600px; background: #ffffff; border-radius: 20px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); overflow: hidden; display: flex; flex-direction: column; position: relative; }
+        
+        .welcomeCard { background: #f8fafc; padding: 20px; text-align: center; border-bottom: 1px solid #e2e8f0; }
+        .welcomeLogo { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; margin-bottom: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .welcomeCard h2 { font-size: 18px; color: #0f172a; font-weight: 800; text-transform: uppercase; }
+
+        .tab-menu { display: flex; background: #1e293b; padding: 6px; gap: 6px; border-bottom: 1px solid #334155; }
+        .tab-button { flex: 1; padding: 10px 6px; text-align: center; background: transparent; border: none; color: #94a3b8; font-weight: 600; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; font-size: 12px; }
+        .tab-button.active { background: #2563eb; color: #ffffff; font-weight: bold; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
+
+        .tab-page { padding: 20px; display: none; }
+        .tab-page.active-page { display: block; }
+
+        .tanggal, .jam { text-align: center; font-weight: 600; color: #1d4ed8; }
+        .tanggal { font-size: 13px; background: #eff6ff; padding: 8px; border-radius: 8px 8px 0 0; border: 1px solid #dbeafe; border-bottom: none; }
+        .jam { font-size: 20px; background: #eff6ff; padding: 0 8px 10px 8px; border-radius: 0 0 8px 8px; border: 1px solid #dbeafe; border-top: none; margin-bottom: 15px; }
+
+        #pilihanLokasi { text-align: center; background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 15px; font-weight: 600; font-size: 13px; color: #475569; }
+        .btnLokasi { background: #2563eb; color: white; border: none; padding: 12px 20px; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; margin: 8px 5px 0 5px; width: 45%; transition: 0.2s; }
+        .btnLokasi:hover { background: #1d4ed8; }
+
+        .scan-box { background: #000; border-radius: 12px; overflow: hidden; margin-top: 10px; }
+        #reader { width: 100% !important; border: none !important; }
+
+        /* FULL SCREEN OVERLAY DINAMIS (HASIL SUKSES) */
+        #fullScreenOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #0f172a; display: none; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 99999; padding: 25px; text-align: center; transition: background 0.4s ease;
+        }
+        #fullScreenOverlay.theme-masuk { background: linear-gradient(135deg, #bae6fd 0%, #38bdf8 100%) !important; }
+        #fullScreenOverlay.theme-pulang { background: linear-gradient(135deg, #a7f3d0 0%, #34d399 100%) !important; }
+        #fullScreenOverlay.theme-loading { background: rgba(15, 23, 42, 0.9) !important; backdrop-filter: blur(10px); }
+        #fullScreenOverlay.error-bg { background: linear-gradient(135deg, #fecaca 0%, #f87171 100%) !important; }
+
+        .overlay-card {
+            background: #ffffff; width: 100%; max-width: 380px; padding: 30px 20px; border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25); display: flex; flex-direction: column; align-items: center;
+            animation: scaleUp 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .overlay-icon { font-size: 56px; margin-bottom: 10px; animation: bounceIcon 0.6s infinite alternate; }
+        .overlay-title { font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 6px; text-transform: uppercase; }
+        .overlay-name { font-size: 20px; font-weight: 700; color: #2563eb; margin: 6px 0; background: #f8fafc; padding: 6px 16px; border-radius: 30px; border: 1px solid #e2e8f0; width: 100%; }
+        .overlay-time { font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 4px; }
+        .overlay-msg-box { background: #f1f5f9; padding: 10px 14px; border-radius: 12px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; font-weight: 600; color: #334155; border: 1px solid #e2e8f0; margin-top: 10px; }
+        .waving-hand { display: inline-block; animation: wave 1.2s infinite; transform-origin: 70% 70%; font-size: 18px; }
+
+        /* MODAL KAMERA SELFIE FULL SCREEN */
+        #selfieModal {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000000;
+            display: none; flex-direction: column; align-items: center; justify-content: space-between;
+            z-index: 9999; padding: 25px 20px; color: white; text-align: center;
+        }
+        #selfieVideo { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; z-index: 1; background: #000; }
+        .selfie-header, .selfie-footer { position: relative; z-index: 2; width: 100%; max-width: 420px; background: rgba(15, 23, 42, 0.7); padding: 14px; border-radius: 16px; backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); }
+        .btn-capture { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; border: none; padding: 14px 28px; border-radius: 35px; font-weight: bold; font-size: 16px; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5); }
+
+        .page-title { text-align: center; margin-bottom: 15px; }
+        .page-icon { font-size: 28px; margin-bottom: 5px; }
+        .page-title h2 { font-size: 16px; color: #1e293b; font-weight: 700; }
+        .page-title p { font-size: 12px; color: #64748b; }
+
+        .rekap-wrapper { overflow-x: auto; max-height: 60vh; }
+        table.rekap-table { width: 100%; border-collapse: collapse; font-size: 11px; white-space: nowrap; }
+        table.rekap-table th, table.rekap-table td { border: 1px solid #cbd5e1; padding: 8px; text-align: center; background: #ffffff; }
+        table.rekap-table th { background: #f1f5f9; color: #1e293b; position: sticky; top: 0; z-index: 2; font-weight: bold; }
+
+        .footer { text-align: center; padding: 15px; font-size: 12px; color: #64748b; background: #f8fafc; border-top: 1px solid #e2e8f0; }
+
+        @keyframes bounceIcon { from { transform: translateY(0); } to { transform: translateY(-6px); } }
+        @keyframes wave { 0% { transform: rotate(0deg); } 20% { transform: rotate(14deg); } 40% { transform: rotate(-8deg); } 60% { transform: rotate(14deg); } 80% { transform: rotate(-4deg); } 100% { transform: rotate(0deg); } }
+        @keyframes scaleUp { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    </style>
 </head>
-
-<script>
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js");
-}
-</script>
-
 <body>
 
-<!-- ==========================================
-     LOADING SCREEN
-========================================== -->
-
-<div id="loadingScreen">
-
-    <img src="Logo.jpeg" class="loadingLogo">
-
-    <h2>ABSENSI MMBC PADANG</h2>
-
-    <p>Sedang memuat...</p>
-
-    <div class="loader"></div>
-
-</div>
-
-
-<!-- ==========================================
-     CONTAINER UTAMA
-========================================== -->
-
-<div class="container">
-
-
-    <!-- ======================================
-         HEADER
-    ======================================= -->
-
-    <div class="welcomeCard">
-
-        <img src="Logo.jpeg" class="welcomeLogo">
-
-        <h2>ABSENSI MMBC PADANG</h2>
-
-    </div>
-
-
-    <!-- ======================================
-         TAB MENU
-    ======================================= -->
-
-    <div id="tabMenu" class="tab-menu">
-
-        <button
-            id="tabAbsensi"
-            class="tab-button active"
-            type="button">
-
-            📷 ABSENSI QR
-
-        </button>
-
-
-        <button
-            id="tabJadwal"
-            class="tab-button"
-            type="button">
-
-            📅 JADWAL KERJA
-
-        </button>
-
-
-        <button
-            id="tabLog"
-            class="tab-button"
-            type="button">
-
-            📋 LOG HARIAN
-
-        </button>
-
-    </div>
-
-
-    <!-- ======================================
-         HALAMAN 1
-         ABSENSI QR
-    ======================================= -->
-
-    <div
-        id="absensiPage"
-        class="tab-page active-page">
-
-
-        <!-- TANGGAL -->
-
-        <div
-            id="tanggal"
-            class="tanggal">
+    <!-- MODAL KAMERA SELFIE -->
+    <div id="selfieModal">
+        <video id="selfieVideo" autoplay playsinline></video>
+        <div class="selfie-header">
+            <h3 style="font-size: 16px; color: #38bdf8;">📸 Ambil Foto Selfie</h3>
+            <p id="selfieStaffName" style="font-size: 13px; color: #e2e8f0; margin-top: 2px;"></p>
         </div>
-
-
-        <!-- JAM -->
-
-        <div
-            id="jam"
-            class="jam">
-        </div>
-
-
-        <!-- PILIHAN LOKASI -->
-
-        <div id="pilihanLokasi">
-
-            👇 Silakan pilih lokasi absensi
-
-
-            <button
-                id="btnKantor"
-                class="btnLokasi">
-
-                🏢 ABSEN KANTOR
-
+        <div class="selfie-footer">
+            <button class="btn-capture" onclick="ambilFotoDanKirim()">
+                <span>📸</span> Ambil & Kirim Absen Masuk
             </button>
-
-
-            <button
-                id="btnLapangan"
-                class="btnLokasi">
-
-                🚗 ABSEN LAPANGAN
-
-            </button>
-
         </div>
-
-
-        <!-- LOADING KAMERA -->
-
-        <div
-            id="loadingCamera"
-            style="display:none;">
-
-            <div class="loading-spinner"></div>
-
-            <div>
-                📷 Mengaktifkan kamera...
-            </div>
-
-        </div>
-
-
-        <!-- STATUS -->
-
-        <div
-            id="status"
-            class="status-box"
-            style="display:none;">
-
-            🟡 Menunggu Scan
-
-        </div>
-
-
-        <!-- SCANNER -->
-
-        <div id="scannerArea">
-
-            <div class="scan-box">
-
-                <div id="reader"></div>
-
-            </div>
-
-        </div>
-
-
-        <!-- HASIL ABSENSI -->
-
-        <div id="hasil"></div>
-
-
-        <!-- SELFIE -->
-
-        <div
-            id="selfieArea"
-            style="display:none;">
-
-            <video
-                id="video"
-                autoplay
-                playsinline>
-            </video>
-
-
-            <canvas
-                id="canvas"
-                style="display:none;">
-            </canvas>
-
-
-            <button
-                id="btnSelfie">
-
-                📸 Ambil Selfie
-
-            </button>
-
-        </div>
-
     </div>
 
-
-    <!-- ======================================
-         HALAMAN 2
-         JADWAL KERJA
-    ======================================= -->
-
-    <div
-        id="jadwalPage"
-        class="tab-page"
-        style="display:none;">
-
-        <div class="page-title">
-
-            <div class="page-icon">
-                📅
+    <!-- FULL SCREEN OVERLAY HASIL ABSEN -->
+    <div id="fullScreenOverlay">
+        <div class="overlay-card">
+            <div class="overlay-icon" id="overlayIcon">✅</div>
+            <div class="overlay-title" id="overlayTitle">Absen Berhasil</div>
+            <div class="overlay-name" id="overlayName">Nama Staff</div>
+            <div class="overlay-time" id="overlayTime">📅 11 Agustus 2026</div>
+            <div class="overlay-msg-box" id="overlayMsgBox">
+                <span id="overlayMsg">Pesan mutiara...</span>
             </div>
-
-            <h2>
-                JADWAL KERJA
-            </h2>
-
-            <p>
-                Jadwal kerja bulanan karyawan
-            </p>
-
         </div>
-
-
-        <!-- LOADING JADWAL -->
-
-        <div
-            id="loadingJadwal"
-            class="page-loading"
-            style="display:none;">
-
-            <div class="loading-spinner"></div>
-
-            <p>
-                Memuat jadwal kerja...
-            </p>
-
-        </div>
-
-
-        <!-- ISI JADWAL -->
-
-        <div
-            id="jadwalContent"
-            class="data-content">
-
-            <div class="empty-data">
-
-                📅
-
-                <p>
-                    Jadwal kerja belum dimuat
-                </p>
-
-            </div>
-
-        </div>
-
     </div>
 
+    <div class="container">
+        <div class="welcomeCard">
+            <img src="Logo.jpeg" class="welcomeLogo" alt="Logo">
+            <h2>ABSENSI MMBC PADANG</h2>
+        </div>
 
-    <!-- ======================================
-         HALAMAN 3
-         LOG HARIAN
-    ======================================= -->
+        <div id="tabMenu" class="tab-menu">
+            <button id="tabAbsensi" class="tab-button active" onclick="switchTab('absensi', this)">📷 ABSENSI QR</button>
+            <button id="tabJadwal" class="tab-button" onclick="switchTab('jadwal', this)">📅 JADWAL KERJA</button>
+            <button id="tabLog" class="tab-button" onclick="switchTab('log', this)">📋 LOG HARIAN</button>
+        </div>
 
-    <div
-        id="logPage"
-        class="tab-page"
-        style="display:none;">
+        <!-- HALAMAN 1: ABSENSI QR -->
+        <div id="absensiPage" class="tab-page active-page">
+            <div id="tanggal" class="tanggal">Memuat tanggal...</div>
+            <div id="jam" class="jam">00:00:00</div>
 
-        <div class="page-title">
-
-            <div class="page-icon">
-                📋
+            <div id="pilihanLokasi">
+                👇 Silakan pilih lokasi absensi<br>
+                <button id="btnKantor" class="btnLokasi" onclick="pilihLokasi('KANTOR')">🏢 KANTOR</button>
+                <button id="btnLapangan" class="btnLokasi" onclick="pilihLokasi('LAPANGAN')">🚗 LAPANGAN</button>
             </div>
 
-            <h2>
-                LOG HARIAN
-            </h2>
-
-            <p>
-                Riwayat absensi karyawan
-            </p>
-
-        </div>
-
-
-        <!-- LOADING LOG -->
-
-        <div
-            id="loadingLog"
-            class="page-loading"
-            style="display:none;">
-
-            <div class="loading-spinner"></div>
-
-            <p>
-                Memuat log absensi...
-            </p>
-
-        </div>
-
-
-        <!-- ISI LOG -->
-
-        <div
-            id="logContent"
-            class="data-content">
-
-            <div class="empty-data">
-
-                📋
-
-                <p>
-                    Log harian belum dimuat
-                </p>
-
+            <div id="scannerArea" style="display:none;">
+                <div style="font-size: 12px; font-weight: 600; color: #15803d; background: #f0fdf4; padding: 8px; text-align: center; border-radius: 8px; margin-bottom: 10px;">
+                    📍 Mode Aktif: <b id="lokasiAktifText">-</b> <span style="cursor:pointer; color:#2563eb; text-decoration:underline; margin-left:10px;" onclick="gantiLokasi()">(Ganti)</span>
+                </div>
+                <div class="scan-box">
+                    <div id="reader"></div>
+                </div>
             </div>
-
         </div>
 
+        <!-- HALAMAN 2: JADWAL KERJA -->
+        <div id="jadwalPage" class="tab-page">
+            <div class="page-title">
+                <div class="page-icon">📅</div>
+                <h2>JADWAL KERJA</h2>
+                <p>Jadwal kerja bulanan karyawan</p>
+            </div>
+            <div class="rekap-wrapper" id="jadwalContent">
+                <div style="text-align:center; padding:20px; color:#64748b;">Memuat jadwal kerja...</div>
+            </div>
+        </div>
+
+        <!-- HALAMAN 3: LOG HARIAN -->
+        <div id="logPage" class="tab-page">
+            <div class="page-title">
+                <div class="page-icon">📋</div>
+                <h2>LOG HARIAN</h2>
+                <p>Riwayat absensi karyawan hari ini</p>
+            </div>
+            <div class="rekap-wrapper" id="logContent">
+                <div style="text-align:center; padding:20px; color:#64748b;">Memuat log absensi...</div>
+            </div>
+        </div>
+
+        <div class="footer">© MMBC PADANG</div>
     </div>
 
+    <script>
+        const API = "ISI_URL_DEPLOY_APPS_SCRIPT_KAMU_DISINI"; // Ganti dengan Web App URL Apps Script Padang kamu
 
-    <!-- ======================================
-         FOOTER
-    ======================================= -->
+        const namaBulanArr = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        let selectedLokasi = "";
+        let html5QrCode = null;
+        let sedangProses = false;
+        let activeStaffId = "";
+        let streamSelfie = null;
 
-    <div class="footer">
+        // Jam & Tanggal Realtime
+        function updateClock(){
+            const now = new Date();
+            const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+            document.getElementById("tanggal").innerText = hari[now.getDay()] + ", " + now.getDate() + " " + namaBulanArr[now.getMonth()] + " " + now.getFullYear();
+            document.getElementById("jam").innerText = now.toLocaleTimeString("id-ID");
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
 
-        © MMBC PADANG
+        function switchTab(tabName, btn) {
+            document.querySelectorAll('.tab-page').forEach(el => el.classList.remove('active-page'));
+            document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
+            
+            if(tabName === 'absensi') {
+                document.getElementById('absensiPage').classList.add('active-page');
+            } else if(tabName === 'jadwal') {
+                document.getElementById('jadwalPage').classList.add('active-page');
+                loadJadwalKerja();
+            } else if(tabName === 'log') {
+                document.getElementById('logPage').classList.add('active-page');
+                loadLogHarian();
+            }
+            btn.classList.add('active');
+        }
 
-    </div>
+        function pilihLokasi(lokasi) {
+            selectedLokasi = lokasi;
+            document.getElementById('lokasiAktifText').innerText = lokasi;
+            document.getElementById('pilihanLokasi').style.display = 'none';
+            document.getElementById('scannerArea').style.display = 'block';
+            mulaiScanner();
+        }
 
+        function gantiLokasi() {
+            if (html5QrCode) {
+                html5QrCode.stop().catch(e => {});
+            }
+            document.getElementById('scannerArea').style.display = 'none';
+            document.getElementById('pilihanLokasi').style.display = 'block';
+        }
 
-</div>
+        function mulaiScanner() {
+            if (!html5QrCode) {
+                html5QrCode = new Html5Qrcode("reader");
+            }
+            html5QrCode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: 230 },
+                (decodedText) => {
+                    if (sedangProses) return;
+                    sedangProses = true;
+                    
+                    html5QrCode.stop().then(() => {
+                        prosesQRData(decodedText);
+                    }).catch(err => {
+                        prosesQRData(decodedText);
+                    });
+                },
+                (err) => {}
+            ).catch(err => alert("Gagal membuka kamera scanner. Pastikan izin kamera aktif."));
+        }
 
+        function prosesQRData(idStaff) {
+            activeStaffId = idStaff;
+            tampilkanLoading("Mengecek Status...", "Memeriksa data absensi di server...");
 
-<!-- ==========================================
-     LIBRARY SCANNER
-========================================== -->
+            fetch(API, {
+                method: "POST",
+                body: JSON.stringify({ action: "getKaryawan", id: idStaff })
+            })
+            .then(r => r.json())
+            .then(res => {
+                tutupLoading();
+                if (!res.status) {
+                    tampilkanPesanError("ID Karyawan tidak terdaftar dalam database.");
+                    return;
+                }
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js">
-</script>
+                // Cek apakah dia mau Masuk atau Pulang dengan mengirim simpanAbsensi sementara atau logika scan
+                eksekusiAbsenFinal(""); // Kirim tanpa foto dulu untuk cek status / absen pulang
+            })
+            .catch(err => {
+                tutupLoading();
+                tampilkanPesanError("Gangguan koneksi ke server.");
+            });
+        }
 
+        function eksekusiAbsenFinal(fotoUrl) {
+            tampilkanLoading("Menyimpan Absen...", "Mohon tunggu sebentar...");
 
-<!-- ==========================================
-     JAVASCRIPT UTAMA
-========================================== -->
+            fetch(API, {
+                method: "POST",
+                body: JSON.stringify({ action: "simpanAbsensi", id: activeStaffId, foto: fotoUrl, lokasi: selectedLokasi })
+            })
+            .then(r => r.json())
+            .then(res => {
+                tutupLoading();
+                if (res.status) {
+                    const nowWib = new Date();
+                    const tglFormat = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " | " + nowWib.toLocaleTimeString("id-ID");
 
-<script src="app.js"></script>
+                    const overlay = document.getElementById("fullScreenOverlay");
+                    const icon = document.getElementById("overlayIcon");
+                    const title = document.getElementById("overlayTitle");
+                    const nameEl = document.getElementById("overlayName");
+                    const timeEl = document.getElementById("overlayTime");
+                    const msgEl = document.getElementById("overlayMsg");
 
+                    if (res.statusAbsen === "PULANG") {
+                        overlay.className = "theme-pulang";
+                        icon.innerText = "🏡";
+                        title.innerText = "Absen Pulang Berhasil";
+                        msgEl.innerHTML = `Hati-hati di jalan, selamat beristirahat! <span class="waving-hand">👋</span>`;
+                    } else {
+                        overlay.className = "theme-masuk";
+                        icon.innerText = "🏢";
+                        title.innerText = "Absen Masuk Berhasil";
+                        msgEl.innerHTML = `Selamat bekerja, semoga harinya menyenangkan! <span class="waving-hand">👋</span>`;
+                    }
 
-<!-- ==========================================
-     SCANNER
-========================================== -->
+                    nameEl.innerText = res.nama;
+                    timeEl.innerText = "📅 " + tglFormat;
+                    overlay.style.display = "flex";
 
-<script src="scanner.js"></script>
+                    setTimeout(() => {
+                        overlay.style.display = "none";
+                        mulaiScanner();
+                        sedangProses = false;
+                    }, 5000);
 
+                } else {
+                    tampilkanPesanError(res.pesan);
+                }
+            })
+            .catch(err => {
+                tutupLoading();
+                tampilkanPesanError("Gangguan koneksi ke server.");
+            });
+        }
 
+        function bukaKameraSelfie(namaStaff) {
+            document.getElementById("selfieStaffName").innerText = "Halo, " + namaStaff;
+            const modal = document.getElementById("selfieModal");
+            modal.style.display = "flex";
+
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false })
+                .then(stream => {
+                    streamSelfie = stream;
+                    const videoElement = document.getElementById("selfieVideo");
+                    videoElement.srcObject = stream;
+                    videoElement.play().catch(e => {});
+                })
+                .catch(err => {
+                    alert("Gagal mengakses kamera depan untuk selfie.");
+                    modal.style.display = "none";
+                    mulaiScanner();
+                    sedangProses = false;
+                });
+        }
+
+        function ambilFotoDanKirim() {
+            const video = document.getElementById("selfieVideo");
+            const canvas = document.getElementById("canvas");
+            canvas.width = video.videoWidth || 480;
+            canvas.height = video.videoHeight || 640;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const base64Image = canvas.toDataURL("image/jpeg", 0.8);
+
+            if (streamSelfie) {
+                streamSelfie.getTracks().forEach(track => track.stop());
+            }
+            document.getElementById("selfieModal").style.display = "none";
+
+            tampilkanLoading("Mengupload Foto...", "Menyimpan foto selfie ke Google Drive...");
+
+            // Karena Apps Script kita langsung handle upload & simpan di fungsi simpanAbsensi lewat action scanQR, 
+            // kita kirim langsung base64 fotonya ke simpanAbsensi
+            fetch(API, {
+                method: "POST",
+                body: JSON.stringify({ action: "simpanAbsensi", id: activeStaffId, foto: base64Image, lokasi: selectedLokasi })
+            })
+            .then(r => r.json())
+            .then(res => {
+                tutupLoading();
+                if (res.status) {
+                    const nowWib = new Date();
+                    const tglFormat = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " | " + nowWib.toLocaleTimeString("id-ID");
+
+                    const overlay = document.getElementById("fullScreenOverlay");
+                    overlay.className = "theme-masuk";
+                    document.getElementById("overlayIcon").innerText = "🏢";
+                    document.getElementById("overlayTitle").innerText = "Absen Masuk Berhasil";
+                    document.getElementById("overlayName").innerText = res.nama;
+                    document.getElementById("overlayTime").innerText = "📅 " + tglFormat;
+                    document.getElementById("overlayMsg").innerHTML = `Selamat bekerja, semoga harinya menyenangkan! <span class="waving-hand">👋</span>`;
+                    overlay.style.display = "flex";
+
+                    setTimeout(() => {
+                        overlay.style.display = "none";
+                        mulaiScanner();
+                        sedangProses = false;
+                    }, 5000);
+                } else {
+                    tampilkanPesanError(res.pesan);
+                }
+            })
+            .catch(err => {
+                tutupLoading();
+                tampilkanPesanError("Gagal mengirim data absensi.");
+            });
+        }
+
+        // Modifikasi alur scanQR di JS agar jika absen MASUK, langsung buka kamera selfie
+        function prosesQRData(idStaff) {
+            activeStaffId = idStaff;
+            tampilkanLoading("Mengecek Status...", "Memeriksa data absensi...");
+
+            fetch(API, {
+                method: "POST",
+                body: JSON.stringify({ action: "getKaryawan", id: idStaff })
+            })
+            .then(r => r.json())
+            .then(res => {
+                tutupLoading();
+                if (!res.status) {
+                    tampilkanPesanError("ID Karyawan tidak terdaftar.");
+                    return;
+                }
+                // Cek status ke server dulu apakah hari ini sudah masuk atau belum
+                // Untuk simpelnya kita langsung panggil bukaKameraSelfie jika belum ada catatan masuk, 
+                // atau langsung tembak eksekusiAbsenFinal jika ingin otomatis. 
+                // Di Utils.gs kita sudah handle otomatis: jika belum ada baris hari ini -> MASUK (butuh selfie), jika sudah -> PULANG.
+                // Mari kita sesuaikan dengan memicu fungsi cek atau langsung buka kamera selfie untuk absen masuk:
+                bukaKameraSelfie(res.nama);
+            })
+            .catch(err => {
+                tutupLoading();
+                tampilkanPesanError("Koneksi bermasalah.");
+            });
+        }
+
+        function tampilkanLoading(judul, sub) {
+            const overlay = document.getElementById("fullScreenOverlay");
+            overlay.className = "theme-loading";
+            document.getElementById("overlayIcon").innerText = "⏳";
+            document.getElementById("overlayTitle").innerText = judul;
+            document.getElementById("overlayName").innerText = "Mohon Tunggu";
+            document.getElementById("overlayTime").innerText = "";
+            document.getElementById("overlayMsg").innerHTML = sub;
+            overlay.style.display = "flex";
+        }
+
+        function tutupLoading() {
+            document.getElementById("fullScreenOverlay").style.display = "none";
+        }
+
+        function tampilkanPesanError(pesan) {
+            const overlay = document.getElementById("fullScreenOverlay");
+            overlay.className = "error-bg";
+            document.getElementById("overlayIcon").innerText = "⚠️";
+            document.getElementById("overlayTitle").innerText = "Perhatian";
+            document.getElementById("overlayName").innerText = "Gagal Absen";
+            document.getElementById("overlayTime").innerText = "";
+            document.getElementById("overlayMsg").innerText = pesan;
+            overlay.style.display = "flex";
+
+            setTimeout(() => {
+                overlay.style.display = "none";
+                mulaiScanner();
+                sedangProses = false;
+            }, 4000);
+        }
+
+        // LOAD JADWAL KERJA
+        function loadJadwalKerja() {
+            const container = document.getElementById('jadwalContent');
+            container.innerHTML = "<div style='text-align:center; padding:20px; color:#64748b;'>Memuat jadwal kerja dari Google Sheet...</div>";
+
+            fetch(API, {
+                method: "POST",
+                body: JSON.stringify({ action: "getJadwal" })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (!res.status) {
+                    container.innerHTML = `<div style='text-align:center; padding:20px; color:#dc2626;'>${res.pesan}</div>`;
+                    return;
+                }
+                let rows = res.data;
+                let html = `<div style="font-weight: bold; font-size: 13px; color: #1e293b; margin-bottom: 8px; text-align: center;">📅 Periode: ${res.namaSheet}</div>`;
+                html += '<table class="rekap-table">';
+                rows.forEach((row, idx) => {
+                    html += '<tr>';
+                    row.forEach(cell => {
+                        let tag = idx === 0 || idx === 1 ? 'th' : 'td';
+                        html += `<${tag}>${cell !== null ? cell : ''}</${tag}>`;
+                    });
+                    html += '</tr>';
+                });
+                html += '</table>';
+                container.innerHTML = html;
+            })
+            .catch(err => {
+                container.innerHTML = "<div style='text-align:center; padding:20px; color:#dc2626;'>Gagal memuat jadwal kerja.</div>";
+            });
+        }
+
+        // LOAD LOG HARIAN
+        function loadLogHarian() {
+            const container = document.getElementById('logContent');
+            container.innerHTML = "<div style='text-align:center; padding:20px; color:#64748b;'>Memuat log absensi hari ini...</div>";
+
+            fetch(API, {
+                method: "POST",
+                body: JSON.stringify({ action: "getLogHarian" })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (!res.status) {
+                    container.innerHTML = `<div style='text-align:center; padding:20px; color:#dc2626;'>${res.pesan}</div>`;
+                    return;
+                }
+                let rows = res.data;
+                if (rows.length <= 1) {
+                    container.innerHTML = "<div style='text-align:center; padding:20px; color:#64748b;'>Belum ada karyawan yang absen hari ini.</div>";
+                    return;
+                }
+                let html = '<table class="rekap-table">';
+                rows.forEach((row, idx) => {
+                    html += '<tr>';
+                    row.forEach((cell, colIdx) => {
+                        // Sembunyikan kolom URL foto mentah jika mau (kolom ke-7 / index 6), tampilkan thumbnail atau teks biasa
+                        let tag = idx === 0 ? 'th' : 'td';
+                        html += `<${tag}>${cell !== null ? cell : ''}</${tag}>`;
+                    });
+                    html += '</tr>';
+                });
+                html += '</table>';
+                container.innerHTML = html;
+            })
+            .catch(err => {
+                container.innerHTML = "<div style='text-align:center; padding:20px; color:#dc2626;'>Gagal memuat log harian.</div>";
+            });
+        }
+    </script>
 </body>
-
 </html>
