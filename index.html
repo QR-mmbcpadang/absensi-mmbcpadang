@@ -250,7 +250,7 @@
 
         function prosesQRData(idStaff) {
             activeStaffId = idStaff;
-            tampilkanLoading("Mengecek Status...", "Memeriksa data absensi di server...");
+            tampilkanLoading("Mengecek Status...", "Memeriksa data karyawan...");
 
             fetch(API, {
                 method: "POST",
@@ -263,16 +263,15 @@
                     tampilkanPesanError("ID Karyawan tidak terdaftar dalam database.");
                     return;
                 }
-
-                // Cek apakah dia mau Masuk atau Pulang dengan mengirim simpanAbsensi sementara atau logika scan
-                eksekusiAbsenFinal(""); // Kirim tanpa foto dulu untuk cek status / absen pulang
+                
+                // Jika ID terdaftar, langsung buka kamera selfie untuk proses absen masuk/pulang
+                bukaKameraSelfie(res.nama);
             })
             .catch(err => {
                 tutupLoading();
                 tampilkanPesanError("Gangguan koneksi ke server.");
             });
         }
-
         function eksekusiAbsenFinal(fotoUrl) {
             tampilkanLoading("Menyimpan Absen...", "Mohon tunggu sebentar...");
 
