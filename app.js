@@ -1857,3 +1857,463 @@ window.addEventListener(
 
     }
 );
+// =========================================
+// LOAD JADWAL
+// =========================================
+
+async function loadJadwal(){
+
+    const loading =
+        document.getElementById("jadwalLoading");
+
+    const error =
+        document.getElementById("jadwalError");
+
+    const table =
+        document.getElementById("jadwalTable");
+
+    loading.style.display = "block";
+    error.style.display = "none";
+
+    table.innerHTML = "";
+
+    try{
+
+        const res = await fetch(
+            GAS_URL,
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":
+                        "text/plain;charset=utf-8"
+                },
+
+                body:JSON.stringify({
+                    action:"getJadwal"
+                })
+            }
+        );
+
+        const hasil = await res.json();
+
+        loading.style.display = "none";
+
+        if(!hasil.status){
+
+            error.innerHTML =
+                "❌ " + hasil.pesan;
+
+            error.style.display = "block";
+
+            return;
+        }
+
+        document.getElementById(
+            "judulJadwal"
+        ).innerText =
+            hasil.namaSheet;
+
+
+        renderJadwal(
+            hasil.data
+        );
+
+    }catch(err){
+
+        console.error(err);
+
+        loading.style.display = "none";
+
+        error.innerHTML =
+            "🔴 Gagal mengambil jadwal kerja";
+
+        error.style.display = "block";
+
+    }
+
+}
+// =========================================
+// LOAD JADWAL
+// =========================================
+
+async function loadJadwal(){
+
+    const loading =
+        document.getElementById("jadwalLoading");
+
+    const error =
+        document.getElementById("jadwalError");
+
+    const table =
+        document.getElementById("jadwalTable");
+
+    loading.style.display = "block";
+    error.style.display = "none";
+
+    table.innerHTML = "";
+
+    try{
+
+        const res = await fetch(
+            GAS_URL,
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":
+                        "text/plain;charset=utf-8"
+                },
+
+                body:JSON.stringify({
+                    action:"getJadwal"
+                })
+            }
+        );
+
+        const hasil = await res.json();
+
+        loading.style.display = "none";
+
+        if(!hasil.status){
+
+            error.innerHTML =
+                "❌ " + hasil.pesan;
+
+            error.style.display = "block";
+
+            return;
+        }
+
+        document.getElementById(
+            "judulJadwal"
+        ).innerText =
+            hasil.namaSheet;
+
+
+        renderJadwal(
+            hasil.data
+        );
+
+    }catch(err){
+
+        console.error(err);
+
+        loading.style.display = "none";
+
+        error.innerHTML =
+            "🔴 Gagal mengambil jadwal kerja";
+
+        error.style.display = "block";
+
+    }
+
+}
+// =========================================
+// RENDER JADWAL
+// =========================================
+
+function renderJadwal(data){
+
+    const container =
+        document.getElementById(
+            "jadwalTable"
+        );
+
+    if(!data || data.length === 0){
+
+        container.innerHTML =
+            "<div class='data-error'>Jadwal kosong</div>";
+
+        return;
+    }
+
+    let html = `
+        <table class="data-table jadwal-table">
+
+            <thead>
+                <tr>
+    `;
+
+    data[0].forEach(cell => {
+
+        html += `
+            <th>${escapeHtml(cell)}</th>
+        `;
+
+    });
+
+    html += `
+                </tr>
+            </thead>
+
+            <tbody>
+    `;
+
+
+    for(let r = 1; r < data.length; r++){
+
+        html += "<tr>";
+
+        data[r].forEach(cell => {
+
+            let nilai =
+                String(cell || "").trim();
+
+            let cls = "";
+
+            if(nilai === "Off"){
+                cls = "cell-off";
+            }
+
+            else if(nilai === "S1"){
+                cls = "cell-s1";
+            }
+
+            else if(nilai === "S2"){
+                cls = "cell-s2";
+            }
+
+            else if(
+                nilai.toLowerCase() === "cuti"
+            ){
+                cls = "cell-cuti";
+            }
+
+            html += `
+                <td class="${cls}">
+                    ${escapeHtml(nilai)}
+                </td>
+            `;
+
+        });
+
+        html += "</tr>";
+
+    }
+
+    html += `
+            </tbody>
+        </table>
+    `;
+
+    container.innerHTML = html;
+
+}
+// =========================================
+// LOAD LOG HARIAN
+// =========================================
+
+async function loadLogHarian(){
+
+    const loading =
+        document.getElementById(
+            "logLoading"
+        );
+
+    const error =
+        document.getElementById(
+            "logError"
+        );
+
+    const table =
+        document.getElementById(
+            "logTable"
+        );
+
+    loading.style.display = "block";
+    error.style.display = "none";
+
+    table.innerHTML = "";
+
+    try{
+
+        const res = await fetch(
+            GAS_URL,
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":
+                        "text/plain;charset=utf-8"
+                },
+
+                body:JSON.stringify({
+                    action:"getLogHarian"
+                })
+            }
+        );
+
+        const hasil = await res.json();
+
+        loading.style.display = "none";
+
+        if(!hasil.status){
+
+            error.innerHTML =
+                "❌ " + hasil.pesan;
+
+            error.style.display = "block";
+
+            return;
+        }
+
+        renderLogHarian(
+            hasil.data
+        );
+
+    }catch(err){
+
+        console.error(err);
+
+        loading.style.display = "none";
+
+        error.innerHTML =
+            "🔴 Gagal mengambil log absensi";
+
+        error.style.display = "block";
+
+    }
+
+}
+// =========================================
+// RENDER LOG HARIAN
+// =========================================
+
+function renderLogHarian(data){
+
+    const container =
+        document.getElementById(
+            "logTable"
+        );
+
+    if(!data || data.length <= 1){
+
+        container.innerHTML = `
+            <div class="data-loading">
+                📋 Belum ada data absensi
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const header = data[0];
+
+    let html = `
+        <table class="data-table log-table">
+
+            <thead>
+                <tr>
+    `;
+
+    header.forEach(cell => {
+
+        html += `
+            <th>${escapeHtml(cell)}</th>
+        `;
+
+    });
+
+    html += `
+                </tr>
+            </thead>
+
+            <tbody>
+    `;
+
+
+    for(let r = 1; r < data.length; r++){
+
+        const row = data[r];
+
+        html += "<tr>";
+
+
+        row.forEach((cell,index) => {
+
+            let nilai =
+                String(cell || "");
+
+            let isi =
+                escapeHtml(nilai);
+
+
+            // FOTO SELFIE
+            if(index === 6 && nilai){
+
+                const match =
+                    nilai.match(
+                        /[-\w]{25,}/
+                    );
+
+                if(match){
+
+                    const fileId =
+                        match[0];
+
+                    isi = `
+                        <a
+                            class="foto-link"
+                            href="https://drive.google.com/file/d/${fileId}/view"
+                            target="_blank">
+                            📷 Lihat
+                        </a>
+                    `;
+
+                }
+
+            }
+
+
+            // HASIL SHIFT
+            if(index === 8){
+
+                if(
+                    nilai.includes("TERLAMBAT")
+                ){
+
+                    isi = `
+                        <span class="log-terlambat">
+                            ${escapeHtml(nilai)}
+                        </span>
+                    `;
+
+                }
+
+                else if(
+                    nilai.includes("OK")
+                ){
+
+                    isi = `
+                        <span class="log-ok">
+                            ${escapeHtml(nilai)}
+                        </span>
+                    `;
+
+                }
+
+            }
+
+
+            html += `
+                <td>${isi}</td>
+            `;
+
+        });
+
+
+        html += "</tr>";
+
+    }
+
+
+    html += `
+            </tbody>
+        </table>
+    `;
+
+    container.innerHTML = html;
+
+}
