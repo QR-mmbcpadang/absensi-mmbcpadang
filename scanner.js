@@ -9,6 +9,9 @@ let stream = null;
 //==================================
 // START SCANNER
 //==================================
+//==================================
+// START SCANNER
+//==================================
 async function startScanner(){
 
     if(scanning) return;
@@ -16,54 +19,64 @@ async function startScanner(){
     scanning = true;
 
     document.getElementById("hasil").innerHTML = "";
-
     document.getElementById("scannerArea").style.display = "block";
 
-    setStatus("warning","🟡 Menunggu Scan");
+    setStatus("warning","🟡 Menyiapkan kamera...");
 
     try{
 
+        // Kalau sebelumnya ada scanner, bersihkan dulu
+        if(html5QrCode){
+            try{
+                await html5QrCode.stop();
+            }catch(e){}
+        }
+
         html5QrCode = new Html5Qrcode("reader");
 
-        const cameras = await Html5Qrcode.getCameras();
+        console.log("Memulai kamera belakang...");
 
-        if(cameras.length==0){
-
-            setStatus("error","🔴 Kamera tidak ditemukan");
-
-            return;
-
-        }
-console.log(cameras);
-        const cameraId = cameras[cameras.length-1].id;
-console.log("START SCANNER");
         await html5QrCode.start(
-    cameraId,
-    {
-        fps: 10,
-        qrbox: { width: 250, height: 250 }
-    },
-    (decodedText) => {
-        console.log("QR TERBACA =", decodedText);
-        onScanSuccess(decodedText);
-    },
-    (err) => {}
-);
+            { facingMode: "environment" },
+            {
+                fps: 10,
+                qrbox: {
+                    width: 250,
+                    height: 250
+                }
+            },
+            (decodedText) => {
+
+                console.log("QR TERBACA =", decodedText);
+
+                onScanSuccess(decodedText);
+
+            },
+            (errorMessage) => {
+                // Abaikan error scan biasa
+            }
+        );
+
+        setStatus("warning","🟡 Menunggu Scan");
+
+        console.log("KAMERA SCANNER AKTIF");
 
     }catch(err){
 
-    console.error(err);
+        console.error("ERROR KAMERA:",err);
 
-    setStatus("error","🔴 Gagal terhubung ke server");
+        scanning = false;
 
-    setTimeout(()=>{
-        startScanner();
-    },2000);
+        setStatus(
+            "error",
+            "🔴 Kamera gagal dibuka. Izinkan akses kamera lalu coba lagi."
+        );
+
+        document.getElementById("scannerArea").style.display = "none";
+
+    }
 
 }
-
-}
-
 //==================================
 // QR BERHASIL DIBACA
 //==================================
@@ -221,19 +234,38 @@ async function bukaSelfie(){
 
     document.getElementById("scannerArea").style.display = "none";
     document.getElementById("selfieArea").style.display = "block";
-document.getElementById("selfieArea").scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-});
-    stream = await navigator.mediaDevices.getUserMedia({
 
-        video:{
-            facingMode:"user"
-        }
-
+    document.getElementById("selfieArea").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
     });
 
-    document.getElementById("video").srcObject = stream;
+    try{
+
+        stream = await navigator.mediaDevices.getUserMedia({
+            video:{
+                facingMode:"user"
+            }
+        });
+
+        document.getElementById("video").srcObject = stream;
+
+    }catch(err){
+
+        console.error("ERROR KAMERA SELFIE:",err);
+
+        document.getElementById("selfieArea").style.display = "none";
+
+        setStatus(
+            "error",
+            "🔴 Kamera selfie tidak bisa dibuka. Silakan izinkan kamera."
+        );
+
+        setTimeout(()=>{
+            startScanner();
+        },2000);
+
+    }
 
 }
 //==================================
@@ -368,7 +400,4 @@ window.dataAbsen = hasil;
 
     }
 
-});
-document.addEventListener("DOMContentLoaded", () => {
-    startScanner();
 });
