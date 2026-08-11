@@ -617,12 +617,12 @@ opacity:.5;
 
 .data-table tbody tr:hover{
     background:#eef6ff;
+    cursor:pointer;
 }
 
 /* =========================================
 JADWAL
 ========================================= */
-
 .jadwal-table td{
     min-width:42px;
 }
