@@ -81,17 +81,31 @@
         table.rekap-table th, table.rekap-table td { border: 1px solid #cbd5e1; padding: 9px 12px; text-align: center; background: #ffffff; }
         table.rekap-table th { background: #f1f5f9; color: #1e293b; position: sticky; top: 0; z-index: 3; font-weight: bold; }
         
-        table.rekap-table th:first-child,  
-        table.rekap-table td:first-child {  
-            position: static; 
-            border-right: 1px solid #cbd5e1; 
-            font-weight: 600; 
-            text-align: left;
-            background: #ffffff;
-        }
-        table.rekap-table th:first-child { 
-            background: #f1f5f9; 
-        }
+        /* Menghapus sticky dari kolom pertama (Tanggal) */
+table.rekap-table th:first-child, 
+table.rekap-table td:first-child { 
+    position: static; /* Ubah dari sticky ke static */
+    border-right: 1px solid #cbd5e1; 
+}
+
+/* Membuat kolom kedua (Nama) menjadi sticky */
+table.rekap-table th:nth-child(2), 
+table.rekap-table td:nth-child(2) { 
+    position: sticky; 
+    left: 0; 
+    z-index: 4; /* Lebih tinggi agar berada di atas */
+    background: #f8fafc; 
+    border-right: 2px solid #cbd5e1; 
+    font-weight: 600; 
+    text-align: left;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+}
+
+/* Pastikan header Nama tetap paling atas */
+table.rekap-table th:nth-child(2) { 
+    z-index: 5; 
+    background: #e2e8f0; 
+}
 
         .footer { text-align: center; padding: 15px; font-size: 12px; color: #64748b; background: #f8fafc; border-top: 1px solid #e2e8f0; }
 
