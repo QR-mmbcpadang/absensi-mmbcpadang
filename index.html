@@ -221,12 +221,16 @@
         }
 
         function pilihLokasi(lokasi) {
-            selectedLokasi = lokasi;
-            document.getElementById('lokasiAktifText').innerText = lokasi;
-            document.getElementById('pilihanLokasi').style.display = 'none';
-            document.getElementById('scannerArea').style.display = 'block';
-            mulaiScanner();
-        }
+    // Nonaktifkan semua tombol lokasi agar user tidak klik berkali-kali
+    const btnLokasi = document.querySelectorAll('.btnLokasi');
+    btnLokasi.forEach(btn => btn.disabled = true);
+    
+    selectedLokasi = lokasi;
+    document.getElementById('lokasiAktifText').innerText = lokasi;
+    document.getElementById('pilihanLokasi').style.display = 'none';
+    document.getElementById('scannerArea').style.display = 'block';
+    mulaiScanner();
+}
 
         function gantiLokasi() {
             if (html5QrCode) {
@@ -299,109 +303,95 @@
         }
 
         function ambilFotoDanKirim() {
-            const video = document.getElementById("selfieVideo");
-            const canvas = document.getElementById("canvas");
+    const video = document.getElementById("selfieVideo");
+    const canvas = document.getElementById("canvas");
+    
+    if (video.videoWidth === 0 || video.videoHeight === 0) {
+        alert("Kamera sedang bersiap, silakan coba ketuk tombol ambil foto sekali lagi.");
+        return;
+    }
+
+    // Ambil tombol capture untuk kita nonaktifkan
+    const btn = document.querySelector('.btn-capture');
+    btn.disabled = true;
+    btn.innerHTML = "<span>⏳</span> Mengirim Absen...";
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext("2d");
+    
+    // 1. Gambar foto asli
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // 2. Tambahkan Watermark
+    const nowWib = new Date();
+    const tglStr = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " - " + nowWib.toLocaleTimeString("id-ID");
+    
+    ctx.fillStyle = "rgba(0, 0, 0, 0.65)";
+    ctx.fillRect(0, canvas.height - 100, canvas.width, 100);
+    ctx.font = "bold 20px Arial";
+    ctx.fillStyle = "#38bdf8";
+    ctx.fillText("👤 " + activeStaffName, 20, canvas.height - 65);
+    ctx.font = "15px Arial";
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText("📅 " + tglStr, 20, canvas.height - 40);
+    ctx.fillText("📍 Lokasi: " + selectedLokasi + " (MMBC PADANG)", 20, canvas.height - 15);
+
+    const base64Image = canvas.toDataURL("image/jpeg", 0.85);
+
+    if (streamSelfie) {
+        streamSelfie.getTracks().forEach(track => track.stop());
+    }
+    document.getElementById("selfieModal").style.display = "none";
+
+    tampilkanLoading("Menyimpan Absen...", "Memproses absensi...");
+
+    fetch(API, {
+        method: "POST",
+        body: JSON.stringify({ action: "simpanAbsensi", id: activeStaffId, foto: base64Image, lokasi: selectedLokasi })
+    })
+    .then(r => r.json())
+    .then(res => {
+        tutupLoading();
+        // Aktifkan kembali tombol jika ingin digunakan lagi nanti
+        btn.disabled = false;
+        btn.innerHTML = "<span>📸</span> Ambil Foto & Kirim Absen";
+        
+        if (res.status) {
+            const tglFormat = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " | " + nowWib.toLocaleTimeString("id-ID");
+            const overlay = document.getElementById("fullScreenOverlay");
             
-            // Pastikan video sudah memuat frame gambar
-            if (video.videoWidth === 0 || video.videoHeight === 0) {
-                alert("Kamera sedang bersiap, silakan coba ketuk tombol ambil foto sekali lagi.");
-                return;
+            if (res.statusAbsen === "PULANG") {
+                overlay.className = "theme-pulang";
+                document.getElementById("overlayIcon").innerText = "🏡";
+                document.getElementById("overlayTitle").innerText = "Absen Pulang Berhasil";
+                document.getElementById("overlayMsg").innerHTML = `Hati-hati di jalan! <span class="waving-hand">👋</span>`;
+            } else {
+                overlay.className = "theme-masuk";
+                document.getElementById("overlayIcon").innerText = "🏢";
+                document.getElementById("overlayTitle").innerText = "Absen Masuk Berhasil";
+                document.getElementById("overlayMsg").innerHTML = `Selamat bekerja! <span class="waving-hand">👋</span>`;
             }
+            document.getElementById("overlayName").innerText = res.nama;
+            document.getElementById("overlayTime").innerText = "📅 " + tglFormat;
+            overlay.style.display = "flex";
 
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            const ctx = canvas.getContext("2d");
-            
-            // 1. Gambar foto asli dari video streaming
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-            // 2. Tambahkan Watermark di atas foto (Nama Staff, Tanggal, Jam, Lokasi)
-            const nowWib = new Date();
-            const tglStr = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " - " + nowWib.toLocaleTimeString("id-ID");
-            
-            ctx.fillStyle = "rgba(0, 0, 0, 0.65)";
-            ctx.fillRect(0, canvas.height - 100, canvas.width, 100);
-
-            ctx.font = "bold 20px Arial";
-            ctx.fillStyle = "#38bdf8";
-            ctx.fillText("👤 " + activeStaffName, 20, canvas.height - 65);
-
-            ctx.font = "15px Arial";
-            ctx.fillStyle = "#ffffff";
-            ctx.fillText("📅 " + tglStr, 20, canvas.height - 40);
-            ctx.fillText("📍 Lokasi: " + selectedLokasi + " (MMBC PADANG)", 20, canvas.height - 15);
-
-            const base64Image = canvas.toDataURL("image/jpeg", 0.85);
-
-            if (streamSelfie) {
-                streamSelfie.getTracks().forEach(track => track.stop());
-            }
-            document.getElementById("selfieModal").style.display = "none";
-
-            tampilkanLoading("Menyimpan Absen...", "Memproses absensi...");
-
-            fetch(API, {
-                method: "POST",
-                body: JSON.stringify({ action: "simpanAbsensi", id: activeStaffId, foto: base64Image, lokasi: selectedLokasi })
-            })
-            .then(r => r.json())
-            .then(res => {
-                tutupLoading();
-                if (res.status) {
-                    const tglFormat = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " | " + nowWib.toLocaleTimeString("id-ID");
-
-                    const overlay = document.getElementById("fullScreenOverlay");
-                    const icon = document.getElementById("overlayIcon");
-                    const title = document.getElementById("overlayTitle");
-                    const nameEl = document.getElementById("overlayName");
-                    const timeEl = document.getElementById("overlayTime");
-                    const msgEl = document.getElementById("overlayMsg");
-
-                    if (res.statusAbsen === "PULANG") {
-                        overlay.className = "theme-pulang";
-                        icon.innerText = "🏡";
-                        title.innerText = "Absen Pulang Berhasil";
-                        msgEl.innerHTML = `Hati-hati di jalan, selamat beristirahat! <span class="waving-hand">👋</span>`;
-                    } else {
-                        overlay.className = "theme-masuk";
-                        icon.innerText = "🏢";
-                        title.innerText = "Absen Masuk Berhasil";
-                        msgEl.innerHTML = `Selamat bekerja, semoga harinya menyenangkan! <span class="waving-hand">👋</span>`;
-                    }
-
-                    nameEl.innerText = res.nama;
-                    timeEl.innerText = "📅 " + tglFormat;
-                    overlay.style.display = "flex";
-
-                    try {
-                        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                        const osc = audioCtx.createOscillator();
-                        const gain = audioCtx.createGain();
-                        osc.connect(gain);
-                        gain.connect(audioCtx.destination);
-                        osc.type = 'sine';
-                        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime);
-                        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-                        osc.start();
-                        osc.stop(audioCtx.currentTime + 0.18);
-                    } catch(e) {}
-
-                    setTimeout(() => {
-                        overlay.style.display = "none";
-                        mulaiScanner();
-                        sedangProses = false;
-                    }, 5000);
-
-                } else {
-                    tampilkanPesanError(res.pesan);
-                }
-            })
-            .catch(err => {
-                tutupLoading();
-                tampilkanPesanError("Gagal mengirim data absensi ke server.");
-            });
+            setTimeout(() => {
+                overlay.style.display = "none";
+                mulaiScanner();
+                sedangProses = false;
+            }, 5000);
+        } else {
+            tampilkanPesanError(res.pesan);
         }
-
+    })
+    .catch(err => {
+        tutupLoading();
+        btn.disabled = false;
+        btn.innerHTML = "<span>📸</span> Ambil Foto & Kirim Absen";
+        tampilkanPesanError("Gagal mengirim data.");
+    });
+}
         function tampilkanLoading(judul, sub) {
             const overlay = document.getElementById("fullScreenOverlay");
             overlay.className = "theme-loading";
