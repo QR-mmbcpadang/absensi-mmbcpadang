@@ -381,17 +381,26 @@ table.rekap-table th:nth-child(2) {
             const tglFormat = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " | " + nowWib.toLocaleTimeString("id-ID");
             const overlay = document.getElementById("fullScreenOverlay");
             try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(659.25, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.18);
-            } catch(e) {}
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    // Nada pertama (masuk ke nada tinggi / "Tring")
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    osc.type = 'triangle'; // Menggunakan triangle agar suaranya lebih lembut seperti lonceng/chime
+    
+    // Efek nada naik (dari frekuensi rendah ke tinggi ala "Tring")
+    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // Nada C5
+    osc.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.25); // Naik ke C6
+    
+    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3); // Efek memudar perlahan (fade out)
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.3);
+} catch(e) {}
             if (res.statusAbsen === "PULANG") {
                 overlay.className = "theme-pulang";
                 document.getElementById("overlayIcon").innerText = "🏡";
