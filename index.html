@@ -380,7 +380,18 @@ table.rekap-table th:nth-child(2) {
         if (res.status) {
             const tglFormat = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " | " + nowWib.toLocaleTimeString("id-ID");
             const overlay = document.getElementById("fullScreenOverlay");
-            
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(659.25, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.18);
+            } catch(e) {}
             if (res.statusAbsen === "PULANG") {
                 overlay.className = "theme-pulang";
                 document.getElementById("overlayIcon").innerText = "🏡";
