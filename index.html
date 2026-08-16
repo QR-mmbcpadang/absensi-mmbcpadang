@@ -261,24 +261,30 @@ table.rekap-table th:nth-child(2) {
         }
 
         function mulaiScanner() {
-            if (!html5QrCode) {
-                html5QrCode = new Html5Qrcode("reader");
-            }
-            html5QrCode.start(
-                { facingMode: "environment" },
-                { fps: 10, qrbox: 230 },
-                (decodedText) => {
-                    if (sedangProses) return;
-                    sedangProses = true;
-                    
-                    html5QrCode.stop().then(() => {
-                        prosesQRData(decodedText);
-                    }).catch(err => {
-                        prosesQRData(decodedText);
-                    });
-                },
-                (err) => {}
-            ).catch(err => alert("Gagal membuka kamera scanner. Pastikan izin kamera aktif."));
+            // Berikan jeda 1 detik agar kamera benar-benar tertutup sempurna sebelumnya
+            setTimeout(() => {
+                if (!html5QrCode) {
+                    html5QrCode = new Html5Qrcode("reader");
+                }
+                html5QrCode.start(
+                    { facingMode: "environment" },
+                    { fps: 10, qrbox: 230 },
+                    (decodedText) => {
+                        if (sedangProses) return;
+                        sedangProses = true;
+                        
+                        html5QrCode.stop().then(() => {
+                            prosesQRData(decodedText);
+                        }).catch(err => {
+                            prosesQRData(decodedText);
+                        });
+                    },
+                    (err) => {}
+                ).catch(err => {
+                    // Jika gagal, berikan info atau biarkan user klik ulang pilih lokasi
+                    console.log("Kamera sedang sibuk:", err);
+                });
+            }, 1000);
         }
 
         function prosesQRData(idStaff) {
