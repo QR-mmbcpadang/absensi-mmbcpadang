@@ -13,29 +13,29 @@
 
         .container { width: 100%; max-width: 900px; background: #ffffff; border-radius: 20px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); overflow: hidden; display: flex; flex-direction: column; position: relative; }
         
-        .welcomeCard { background: #f8fafc; padding: 20px; text-align: center; border-bottom: 1px solid #e2e8f0; }
+        .welcomeCard { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 20px; text-align: center; border-bottom: 1px solid #cbd5e1; }
         .welcomeLogo { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; margin-bottom: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .welcomeCard h2 { font-size: 18px; color: #0f172a; font-weight: 800; text-transform: uppercase; }
+        .welcomeCard h2 { font-size: 18px; color: #0f172a; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
 
         .tab-menu { display: flex; background: #1e293b; padding: 6px; gap: 6px; border-bottom: 1px solid #334155; }
         .tab-button { flex: 1; padding: 10px 6px; text-align: center; background: transparent; border: none; color: #94a3b8; font-weight: 600; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; font-size: 12px; }
         .tab-button.active { background: #2563eb; color: #ffffff; font-weight: bold; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
 
-        .tab-page { padding: 20px; display: none; }
+        .tab-page { padding: 20px; display: none; background: #f8fafc; min-height: 400px; }
         .tab-page.active-page { display: block; }
 
         .tanggal, .jam { text-align: center; font-weight: 600; color: #1d4ed8; }
-        .tanggal { font-size: 13px; background: #eff6ff; padding: 8px; border-radius: 8px 8px 0 0; border: 1px solid #dbeafe; border-bottom: none; }
-        .jam { font-size: 20px; background: #eff6ff; padding: 0 8px 10px 8px; border-radius: 0 0 8px 8px; border: 1px solid #dbeafe; border-top: none; margin-bottom: 15px; }
+        .tanggal { font-size: 13px; background: #eff6ff; padding: 8px; border-radius: 10px 10px 0 0; border: 1px solid #dbeafe; border-bottom: none; }
+        .jam { font-size: 22px; background: #eff6ff; padding: 0 8px 12px 8px; border-radius: 0 0 10px 10px; border: 1px solid #dbeafe; border-top: none; margin-bottom: 15px; }
 
-        #pilihanLokasi { text-align: center; background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 15px; font-weight: 600; font-size: 13px; color: #475569; }
-        .btnLokasi { background: #2563eb; color: white; border: none; padding: 12px 20px; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; margin: 8px 5px 0 5px; width: 45%; transition: 0.2s; }
-        .btnLokasi:hover { background: #1d4ed8; }
+        #pilihanLokasi { text-align: center; background: #ffffff; padding: 20px; border-radius: 14px; border: 1px solid #e2e8f0; margin-bottom: 15px; font-weight: 600; font-size: 13px; color: #475569; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .btnLokasi { background: #2563eb; color: white; border: none; padding: 12px 20px; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; margin: 8px 5px 0 5px; width: 45%; transition: 0.2s; box-shadow: 0 4px 10px rgba(37,99,235,0.2); }
+        .btnLokasi:hover { background: #1d4ed8; transform: translateY(-1px); }
 
-        .scan-box { background: #000; border-radius: 12px; overflow: hidden; margin-top: 10px; }
+        .scan-box { background: #000; border-radius: 12px; overflow: hidden; margin-top: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         #reader { width: 100% !important; border: none !important; }
 
-        .search-box { width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 13px; margin-bottom: 12px; outline: none; transition: border 0.2s; }
+        .search-box { width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 13px; margin-bottom: 12px; outline: none; background: #ffffff; transition: border 0.2s; }
         .search-box:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
 
         /* FULL SCREEN OVERLAY DINAMIS */
@@ -76,36 +76,32 @@
         .page-title h2 { font-size: 16px; color: #1e293b; font-weight: 700; }
         .page-title p { font-size: 12px; color: #64748b; }
 
-        .rekap-wrapper { overflow-x: auto; max-height: 65vh; border: 1px solid #cbd5e1; border-radius: 10px; }
+        /* TABEL ELEGAN & BADGE STATUS */
+        .rekap-wrapper { overflow-x: auto; max-height: 65vh; border: 1px solid #cbd5e1; border-radius: 12px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
         table.rekap-table { width: 100%; border-collapse: collapse; font-size: 12px; white-space: nowrap; }
-        table.rekap-table th, table.rekap-table td { border: 1px solid #cbd5e1; padding: 9px 12px; text-align: center; background: #ffffff; }
-        table.rekap-table th { background: #f1f5f9; color: #1e293b; position: sticky; top: 0; z-index: 3; font-weight: bold; }
+        table.rekap-table th, table.rekap-table td { border: 1px solid #e2e8f0; padding: 9px 12px; text-align: center; background: #ffffff; }
+        table.rekap-table th { background: #1e293b !important; color: #ffffff !important; position: sticky; top: 0; z-index: 3; font-weight: 600; letter-spacing: 0.3px; }
         
-        /* Menghapus sticky dari kolom pertama (Tanggal) */
-table.rekap-table th:first-child, 
-table.rekap-table td:first-child { 
-    position: static; /* Ubah dari sticky ke static */
-    border-right: 1px solid #cbd5e1; 
-}
+        /* Kolom Nama Sticky */
+        table.rekap-table th:first-child, table.rekap-table td:first-child { position: static; border-right: 1px solid #e2e8f0; }
+        table.rekap-table th:nth-child(2), table.rekap-table td:nth-child(2) { position: sticky; left: 0; z-index: 4; background: #f8fafc; border-right: 2px solid #cbd5e1; font-weight: 600; text-align: left; box-shadow: 2px 0 5px rgba(0,0,0,0.05); }
+        table.rekap-table th:nth-child(2) { z-index: 5; background: #0f172a; color: #ffffff !important; }
 
-/* Membuat kolom kedua (Nama) menjadi sticky */
-table.rekap-table th:nth-child(2), 
-table.rekap-table td:nth-child(2) { 
-    position: sticky; 
-    left: 0; 
-    z-index: 4; /* Lebih tinggi agar berada di atas */
-    background: #f8fafc; 
-    border-right: 2px solid #cbd5e1; 
-    font-weight: 600; 
-    text-align: left;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.05);
-}
-
-/* Pastikan header Nama tetap paling atas */
-table.rekap-table th:nth-child(2) { 
-    z-index: 5; 
-    background: #e2e8f0; 
-}
+        /* DESAIN BADGE STATUS JADWAL AGAR TIDAK PUSING */
+        .badge-shift {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 11px;
+            text-align: center;
+            min-width: 32px;
+        }
+        .badge-s1 { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+        .badge-s2 { background: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe; }
+        .badge-off { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+        .badge-cuti { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+        .badge-tlt { background: #ffedd5; color: #c2410c; border: 1px solid #fed7aa; }
 
         .footer { text-align: center; padding: 15px; font-size: 12px; color: #64748b; background: #f8fafc; border-top: 1px solid #e2e8f0; }
 
@@ -165,7 +161,7 @@ table.rekap-table th:nth-child(2) {
             </div>
 
             <div id="scannerArea" style="display:none;">
-                <div style="font-size: 12px; font-weight: 600; color: #15803d; background: #f0fdf4; padding: 8px; text-align: center; border-radius: 8px; margin-bottom: 10px;">
+                <div style="font-size: 12px; font-weight: 600; color: #15803d; background: #f0fdf4; padding: 10px; text-align: center; border-radius: 8px; margin-bottom: 10px; border: 1px solid #dcfce7;">
                     📍 Mode Aktif: <b id="lokasiAktifText">-</b> <span style="cursor:pointer; color:#2563eb; text-decoration:underline; margin-left:10px;" onclick="gantiLokasi()">(Ganti)</span>
                 </div>
                 <div class="scan-box">
@@ -241,16 +237,15 @@ table.rekap-table th:nth-child(2) {
         }
 
         function pilihLokasi(lokasi) {
-    // Nonaktifkan semua tombol lokasi agar user tidak klik berkali-kali
-    const btnLokasi = document.querySelectorAll('.btnLokasi');
-    btnLokasi.forEach(btn => btn.disabled = true);
-    
-    selectedLokasi = lokasi;
-    document.getElementById('lokasiAktifText').innerText = lokasi;
-    document.getElementById('pilihanLokasi').style.display = 'none';
-    document.getElementById('scannerArea').style.display = 'block';
-    mulaiScanner();
-}
+            const btnLokasi = document.querySelectorAll('.btnLokasi');
+            btnLokasi.forEach(btn => btn.disabled = true);
+            
+            selectedLokasi = lokasi;
+            document.getElementById('lokasiAktifText').innerText = lokasi;
+            document.getElementById('pilihanLokasi').style.display = 'none';
+            document.getElementById('scannerArea').style.display = 'block';
+            mulaiScanner();
+        }
 
         function gantiLokasi() {
             if (html5QrCode) {
@@ -261,7 +256,6 @@ table.rekap-table th:nth-child(2) {
         }
 
         function mulaiScanner() {
-            // Berikan jeda 1 detik agar kamera benar-benar tertutup sempurna sebelumnya
             setTimeout(() => {
                 if (!html5QrCode) {
                     html5QrCode = new Html5Qrcode("reader");
@@ -281,7 +275,6 @@ table.rekap-table th:nth-child(2) {
                     },
                     (err) => {}
                 ).catch(err => {
-                    // Jika gagal, berikan info atau biarkan user klik ulang pilih lokasi
                     console.log("Kamera sedang sibuk:", err);
                 });
             }, 1000);
@@ -289,12 +282,10 @@ table.rekap-table th:nth-child(2) {
 
         function prosesQRData(idStaff) {
             activeStaffId = idStaff;
-            // Ambil nama staff terlebih dahulu (bisa lewat pengecekan API atau langsung buka modal dengan nama sementara)
             document.getElementById("selfieStaffName").innerText = "Memeriksa ID: " + idStaff + "...";
             const modal = document.getElementById("selfieModal");
             modal.style.display = "flex";
 
-            // Cek nama via backend atau langsung buka kamera
             fetch(API, {
                 method: "POST",
                 body: JSON.stringify({ action: "cekNama", id: idStaff })
@@ -329,115 +320,106 @@ table.rekap-table th:nth-child(2) {
         }
 
         function ambilFotoDanKirim() {
-    const video = document.getElementById("selfieVideo");
-    const canvas = document.getElementById("canvas");
-    
-    if (video.videoWidth === 0 || video.videoHeight === 0) {
-        alert("Kamera sedang bersiap, silakan coba ketuk tombol ambil foto sekali lagi.");
-        return;
-    }
-
-    // Ambil tombol capture untuk kita nonaktifkan
-    const btn = document.querySelector('.btn-capture');
-    btn.disabled = true;
-    btn.innerHTML = "<span>⏳</span> Mengirim Absen...";
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    const ctx = canvas.getContext("2d");
-    
-    // 1. Gambar foto asli
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    // 2. Tambahkan Watermark
-    const nowWib = new Date();
-    const tglStr = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " - " + nowWib.toLocaleTimeString("id-ID");
-    
-    ctx.fillStyle = "rgba(0, 0, 0, 0.65)";
-    ctx.fillRect(0, canvas.height - 100, canvas.width, 100);
-    ctx.font = "bold 20px Arial";
-    ctx.fillStyle = "#38bdf8";
-    ctx.fillText("👤 " + activeStaffName, 20, canvas.height - 65);
-    ctx.font = "15px Arial";
-    ctx.fillStyle = "#ffffff";
-    ctx.fillText("📅 " + tglStr, 20, canvas.height - 40);
-    ctx.fillText("📍 Lokasi: " + selectedLokasi + " (MMBC PADANG)", 20, canvas.height - 15);
-
-    const base64Image = canvas.toDataURL("image/jpeg", 0.85);
-
-    if (streamSelfie) {
-        streamSelfie.getTracks().forEach(track => track.stop());
-    }
-    document.getElementById("selfieModal").style.display = "none";
-
-    tampilkanLoading("Menyimpan Absen...", "Memproses absensi...");
-
-    fetch(API, {
-        method: "POST",
-        body: JSON.stringify({ action: "simpanAbsensi", id: activeStaffId, foto: base64Image, lokasi: selectedLokasi })
-    })
-    .then(r => r.json())
-    .then(res => {
-        tutupLoading();
-        // Aktifkan kembali tombol jika ingin digunakan lagi nanti
-        btn.disabled = false;
-        btn.innerHTML = "<span>📸</span> Ambil Foto & Kirim Absen";
-        
-        if (res.status) {
-            const tglFormat = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " | " + nowWib.toLocaleTimeString("id-ID");
-            const overlay = document.getElementById("fullScreenOverlay");
-            try {
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    
-    // Nada pertama (masuk ke nada tinggi / "Tring")
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    
-    osc.type = 'triangle'; // Menggunakan triangle agar suaranya lebih lembut seperti lonceng/chime
-    
-    // Efek nada naik (dari frekuensi rendah ke tinggi ala "Tring")
-    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // Nada C5
-    osc.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.25); // Naik ke C6
-    
-    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3); // Efek memudar perlahan (fade out)
-    
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.3);
-} catch(e) {}
-            if (res.statusAbsen === "PULANG") {
-                overlay.className = "theme-pulang";
-                document.getElementById("overlayIcon").innerText = "🏡";
-                document.getElementById("overlayTitle").innerText = "Absen Pulang Berhasil";
-                document.getElementById("overlayMsg").innerHTML = `Hati-hati di jalan! <span class="waving-hand">👋</span>`;
-            } else {
-                overlay.className = "theme-masuk";
-                document.getElementById("overlayIcon").innerText = "🏢";
-                document.getElementById("overlayTitle").innerText = "Absen Masuk Berhasil";
-                document.getElementById("overlayMsg").innerHTML = `Selamat bekerja! <span class="waving-hand">👋</span>`;
+            const video = document.getElementById("selfieVideo");
+            const canvas = document.getElementById("canvas");
+            
+            if (video.videoWidth === 0 || video.videoHeight === 0) {
+                alert("Kamera sedang bersiap, silakan coba ketuk tombol ambil foto sekali lagi.");
+                return;
             }
-            document.getElementById("overlayName").innerText = res.nama;
-            document.getElementById("overlayTime").innerText = "📅 " + tglFormat;
-            overlay.style.display = "flex";
 
-            setTimeout(() => {
-                overlay.style.display = "none";
-                mulaiScanner();
-                sedangProses = false;
-            }, 5000);
-        } else {
-            tampilkanPesanError(res.pesan);
+            const btn = document.querySelector('.btn-capture');
+            btn.disabled = true;
+            btn.innerHTML = "<span>⏳</span> Mengirim Absen...";
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext("2d");
+            
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const nowWib = new Date();
+            const tglStr = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " - " + nowWib.toLocaleTimeString("id-ID");
+            
+            ctx.fillStyle = "rgba(0, 0, 0, 0.65)";
+            ctx.fillRect(0, canvas.height - 100, canvas.width, 100);
+            ctx.font = "bold 20px Arial";
+            ctx.fillStyle = "#38bdf8";
+            ctx.fillText("👤 " + activeStaffName, 20, canvas.height - 65);
+            ctx.font = "15px Arial";
+            ctx.fillStyle = "#ffffff";
+            ctx.fillText("📅 " + tglStr, 20, canvas.height - 40);
+            ctx.fillText("📍 Lokasi: " + selectedLokasi + " (MMBC PADANG)", 20, canvas.height - 15);
+
+            const base64Image = canvas.toDataURL("image/jpeg", 0.85);
+
+            if (streamSelfie) {
+                streamSelfie.getTracks().forEach(track => track.stop());
+            }
+            document.getElementById("selfieModal").style.display = "none";
+
+            tampilkanLoading("Menyimpan Absen...", "Memproses absensi...");
+
+            fetch(API, {
+                method: "POST",
+                body: JSON.stringify({ action: "simpanAbsensi", id: activeStaffId, foto: base64Image, lokasi: selectedLokasi })
+            })
+            .then(r => r.json())
+            .then(res => {
+                tutupLoading();
+                btn.disabled = false;
+                btn.innerHTML = "<span>📸</span> Ambil Foto & Kirim Absen";
+                
+                if (res.status) {
+                    const tglFormat = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " | " + nowWib.toLocaleTimeString("id-ID");
+                    const overlay = document.getElementById("fullScreenOverlay");
+                    try {
+                        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+                        osc.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.25);
+                        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                        osc.start();
+                        osc.stop(audioCtx.currentTime + 0.3);
+                    } catch(e) {}
+
+                    if (res.statusAbsen === "PULANG") {
+                        overlay.className = "theme-pulang";
+                        document.getElementById("overlayIcon").innerText = "🏡";
+                        document.getElementById("overlayTitle").innerText = "Absen Pulang Berhasil";
+                        document.getElementById("overlayMsg").innerHTML = `Hati-hati di jalan! <span class="waving-hand">👋</span>`;
+                    } else {
+                        overlay.className = "theme-masuk";
+                        document.getElementById("overlayIcon").innerText = "🏢";
+                        document.getElementById("overlayTitle").innerText = "Absen Masuk Berhasil";
+                        document.getElementById("overlayMsg").innerHTML = `Selamat bekerja! <span class="waving-hand">👋</span>`;
+                    }
+                    document.getElementById("overlayName").innerText = res.nama;
+                    document.getElementById("overlayTime").innerText = "📅 " + tglFormat;
+                    overlay.style.display = "flex";
+
+                    setTimeout(() => {
+                        overlay.style.display = "none";
+                        mulaiScanner();
+                        sedangProses = false;
+                    }, 5000);
+                } else {
+                    tampilkanPesanError(res.pesan);
+                }
+            })
+            .catch(err => {
+                tutupLoading();
+                btn.disabled = false;
+                btn.innerHTML = "<span>📸</span> Ambil Foto & Kirim Absen";
+                tampilkanPesanError("Gagal mengirim data.");
+            });
         }
-    })
-    .catch(err => {
-        tutupLoading();
-        btn.disabled = false;
-        btn.innerHTML = "<span>📸</span> Ambil Foto & Kirim Absen";
-        tampilkanPesanError("Gagal mengirim data.");
-    });
-}
+
         function tampilkanLoading(judul, sub) {
             const overlay = document.getElementById("fullScreenOverlay");
             overlay.className = "theme-loading";
@@ -470,7 +452,7 @@ table.rekap-table th:nth-child(2) {
             }, 4000);
         }
 
-        // LOAD JADWAL KERJA
+        // LOAD JADWAL KERJA DENGAN BADGE WARNA ELEGAN
         function loadJadwalKerja() {
             const container = document.getElementById('jadwalContent');
             container.innerHTML = "<div style='text-align:center; padding:20px; color:#64748b;'>Memuat jadwal kerja...</div>";
@@ -497,11 +479,30 @@ table.rekap-table th:nth-child(2) {
             const container = document.getElementById('jadwalContent');
             let html = `<div style="font-weight: bold; font-size: 13px; color: #1e293b; margin-bottom: 8px; text-align: center;">📅 Periode: ${namaSheet}</div>`;
             html += '<table class="rekap-table" id="tabelJadwalIsi">';
+            
             rows.forEach((row, idx) => {
                 html += '<tr>';
-                row.forEach(cell => {
+                row.forEach((cell, colIdx) => {
                     let tag = idx === 0 || idx === 1 ? 'th' : 'td';
-                    html += `<${tag}>${cell !== null ? cell : ''}</${tag}>`;
+                    let cellText = cell !== null ? String(cell).trim() : '';
+
+                    // Berikan badge warna otomatis untuk baris data staff (indeks >= 2)
+                    if (idx >= 2 && colIdx > 1 && cellText !== '') {
+                        let upperVal = cellText.toUpperCase();
+                        let badgeClass = "";
+                        
+                        if (upperVal === "S1") badgeClass = "badge-shift badge-s1";
+                        else if (upperVal === "S2") badgeClass = "badge-shift badge-s2";
+                        else if (upperVal === "OFF" || upperVal === "LIBUR") badgeClass = "badge-shift badge-off";
+                        else if (upperVal.includes("CUTI")) badgeClass = "badge-shift badge-cuti";
+                        else if (upperVal === "TLT" || upperVal === "T") badgeClass = "badge-shift badge-tlt";
+
+                        if (badgeClass !== "") {
+                            cellText = `<span class="${badgeClass}">${cellText}</span>`;
+                        }
+                    }
+
+                    html += `<${tag}>${cellText}</${tag}>`;
                 });
                 html += '</tr>';
             });
