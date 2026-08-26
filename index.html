@@ -11,14 +11,15 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background: #0f172a; color: #333; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; }
 
-        .container { width: 100%; max-width: 900px; background: #ffffff; border-radius: 20px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); overflow: hidden; display: flex; flex-direction: column; position: relative; }
+        /* KONTANIER DILEBARKAN UNTUK MONITOR / LAPTOP (MAX 1200px) */
+        .container { width: 100%; max-width: 1200px; background: #ffffff; border-radius: 20px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); overflow: hidden; display: flex; flex-direction: column; position: relative; }
         
         .welcomeCard { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 20px; text-align: center; border-bottom: 1px solid #cbd5e1; }
         .welcomeLogo { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; margin-bottom: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .welcomeCard h2 { font-size: 18px; color: #0f172a; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
 
         .tab-menu { display: flex; background: #1e293b; padding: 6px; gap: 6px; border-bottom: 1px solid #334155; }
-        .tab-button { flex: 1; padding: 10px 6px; text-align: center; background: transparent; border: none; color: #94a3b8; font-weight: 600; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; font-size: 12px; }
+        .tab-button { flex: 1; padding: 10px 6px; text-align: center; background: transparent; border: none; color: #94a3b8; font-weight: 600; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; font-size: 13px; }
         .tab-button.active { background: #2563eb; color: #ffffff; font-weight: bold; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
 
         .tab-page { padding: 20px; display: none; background: #f8fafc; min-height: 400px; }
@@ -32,7 +33,7 @@
         .btnLokasi { background: #2563eb; color: white; border: none; padding: 12px 20px; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; margin: 8px 5px 0 5px; width: 45%; transition: 0.2s; box-shadow: 0 4px 10px rgba(37,99,235,0.2); }
         .btnLokasi:hover { background: #1d4ed8; transform: translateY(-1px); }
 
-        .scan-box { background: #000; border-radius: 12px; overflow: hidden; margin-top: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .scan-box { background: #000; border-radius: 12px; overflow: hidden; margin-top: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 500px; margin-left: auto; margin-right: auto; }
         #reader { width: 100% !important; border: none !important; }
 
         .search-box { width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 13px; margin-bottom: 12px; outline: none; background: #ffffff; transition: border 0.2s; }
@@ -76,10 +77,10 @@
         .page-title h2 { font-size: 16px; color: #1e293b; font-weight: 700; }
         .page-title p { font-size: 12px; color: #64748b; }
 
-        /* --- TABEL ELEGAN & STICKY HEADER GANDA --- */
-        .rekap-wrapper { overflow-x: auto; max-height: 65vh; border: 1px solid #cbd5e1; border-radius: 12px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        /* --- TABEL ELEGAN & STICKY HEADER GANDA (LEBIH TINGGI & LUAS) --- */
+        .rekap-wrapper { overflow-x: auto; max-height: 75vh; border: 1px solid #cbd5e1; border-radius: 12px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
         table.rekap-table { width: 100%; border-collapse: collapse; font-size: 12px; white-space: nowrap; }
-        table.rekap-table th, table.rekap-table td { border: 1px solid #e2e8f0; padding: 9px 12px; text-align: center; background: #ffffff; vertical-align: middle; }
+        table.rekap-table th, table.rekap-table td { border: 1px solid #e2e8f0; padding: 8px 10px; text-align: center; background: #ffffff; vertical-align: middle; }
         
         table.rekap-table th { background: #1e293b !important; color: #ffffff !important; font-weight: 600; letter-spacing: 0.3px; position: sticky; z-index: 3; }
 
@@ -550,10 +551,9 @@
                     return;
                 }
 
-                // Ambil data tanpa ID Karyawan (Indeks 1)
                 rawLogData = originalRows.map(row => {
                     let newRow = [...row];
-                    newRow.splice(1, 1); // Hapus kolom ID Karyawan
+                    newRow.splice(1, 1);
                     return newRow;
                 });
 
@@ -573,7 +573,6 @@
                     let tag = idx === 0 ? 'th' : 'td';
                     let cellContent = cell !== null ? String(cell).trim() : '';
 
-                    // Jika ini baris data (bukan header) dan di Kolom Foto (Link Foto Drive)
                     if (idx > 0 && colIdx === 5 && cellContent !== '') {
                         let match = cellContent.match(/[-\w]{25,}/);
                         if (match) {
