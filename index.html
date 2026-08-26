@@ -76,27 +76,22 @@
         .page-title h2 { font-size: 16px; color: #1e293b; font-weight: 700; }
         .page-title p { font-size: 12px; color: #64748b; }
 
-                /* --- TABEL ELEGAN & STICKY HEADER GANDA --- */
+        /* --- TABEL ELEGAN & STICKY HEADER GANDA --- */
         .rekap-wrapper { overflow-x: auto; max-height: 65vh; border: 1px solid #cbd5e1; border-radius: 12px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
         table.rekap-table { width: 100%; border-collapse: collapse; font-size: 12px; white-space: nowrap; }
-        table.rekap-table th, table.rekap-table td { border: 1px solid #e2e8f0; padding: 9px 12px; text-align: center; background: #ffffff; }
+        table.rekap-table th, table.rekap-table td { border: 1px solid #e2e8f0; padding: 9px 12px; text-align: center; background: #ffffff; vertical-align: middle; }
         
         table.rekap-table th { background: #1e293b !important; color: #ffffff !important; font-weight: 600; letter-spacing: 0.3px; position: sticky; z-index: 3; }
 
-        /* Baris pertama header (Nama Hari) nempel paling atas */
         table.rekap-table tr:nth-child(1) th { top: 0; z-index: 5; }
-
-        /* Baris kedua header (Angka Tanggal) nempel tepat di bawah baris hari */
         table.rekap-table tr:nth-child(2) th { top: 32px; z-index: 4; }
 
-        /* Kolom Nama Staff (di pojok kiri) nempel sticky secara horizontal & vertikal */
         table.rekap-table th:first-child, table.rekap-table td:first-child { position: static; border-right: 1px solid #e2e8f0; }
         table.rekap-table th:nth-child(2), table.rekap-table td:nth-child(2) { position: sticky; left: 0; z-index: 2; background: #f8fafc; border-right: 2px solid #cbd5e1; font-weight: 600; text-align: left; box-shadow: 2px 0 5px rgba(0,0,0,0.05); }
         
-        /* Pertemuan pojok kiri atas (Header Kolom Nama) paling tinggi agar tidak tembus */
         table.rekap-table tr:nth-child(1) th:nth-child(2) { z-index: 7; background: #1e293b !important; }
         table.rekap-table tr:nth-child(2) th:nth-child(2) { z-index: 6; background: #1e293b !important; }
-        /* DESAIN BADGE STATUS JADWAL AGAR TIDAK PUSING */
+        
         .badge-shift {
             display: inline-block;
             padding: 3px 8px;
@@ -461,7 +456,7 @@
             }, 4000);
         }
 
-        // LOAD JADWAL KERJA DENGAN BADGE WARNA ELEGAN
+        // LOAD JADWAL KERJA
         function loadJadwalKerja() {
             const container = document.getElementById('jadwalContent');
             container.innerHTML = "<div style='text-align:center; padding:20px; color:#64748b;'>Memuat jadwal kerja...</div>";
@@ -495,7 +490,6 @@
                     let tag = idx === 0 || idx === 1 ? 'th' : 'td';
                     let cellText = cell !== null ? String(cell).trim() : '';
 
-                    // Berikan badge warna otomatis untuk baris data staff (indeks >= 2)
                     if (idx >= 2 && colIdx > 1 && cellText !== '') {
                         let upperVal = cellText.toUpperCase();
                         let badgeClass = "";
@@ -534,7 +528,7 @@
             renderJadwalTable([header1, header2, ...filteredBody], "Hasil Pencarian");
         }
 
-        // LOAD LOG HARIAN
+        // LOAD LOG HARIAN (THUMBNAIL FOTO SELFIE DITAMPILKAN KECIL)
         function loadLogHarian() {
             const container = document.getElementById('logContent');
             container.innerHTML = "<div style='text-align:center; padding:20px; color:#64748b;'>Memuat log absensi hari ini...</div>";
@@ -556,9 +550,9 @@
                     return;
                 }
 
+                // Ambil data tanpa ID Karyawan (Indeks 1)
                 rawLogData = originalRows.map(row => {
                     let newRow = [...row];
-                    newRow.splice(6, 1); // Hapus kolom Foto
                     newRow.splice(1, 1); // Hapus kolom ID Karyawan
                     return newRow;
                 });
@@ -575,9 +569,22 @@
             let html = '<table class="rekap-table" id="tabelLogIsi">';
             rows.forEach((row, idx) => {
                 html += '<tr>';
-                row.forEach(cell => {
+                row.forEach((cell, colIdx) => {
                     let tag = idx === 0 ? 'th' : 'td';
-                    html += `<${tag}>${cell !== null ? cell : ''}</${tag}>`;
+                    let cellContent = cell !== null ? String(cell).trim() : '';
+
+                    // Jika ini baris data (bukan header) dan di Kolom Foto (Link Foto Drive)
+                    if (idx > 0 && colIdx === 5 && cellContent !== '') {
+                        let match = cellContent.match(/[-\w]{25,}/);
+                        if (match) {
+                            let imgUrl = "https://lh3.googleusercontent.com/d/" + match[0];
+                            cellContent = `<a href="${cellContent}" target="_blank"><img src="${imgUrl}" style="width:36px; height:36px; border-radius:50%; object-fit:cover; border:1px solid #cbd5e1; box-shadow:0 2px 4px rgba(0,0,0,0.1);" title="Klik untuk lihat foto asli"></a>`;
+                        } else if (cellContent.startsWith("http")) {
+                            cellContent = `<a href="${cellContent}" target="_blank" style="color:#2563eb; text-decoration:underline;">Lihat Foto</a>`;
+                        }
+                    }
+
+                    html += `<${tag}>${cellContent}</${tag}>`;
                 });
                 html += '</tr>';
             });
