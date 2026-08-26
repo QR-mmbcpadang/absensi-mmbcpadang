@@ -77,7 +77,7 @@
         .page-title h2 { font-size: 16px; color: #1e293b; font-weight: 700; }
         .page-title p { font-size: 12px; color: #64748b; }
 
-        /* --- TABEL ELEGAN & STICKY HEADER GANDA (LEBIH TINGGI & LUAS) --- */
+        /* --- TABEL ELEGAN & STICKY HEADER GANDA --- */
         .rekap-wrapper { overflow-x: auto; max-height: 75vh; border: 1px solid #cbd5e1; border-radius: 12px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
         table.rekap-table { width: 100%; border-collapse: collapse; font-size: 12px; white-space: nowrap; }
         table.rekap-table th, table.rekap-table td { border: 1px solid #e2e8f0; padding: 8px 10px; text-align: center; background: #ffffff; vertical-align: middle; }
@@ -529,7 +529,7 @@
             renderJadwalTable([header1, header2, ...filteredBody], "Hasil Pencarian");
         }
 
-        // LOAD LOG HARIAN (THUMBNAIL FOTO SELFIE DITAMPILKAN KECIL)
+        // LOAD LOG HARIAN (TANPA KOLOM THUMBNAIL)
         function loadLogHarian() {
             const container = document.getElementById('logContent');
             container.innerHTML = "<div style='text-align:center; padding:20px; color:#64748b;'>Memuat log absensi hari ini...</div>";
@@ -553,7 +553,8 @@
 
                 rawLogData = originalRows.map(row => {
                     let newRow = [...row];
-                    newRow.splice(1, 1);
+                    newRow.splice(7, 1); // Hapus kolom THUMBNAIL (kolom kosong)
+                    newRow.splice(1, 1); // Hapus kolom ID STAFF
                     return newRow;
                 });
 
