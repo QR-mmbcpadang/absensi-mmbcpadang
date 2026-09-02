@@ -11,7 +11,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background: #0f172a; color: #333; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; }
 
-        /* KONTANIER DILEBARKAN UNTUK MONITOR / LAPTOP (MAX 1200px) */
         .container { width: 100%; max-width: 1200px; background: #ffffff; border-radius: 20px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); overflow: hidden; display: flex; flex-direction: column; position: relative; }
         
         .welcomeCard { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 20px; text-align: center; border-bottom: 1px solid #cbd5e1; }
@@ -39,7 +38,6 @@
         .search-box { width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 13px; margin-bottom: 12px; outline: none; background: #ffffff; transition: border 0.2s; }
         .search-box:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
 
-        /* FULL SCREEN OVERLAY DINAMIS */
         #fullScreenOverlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #0f172a; display: none; flex-direction: column; align-items: center; justify-content: center;
@@ -62,7 +60,6 @@
         .overlay-msg-box { background: #f1f5f9; padding: 10px 14px; border-radius: 12px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; font-weight: 600; color: #334155; border: 1px solid #e2e8f0; margin-top: 10px; }
         .waving-hand { display: inline-block; animation: wave 1.2s infinite; transform-origin: 70% 70%; font-size: 18px; }
 
-        /* MODAL KAMERA SELFIE */
         #selfieModal {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000000;
             display: none; flex-direction: column; align-items: center; justify-content: space-between;
@@ -77,22 +74,73 @@
         .page-title h2 { font-size: 16px; color: #1e293b; font-weight: 700; }
         .page-title p { font-size: 12px; color: #64748b; }
 
-        /* --- TABEL ELEGAN & STICKY HEADER GANDA --- */
+        /* --- STYLING TABEL YANG DIPERBARUI (ESTETIK, ZEBRA & LEBAR KOLOM NO) --- */
         .rekap-wrapper { overflow-x: auto; max-height: 75vh; border: 1px solid #cbd5e1; border-radius: 12px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        
+        /* PEMBUNGKUS TABEL BERWARNA UNTUK LOG HARIAN */
+        .log-container-wrapper {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 1px solid #bbf7d0;
+            padding: 15px;
+            border-radius: 16px;
+            box-shadow: 0 6px 15px rgba(21, 128, 61, 0.08);
+        }
+
+        /* PEMBUNGKUS TABEL BERWARNA UNTUK JADWAL KERJA */
+        .jadwal-container-wrapper {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border: 1px solid #bfdbfe;
+            padding: 15px;
+            border-radius: 16px;
+            box-shadow: 0 6px 15px rgba(37, 99, 235, 0.08);
+        }
+
         table.rekap-table { width: 100%; border-collapse: collapse; font-size: 12px; white-space: nowrap; }
-        table.rekap-table th, table.rekap-table td { border: 1px solid #e2e8f0; padding: 8px 10px; text-align: center; background: #ffffff; vertical-align: middle; }
+        table.rekap-table th, table.rekap-table td { border: 1px solid #cbd5e1; padding: 8px 10px; text-align: center; background: #ffffff; vertical-align: middle; }
         
-        table.rekap-table th { background: #1e293b !important; color: #ffffff !important; font-weight: 600; letter-spacing: 0.3px; position: sticky; z-index: 3; }
+        /* PERBAIKAN HEADER JADWAL AGAR TIDAK TEMBUS KE ATAS */
+        table.rekap-table th { background: #1e293b !important; color: #ffffff !important; font-weight: 600; letter-spacing: 0.3px; position: sticky; z-index: 5; }
 
-        table.rekap-table tr:nth-child(1) th { top: 0; z-index: 5; }
-        table.rekap-table tr:nth-child(2) th { top: 32px; z-index: 4; }
+        table.rekap-table tr:nth-child(1) th { top: 0; z-index: 7; }
+        table.rekap-table tr:nth-child(2) th { top: 32px; z-index: 6; }
 
-        table.rekap-table th:first-child, table.rekap-table td:first-child { position: static; border-right: 1px solid #e2e8f0; }
-        table.rekap-table th:nth-child(2), table.rekap-table td:nth-child(2) { position: sticky; left: 0; z-index: 2; background: #f8fafc; border-right: 2px solid #cbd5e1; font-weight: 600; text-align: left; box-shadow: 2px 0 5px rgba(0,0,0,0.05); }
+        /* PERBAIKAN LEBAR KOLOM NO AGAR TIDAK TERLALU LEBAR */
+        table.rekap-table th:first-child, table.rekap-table td:first-child { 
+            position: sticky; 
+            left: 0; 
+            z-index: 4; 
+            background: #f1f5f9; 
+            width: 50px; 
+            min-width: 50px; 
+            max-width: 60px; 
+            border-right: 1px solid #cbd5e1; 
+        }
+        table.rekap-table tr:nth-child(1) th:first-child { z-index: 9; background: #1e293b !important; }
+        table.rekap-table tr:nth-child(2) th:first-child { z-index: 8; background: #1e293b !important; }
+
+        /* KOLOM NAMA STICKY DI SEBELAH KOLOM NO */
+        table.rekap-table th:nth-child(2), table.rekap-table td:nth-child(2) { 
+            position: sticky; 
+            left: 50px; 
+            z-index: 3; 
+            background: #f8fafc; 
+            border-right: 2px solid #cbd5e1; 
+            font-weight: 600; 
+            text-align: left; 
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05); 
+        }
         
-        table.rekap-table tr:nth-child(1) th:nth-child(2) { z-index: 7; background: #1e293b !important; }
-        table.rekap-table tr:nth-child(2) th:nth-child(2) { z-index: 6; background: #1e293b !important; }
+        table.rekap-table tr:nth-child(1) th:nth-child(2) { z-index: 9; background: #1e293b !important; }
+        table.rekap-table tr:nth-child(2) th:nth-child(2) { z-index: 8; background: #1e293b !important; }
         
+        /* PENAMBAHAN BARIS ZEBRA PADA TABEL */
+        table.rekap-table tr:not(:first-child):not(:nth-child(2)):nth-child(even) td {
+            background-color: #f1f5f9 !important;
+        }
+        table.rekap-table tr:not(:first-child):not(:nth-child(2)):nth-child(odd) td {
+            background-color: #ffffff !important;
+        }
+
         .badge-shift {
             display: inline-block;
             padding: 3px 8px;
@@ -184,8 +232,10 @@
                 <p>Jadwal kerja bulanan karyawan</p>
             </div>
             <input type="text" id="searchJadwal" class="search-box" placeholder="🔍 Cari nama karyawan..." onkeyup="filterTabelJadwal()">
-            <div class="rekap-wrapper" id="jadwalContent">
-                <div style="text-align:center; padding:20px; color:#64748b;">Memuat jadwal kerja...</div>
+            <div class="jadwal-container-wrapper">
+                <div class="rekap-wrapper" id="jadwalContent">
+                    <div style="text-align:center; padding:20px; color:#64748b;">Memuat jadwal kerja...</div>
+                </div>
             </div>
         </div>
 
@@ -196,8 +246,10 @@
                 <p>Riwayat absensi karyawan hari ini</p>
             </div>
             <input type="text" id="searchLog" class="search-box" placeholder="🔍 Cari nama karyawan, status, atau lokasi..." onkeyup="filterTabelLog()">
-            <div class="rekap-wrapper" id="logContent">
-                <div style="text-align:center; padding:20px; color:#64748b;">Memuat log absensi...</div>
+            <div class="log-container-wrapper">
+                <div class="rekap-wrapper" id="logContent">
+                    <div style="text-align:center; padding:20px; color:#64748b;">Memuat log absensi...</div>
+                </div>
             </div>
         </div>
 
@@ -599,7 +651,7 @@
 
                     html += `<${tag}>${cellContent}</${tag}>`;
                 });
-                html += '</tr>';
+                html += 'html += '</tr>';
             });
             html += '</table>';
             container.innerHTML = html;
