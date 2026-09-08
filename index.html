@@ -9,13 +9,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: #0f172a; color: #333; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; }
+        body { background: #0b0f19; color: #333; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; }
 
-        .container { width: 100%; max-width: 1200px; background: #ffffff; border-radius: 20px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); overflow: hidden; display: flex; flex-direction: column; position: relative; }
+        .container { width: 100%; max-width: 1200px; background: #ffffff; border-radius: 20px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4); overflow: hidden; display: flex; flex-direction: column; position: relative; }
         
-        .welcomeCard { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 20px; text-align: center; border-bottom: 1px solid #cbd5e1; }
-        .welcomeLogo { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; margin-bottom: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .welcomeCard h2 { font-size: 18px; color: #0f172a; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .welcomeCard { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 22px; text-align: center; border-bottom: 1px solid #334155; }
+        .welcomeLogo { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-bottom: 8px; box-shadow: 0 4px 15px rgba(37,99,235,0.4); border: 2px solid #38bdf8; }
+        .welcomeCard h2 { font-size: 19px; color: #ffffff; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
 
         .tab-menu { display: flex; background: #1e293b; padding: 6px; gap: 6px; border-bottom: 1px solid #334155; }
         .tab-button { flex: 1; padding: 10px 6px; text-align: center; background: transparent; border: none; color: #94a3b8; font-weight: 600; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; font-size: 13px; }
@@ -28,37 +28,45 @@
         .tanggal { font-size: 13px; background: #eff6ff; padding: 8px; border-radius: 10px 10px 0 0; border: 1px solid #dbeafe; border-bottom: none; }
         .jam { font-size: 22px; background: #eff6ff; padding: 0 8px 12px 8px; border-radius: 0 0 10px 10px; border: 1px solid #dbeafe; border-top: none; margin-bottom: 15px; }
 
-        #pilihanLokasi { text-align: center; background: #ffffff; padding: 20px; border-radius: 14px; border: 1px solid #e2e8f0; margin-bottom: 15px; font-weight: 600; font-size: 13px; color: #475569; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
-        .btnLokasi { background: #2563eb; color: white; border: none; padding: 12px 20px; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; margin: 8px 5px 0 5px; width: 45%; transition: 0.2s; box-shadow: 0 4px 10px rgba(37,99,235,0.2); }
-        .btnLokasi:hover { background: #1d4ed8; transform: translateY(-1px); }
+        #pilihanLokasi { text-align: center; background: #ffffff; padding: 25px; border-radius: 14px; border: 1px solid #e2e8f0; margin-bottom: 15px; font-weight: 600; font-size: 14px; color: #475569; box-shadow: 0 4px 15px rgba(0,0,0,0.04); }
+        .btnLokasi { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; border: none; padding: 14px 22px; border-radius: 12px; font-weight: bold; font-size: 14px; cursor: pointer; margin: 8px 6px 0 6px; width: 45%; transition: all 0.2s; box-shadow: 0 4px 12px rgba(37,99,235,0.25); }
+        .btnLokasi:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(37,99,235,0.4); }
 
-        .scan-box { background: #000; border-radius: 12px; overflow: hidden; margin-top: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 500px; margin-left: auto; margin-right: auto; }
+        .scan-box { background: #000; border-radius: 12px; overflow: hidden; margin-top: 10px; box-shadow: 0 6px 20px rgba(0,0,0,0.15); max-width: 500px; margin-left: auto; margin-right: auto; }
         #reader { width: 100% !important; border: none !important; }
 
         .search-box { width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 13px; margin-bottom: 12px; outline: none; background: #ffffff; transition: border 0.2s; }
         .search-box:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
 
+        /* OVERLAY ELEGANT & PROFESIONAL */
         #fullScreenOverlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #0f172a; display: none; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 99999; padding: 25px; text-align: center; transition: background 0.4s ease;
+            background: rgba(11, 15, 25, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 99999; padding: 25px; text-align: center; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        #fullScreenOverlay.theme-masuk { background: linear-gradient(135deg, #bae6fd 0%, #38bdf8 100%) !important; }
-        #fullScreenOverlay.theme-pulang { background: linear-gradient(135deg, #a7f3d0 0%, #34d399 100%) !important; }
-        #fullScreenOverlay.theme-loading { background: rgba(15, 23, 42, 0.9) !important; backdrop-filter: blur(10px); }
-        #fullScreenOverlay.error-bg { background: linear-gradient(135deg, #fecaca 0%, #f87171 100%) !important; }
+        #fullScreenOverlay.theme-masuk { background: radial-gradient(circle, rgba(14,116,144,0.9) 0%, rgba(15,23,42,0.95) 100%) !important; }
+        #fullScreenOverlay.theme-pulang { background: radial-gradient(circle, rgba(6,95,70,0.9) 0%, rgba(15,23,42,0.95) 100%) !important; }
+        #fullScreenOverlay.theme-loading { background: rgba(11, 15, 25, 0.92) !important; }
+        #fullScreenOverlay.error-bg { background: radial-gradient(circle, rgba(153,27,27,0.9) 0%, rgba(15,23,42,0.95) 100%) !important; }
 
         .overlay-card {
-            background: #ffffff; width: 100%; max-width: 380px; padding: 30px 20px; border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.25); display: flex; flex-direction: column; align-items: center;
-            animation: scaleUp 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(255, 255, 255, 0.95); width: 100%; max-width: 410px; padding: 35px 25px; border-radius: 28px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); display: flex; flex-direction: column; align-items: center;
+            animation: scaleUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .overlay-icon { font-size: 56px; margin-bottom: 10px; animation: bounceIcon 0.6s infinite alternate; }
-        .overlay-title { font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 6px; text-transform: uppercase; }
-        .overlay-name { font-size: 20px; font-weight: 700; color: #2563eb; margin: 6px 0; background: #f8fafc; padding: 6px 16px; border-radius: 30px; border: 1px solid #e2e8f0; width: 100%; }
-        .overlay-time { font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 4px; }
-        .overlay-msg-box { background: #f1f5f9; padding: 10px 14px; border-radius: 12px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; font-weight: 600; color: #334155; border: 1px solid #e2e8f0; margin-top: 10px; }
-        .waving-hand { display: inline-block; animation: wave 1.2s infinite; transform-origin: 70% 70%; font-size: 18px; }
+        .overlay-icon { font-size: 64px; margin-bottom: 12px; animation: bounceIcon 0.8s infinite alternate; }
+        .overlay-title { font-size: 19px; font-weight: 800; color: #0f172a; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .overlay-name { font-size: 21px; font-weight: 700; color: #2563eb; margin: 8px 0; background: #f1f5f9; padding: 8px 18px; border-radius: 35px; border: 1px solid #cbd5e1; width: 100%; box-shadow: inset 0 2px 4px rgba(0,0,0,0.03); }
+        .overlay-time { font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 6px; }
+        .overlay-msg-box { background: #f8fafc; padding: 12px 16px; border-radius: 14px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; font-weight: 600; color: #1e293b; border: 1px solid #e2e8f0; margin-top: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        .waving-hand { display: inline-block; animation: wave 1.2s infinite; transform-origin: 70% 70%; font-size: 19px; }
+
+        /* SPINNER LOADING ELEGANT */
+        .spinner-ring {
+            width: 55px; height: 55px; border: 4px solid rgba(56, 189, 248, 0.2); border-top: 4px solid #38bdf8;
+            border-radius: 50%; animation: spin 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; margin-bottom: 15px;
+        }
 
         #selfieModal {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000000;
@@ -66,7 +74,7 @@
             z-index: 9999; padding: 25px 20px; color: white; text-align: center;
         }
         #selfieVideo { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; z-index: 1; background: #000; }
-        .selfie-header, .selfie-footer { position: relative; z-index: 2; width: 100%; max-width: 420px; background: rgba(15, 23, 42, 0.7); padding: 14px; border-radius: 16px; backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); }
+        .selfie-header, .selfie-footer { position: relative; z-index: 2; width: 100%; max-width: 420px; background: rgba(15, 23, 42, 0.75); padding: 15px; border-radius: 16px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
         .btn-capture { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; border: none; padding: 14px 28px; border-radius: 35px; font-weight: bold; font-size: 16px; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5); }
 
         .page-title { text-align: center; margin-bottom: 15px; }
@@ -78,17 +86,13 @@
         
         .log-container-wrapper {
             background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-            border: 1px solid #bbf7d0;
-            padding: 15px;
-            border-radius: 16px;
+            border: 1px solid #bbf7d0; padding: 15px; border-radius: 16px;
             box-shadow: 0 6px 15px rgba(21, 128, 61, 0.08);
         }
 
         .jadwal-container-wrapper {
             background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            border: 1px solid #bfdbfe;
-            padding: 15px;
-            border-radius: 16px;
+            border: 1px solid #bfdbfe; padding: 15px; border-radius: 16px;
             box-shadow: 0 6px 15px rgba(37, 99, 235, 0.08);
         }
 
@@ -100,49 +104,23 @@
         table.rekap-table tr:nth-child(1) th { top: 0; z-index: 7; }
         table.rekap-table tr:nth-child(2) th { top: 32px; z-index: 6; }
 
-        /* KOLOM PERTAMA (TANGGAL/NO): DILEBARKAN DAN TIDAK STICKY */
         table.rekap-table th:first-child, table.rekap-table td:first-child { 
-            position: static; 
-            background: #f1f5f9; 
-            width: 85px; 
-            min-width: 85px; 
-            max-width: 100px; 
-            border-right: 1px solid #cbd5e1; 
+            position: static; background: #f1f5f9; width: 85px; min-width: 85px; max-width: 100px; border-right: 1px solid #cbd5e1; 
         }
         table.rekap-table tr:nth-child(1) th:first-child { background: #1e293b !important; }
         table.rekap-table tr:nth-child(2) th:first-child { background: #1e293b !important; }
 
-        /* KOLOM KEDUA (NAMA): TETAP STICKY DI KIRI */
         table.rekap-table th:nth-child(2), table.rekap-table td:nth-child(2) { 
-            position: sticky; 
-            left: 0; 
-            z-index: 3; 
-            background: #f8fafc; 
-            border-right: 2px solid #cbd5e1; 
-            font-weight: 600; 
-            text-align: left; 
-            box-shadow: 2px 0 5px rgba(0,0,0,0.05); 
+            position: sticky; left: 0; z-index: 3; background: #f8fafc; border-right: 2px solid #cbd5e1; font-weight: 600; text-align: left; box-shadow: 2px 0 5px rgba(0,0,0,0.05); 
         }
         
         table.rekap-table tr:nth-child(1) th:nth-child(2) { z-index: 9; background: #1e293b !important; }
         table.rekap-table tr:nth-child(2) th:nth-child(2) { z-index: 8; background: #1e293b !important; }
         
-        table.rekap-table tr:not(:first-child):not(:nth-child(2)):nth-child(even) td {
-            background-color: #f1f5f9 !important;
-        }
-        table.rekap-table tr:not(:first-child):not(:nth-child(2)):nth-child(odd) td {
-            background-color: #ffffff !important;
-        }
+        table.rekap-table tr:not(:first-child):not(:nth-child(2)):nth-child(even) td { background-color: #f1f5f9 !important; }
+        table.rekap-table tr:not(:first-child):not(:nth-child(2)):nth-child(odd) td { background-color: #ffffff !important; }
 
-        .badge-shift {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 11px;
-            text-align: center;
-            min-width: 32px;
-        }
+        .badge-shift { display: inline-block; padding: 3px 8px; border-radius: 6px; font-weight: 600; font-size: 11px; text-align: center; min-width: 32px; }
         .badge-s1 { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
         .badge-s2 { background: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe; }
         .badge-off { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
@@ -153,9 +131,10 @@
 
         .footer { text-align: center; padding: 15px; font-size: 12px; color: #64748b; background: #f8fafc; border-top: 1px solid #e2e8f0; }
 
-        @keyframes bounceIcon { from { transform: translateY(0); } to { transform: translateY(-6px); } }
+        @keyframes bounceIcon { from { transform: translateY(0); } to { transform: translateY(-8px); } }
         @keyframes wave { 0% { transform: rotate(0deg); } 20% { transform: rotate(14deg); } 40% { transform: rotate(-8deg); } 60% { transform: rotate(14deg); } 80% { transform: rotate(-4deg); } 100% { transform: rotate(0deg); } }
         @keyframes scaleUp { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -174,14 +153,18 @@
         </div>
     </div>
 
+    <!-- OVERLAY PROSES & SUKSES ELEGANT -->
     <div id="fullScreenOverlay">
         <div class="overlay-card">
-            <div class="overlay-icon" id="overlayIcon">✅</div>
-            <div class="overlay-title" id="overlayTitle">Absen Berhasil</div>
-            <div class="overlay-name" id="overlayName">Nama Staff</div>
-            <div class="overlay-time" id="overlayTime">📅 11 Agustus 2026</div>
+            <div id="overlayLoaderContainer">
+                <div class="spinner-ring"></div>
+            </div>
+            <div class="overlay-icon" id="overlayIcon" style="display:none;">✅</div>
+            <div class="overlay-title" id="overlayTitle">Memproses Absen</div>
+            <div class="overlay-name" id="overlayName">Mohon Tunggu</div>
+            <div class="overlay-time" id="overlayTime"></div>
             <div class="overlay-msg-box" id="overlayMsgBox">
-                <span id="overlayMsg">Pesan mutiara...</span>
+                <span id="overlayMsg">Menghubungkan ke server...</span>
             </div>
         </div>
     </div>
@@ -410,7 +393,7 @@
             }
             document.getElementById("selfieModal").style.display = "none";
 
-            tampilkanLoading("Menyimpan Absen...", "Memproses absensi...");
+            tampilkanLoading("MENYIMPAN ABSEN", "Sedang mengunggah foto dan memproses data...");
 
             fetch(API, {
                 method: "POST",
@@ -425,35 +408,39 @@
                 if (res.status) {
                     const tglFormat = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " | " + nowWib.toLocaleTimeString("id-ID");
                     const overlay = document.getElementById("fullScreenOverlay");
-                    try {
-                        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                        const osc = audioCtx.createOscillator();
-                        const gain = audioCtx.createGain();
-                        osc.connect(gain);
-                        gain.connect(audioCtx.destination);
-                        osc.type = 'triangle';
-                        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
-                        osc.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.25);
-                        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
-                        osc.start();
-                        osc.stop(audioCtx.currentTime + 0.3);
-                    } catch(e) {}
+                    
+                    // PUTAR SUARA "TRING" KRISTAL JELAS & NOTIFIKASI SUARA MANUSIA
+                    playTringBellSound();
 
+                    let pesanSuaraUcap = "";
                     if (res.statusAbsen === "PULANG") {
                         overlay.className = "theme-pulang";
                         document.getElementById("overlayIcon").innerText = "🏡";
                         document.getElementById("overlayTitle").innerText = "Absen Pulang Berhasil";
-                        document.getElementById("overlayMsg").innerHTML = `Hati-hati di jalan! <span class="waving-hand">👋</span>`;
+                        document.getElementById("overlayMsg").innerHTML = `Hati-hati di jalan, selamat beristirahat! <span class="waving-hand">👋</span>`;
+                        pesanSuaraUcap = "Absen Pulang Berhasil";
                     } else {
                         overlay.className = "theme-masuk";
                         document.getElementById("overlayIcon").innerText = "🏢";
                         document.getElementById("overlayTitle").innerText = "Absen Masuk Berhasil";
-                        document.getElementById("overlayMsg").innerHTML = `Selamat bekerja! <span class="waving-hand">👋</span>`;
+                        document.getElementById("overlayMsg").innerHTML = `Selamat bekerja, semoga harinya menyenangkan! <span class="waving-hand">👋</span>`;
+                        pesanSuaraUcap = "Absen Masuk Berhasil";
                     }
+
                     document.getElementById("overlayName").innerText = res.nama;
                     document.getElementById("overlayTime").innerText = "📅 " + tglFormat;
                     overlay.style.display = "flex";
+
+                    // UCAPKAN SUARA NOTIFIKASI (SPEECH SYNTHESIS)
+                    if ('speechSynthesis' in window) {
+                        setTimeout(() => {
+                            const utterance = new SpeechSynthesisUtterance(pesansUcap || pesanSuaraUcap);
+                            utterance.lang = 'id-ID';
+                            utterance.rate = 1.0;
+                            utterance.pitch = 1.1;
+                            window.speechSynthesis.speak(utterance);
+                        }, 350);
+                    }
 
                     setTimeout(() => {
                         overlay.style.display = "none";
@@ -468,16 +455,47 @@
                 tutupLoading();
                 btn.disabled = false;
                 btn.innerHTML = "<span>📸</span> Ambil Foto & Kirim Absen";
-                tampilkanPesanError("Gagal mengirim data.");
+                tampilkanPesanError("Gagal mengirim data ke server.");
             });
+        }
+
+        // FUNGSI AUDIO SUARA "TRING" KRISTAL JELAS
+        function playTringBellSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                function playTone(freq, delay, duration, vol) {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
+                    
+                    gain.gain.setValueAtTime(vol, audioCtx.currentTime + delay);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + delay + duration);
+                    
+                    osc.start(audioCtx.currentTime + delay);
+                    osc.stop(audioCtx.currentTime + delay + duration);
+                }
+
+                // Efek Denting "Tring" Harmonis (Frekuensi Tinggi Jernih)
+                playTone(1318.51, 0.0, 0.6, 0.25); // E6
+                playTone(2093.00, 0.08, 0.8, 0.3); // C7 (High crystal ring)
+                playTone(2637.02, 0.15, 1.0, 0.2); // E7
+            } catch(e) {
+                console.log("Audio error:", e);
+            }
         }
 
         function tampilkanLoading(judul, sub) {
             const overlay = document.getElementById("fullScreenOverlay");
             overlay.className = "theme-loading";
-            document.getElementById("overlayIcon").innerText = "⏳";
+            document.getElementById("overlayLoaderContainer").style.display = "block";
+            document.getElementById("overlayIcon").style.display = "none";
             document.getElementById("overlayTitle").innerText = judul;
-            document.getElementById("overlayName").innerText = "Mohon Tunggu";
+            document.getElementById("overlayName").innerText = "Mohon Tunggu Sebentar";
             document.getElementById("overlayTime").innerText = "";
             document.getElementById("overlayMsg").innerHTML = sub;
             overlay.style.display = "flex";
@@ -490,12 +508,20 @@
         function tampilkanPesanError(pesan) {
             const overlay = document.getElementById("fullScreenOverlay");
             overlay.className = "error-bg";
+            document.getElementById("overlayLoaderContainer").style.display = "none";
+            document.getElementById("overlayIcon").style.display = "block";
             document.getElementById("overlayIcon").innerText = "⚠️";
             document.getElementById("overlayTitle").innerText = "Perhatian";
             document.getElementById("overlayName").innerText = "Gagal Absen";
             document.getElementById("overlayTime").innerText = "";
             document.getElementById("overlayMsg").innerText = pesan;
             overlay.style.display = "flex";
+
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance("Gagal melakukan absensi");
+                utterance.lang = 'id-ID';
+                window.speechSynthesis.speak(utterance);
+            }
 
             setTimeout(() => {
                 overlay.style.display = "none";
@@ -587,7 +613,7 @@
             renderJadwalTable([header1, header2, ...filteredBody], "Hasil Pencarian");
         }
 
-        // LOAD LOG HARIAN (TANPA KOLOM THUMBNAIL)
+        // LOAD LOG HARIAN
         function loadLogHarian() {
             const container = document.getElementById('logContent');
             container.innerHTML = "<div style='text-align:center; padding:20px; color:#64748b;'>Memuat log absensi hari ini...</div>";
