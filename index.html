@@ -93,13 +93,28 @@
             border-radius: 50%; animation: spin 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; margin-bottom: 15px;
         }
 
+        /* PERBAIKAN TOTAL LAYOUT SELFIE MODAL: POSISI TOMBOL AMAN DI BAWAH TANPA TERDORONG JAUH */
         #selfieModal {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000000;
-            display: none; flex-direction: column; align-items: center; justify-content: space-between;
-            z-index: 9999; padding: 25px 20px; color: white; text-align: center;
+            display: none; flex-direction: column; align-items: center; justify-content: flex-end;
+            z-index: 9999; padding: 20px; color: white; text-align: center;
         }
         #selfieVideo { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; z-index: 1; background: #000; }
-        .selfie-header, .selfie-footer { position: relative; z-index: 2; width: 100%; max-width: 420px; background: rgba(15, 23, 42, 0.85); padding: 16px; border-radius: 18px; backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.25); }
+        
+        .selfie-header { 
+            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+            z-index: 2; width: 90%; max-width: 420px; background: rgba(15, 23, 42, 0.85); 
+            padding: 12px 16px; border-radius: 16px; backdrop-filter: blur(12px); 
+            border: 1px solid rgba(255,255,255,0.25); 
+        }
+
+        .selfie-footer { 
+            position: relative; z-index: 2; width: 100%; max-width: 420px; 
+            background: rgba(15, 23, 42, 0.85); padding: 16px; border-radius: 18px; 
+            backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.25); 
+            margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
         .btn-capture { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; border: none; padding: 15px 30px; border-radius: 40px; font-weight: bold; font-size: 16px; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 8px 22px rgba(59, 130, 246, 0.6); }
 
         .page-title { text-align: center; margin-bottom: 18px; }
