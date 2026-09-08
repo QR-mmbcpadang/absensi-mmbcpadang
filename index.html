@@ -313,28 +313,42 @@
         }
 
         function mulaiScanner() {
+            sedangProses = false;
             setTimeout(() => {
                 if (!html5QrCode) {
                     html5QrCode = new Html5Qrcode("reader");
                 }
-                html5QrCode.start(
-                    { facingMode: "environment" },
-                    { fps: 10, qrbox: 230 },
-                    (decodedText) => {
-                        if (sedangProses) return;
-                        sedangProses = true;
-                        
-                        html5QrCode.stop().then(() => {
-                            prosesQRData(decodedText);
-                        }).catch(err => {
-                            prosesQRData(decodedText);
-                        });
-                    },
-                    (err) => {}
-                ).catch(err => {
-                    console.log("Kamera sedang sibuk:", err);
-                });
-            }, 1000);
+                if (html5QrCode.isScanning) {
+                    html5QrCode.stop().then(() => {
+                        jalankanKameraScanner();
+                    }).catch(err => {
+                        jalankanKameraScanner();
+                    });
+                } else {
+                    jalankanKameraScanner();
+                }
+            }, 800);
+        }
+
+        function jalankanKameraScanner() {
+            html5QrCode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: 230 },
+                (decodedText) => {
+                    if (sedangProses) return;
+                    sedangProses = true;
+                    
+                    html5QrCode.stop().then(() => {
+                        prosesQRData(decodedText);
+                    }).catch(err => {
+                        prosesQRData(decodedText);
+                    });
+                },
+                (err) => {}
+            ).catch(err => {
+                console.log("Kamera sibuk:", err);
+                setTimeout(() => { sedangProses = false; }, 2000);
+            });
         }
 
         function prosesQRData(idStaff) {
@@ -416,7 +430,8 @@
             document.getElementById("selfieModal").style.display = "none";
 
             tampilkanLoading("MENYIMPAN ABSEN", "Sedang mengunggah foto dan memproses data...");
-fetch(API, {
+
+            fetch(API, {
                 method: "POST",
                 body: JSON.stringify({ action: "simpanAbsensi", id: activeStaffId, foto: base64Image, lokasi: selectedLokasi })
             })
@@ -430,34 +445,28 @@ fetch(API, {
                     const tglFormat = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " | " + nowWib.toLocaleTimeString("id-ID");
                     const overlay = document.getElementById("fullScreenOverlay");
                     
-                    // Putar Suara Tring Jernih
                     playTringBellSound();
 
                     let teksUcapkan = "";
                     
-                    // ========================================================
-                    // BAGIAN INI YANG SEBELUMNYA KURANG / BELUM TERSIMPAN DI KODEMU
-                    // ========================================================
                     if (res.statusAbsen && res.statusAbsen.toUpperCase() === "PULANG") {
-                        overlay.className = "theme-pulang"; // Tema Hijau Zamrud & Ikon Rumah
+                        overlay.className = "theme-pulang";
                         document.getElementById("overlayIcon").innerText = "🏡";
                         document.getElementById("overlayTitle").innerText = "Absen Pulang Berhasil";
                         document.getElementById("overlayMsg").innerHTML = `Hati-hati di jalan, selamat beristirahat! <span class="waving-hand">👋</span>`;
                         teksUcapkan = "Absen Pulang Berhasil";
                     } else {
-                        overlay.className = "theme-masuk"; // Tema Biru Korporat & Ikon Kantor
+                        overlay.className = "theme-masuk";
                         document.getElementById("overlayIcon").innerText = "🏢";
                         document.getElementById("overlayTitle").innerText = "Absen Masuk Berhasil";
                         document.getElementById("overlayMsg").innerHTML = `Selamat bekerja, semoga harinya menyenangkan! <span class="waving-hand">👋</span>`;
                         teksUcapkan = "Absen Masuk Berhasil";
                     }
-                    // ========================================================
 
                     document.getElementById("overlayName").innerText = res.nama;
                     document.getElementById("overlayTime").innerText = "📅 " + tglFormat;
                     overlay.style.display = "flex";
 
-                    // Suara Notifikasi Manusia
                     if ('speechSynthesis' in window) {
                         window.speechSynthesis.cancel();
                         setTimeout(() => {
@@ -469,7 +478,6 @@ fetch(API, {
                         }, 400);
                     }
 
-                    // Tampil 7 detik sebelum kembali ke kamera
                     setTimeout(() => {
                         overlay.style.display = "none";
                         mulaiScanner();
@@ -479,12 +487,6 @@ fetch(API, {
                     tampilkanPesanError(res.pesan);
                 }
             })
-            .catch(err => {
-                tutupLoading();
-                btn.disabled = false;
-                btn.innerHTML = "<span>📸</span> Ambil Foto & Kirim Absen";
-                tampilkanPesanError("Gagal mengirim data ke server.");
-            });
             .catch(err => {
                 tutupLoading();
                 btn.disabled = false;
