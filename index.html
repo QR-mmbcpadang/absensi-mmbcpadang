@@ -38,9 +38,7 @@
         .search-box { width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 13px; margin-bottom: 15px; outline: none; background: #ffffff; transition: all 0.2s; }
         .search-box:focus { border-color: #2563eb; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15); }
 
-        /* ========================================================
-           OVERLAY PROFESIONAL & ELEGAN BARU (HIGH-END UI DESIGN)
-           ======================================================== */
+        /* OVERLAY PROFESIONAL & ELEGAN */
         #fullScreenOverlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
@@ -48,7 +46,6 @@
             z-index: 99999; padding: 20px; text-align: center; opacity: 0; transition: opacity 0.35s ease;
         }
         
-        /* KARTU UTAMA POPUP */
         .overlay-card {
             background: #ffffff; width: 100%; max-width: 440px; padding: 35px 25px 30px 25px; border-radius: 32px;
             display: flex; flex-direction: column; align-items: center; position: relative;
@@ -59,35 +56,30 @@
         #fullScreenOverlay.show { opacity: 1; }
         #fullScreenOverlay.show .overlay-card { transform: scale(1) translateY(0); }
 
-        /* HEADER BADGE & ANIMASI IKON SUKSES/PULANG/MASUK */
         .overlay-badge-icon {
             width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
             font-size: 40px; margin-bottom: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             animation: bounceGentle 2s infinite ease-in-out;
         }
 
-        /* TEMA ABSEN MASUK (Eksklusif Biru Korporat Modern) */
         #fullScreenOverlay.theme-masuk .overlay-card { border-top: 6px solid #2563eb; }
         #fullScreenOverlay.theme-masuk .overlay-badge-icon { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); color: #2563eb; }
         #fullScreenOverlay.theme-masuk .overlay-title { color: #1e40af; }
         #fullScreenOverlay.theme-masuk .overlay-name-badge { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
         #fullScreenOverlay.theme-masuk .overlay-msg-box { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
 
-        /* TEMA ABSEN PULANG (Eksklusif Hijau Zamrud Tenang & Hangat) */
         #fullScreenOverlay.theme-pulang .overlay-card { border-top: 6px solid #059669; }
         #fullScreenOverlay.theme-pulang .overlay-badge-icon { background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); color: #059669; }
         #fullScreenOverlay.theme-pulang .overlay-title { color: #065f46; }
         #fullScreenOverlay.theme-pulang .overlay-name-badge { background: #f0fdf4; color: #047857; border: 1px solid #a7f3d0; }
         #fullScreenOverlay.theme-pulang .overlay-msg-box { background: #fefce8; color: #854d0e; border: 1px solid #fef08a; }
 
-        /* TEMA ERROR & LOADING */
         #fullScreenOverlay.error-bg .overlay-card { border-top: 6px solid #dc2626; }
         #fullScreenOverlay.error-bg .overlay-badge-icon { background: #fee2e2; color: #dc2626; }
         #fullScreenOverlay.error-bg .overlay-title { color: #991b1b; }
 
         .overlay-subtitle { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #64748b; margin-bottom: 4px; }
         .overlay-title { font-size: 22px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.3px; }
-        
         .overlay-name-badge { font-size: 20px; font-weight: 700; margin: 6px 0 14px 0; padding: 12px 20px; border-radius: 16px; width: 100%; word-break: break-word; }
         
         .overlay-info-grid { display: flex; flex-direction: column; width: 100%; gap: 8px; margin-bottom: 16px; }
@@ -97,13 +89,11 @@
         .overlay-msg-box { padding: 12px 16px; border-radius: 14px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
         .waving-hand { display: inline-block; animation: wave 1.2s infinite; transform-origin: 70% 70%; font-size: 18px; }
 
-        /* SPINNER LOADING ELEGANT */
         .spinner-ring {
             width: 60px; height: 60px; border: 5px solid rgba(56, 189, 248, 0.2); border-top: 5px solid #2563eb;
             border-radius: 50%; animation: spin 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; margin-bottom: 15px;
         }
 
-        /* SELFIE MODAL */
         #selfieModal {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000000;
             display: none; flex-direction: column; align-items: center; justify-content: flex-end;
@@ -133,35 +123,20 @@
         .page-title p { font-size: 12px; color: #64748b; }
 
         .rekap-wrapper { overflow-x: auto; max-height: 75vh; border: 1px solid #cbd5e1; border-radius: 14px; background: #ffffff; box-shadow: 0 4px 15px rgba(0,0,0,0.04); }
-        
-        .log-container-wrapper {
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-            border: 1px solid #bbf7d0; padding: 18px; border-radius: 18px;
-            box-shadow: 0 8px 20px rgba(21, 128, 61, 0.08);
-        }
-
-        .jadwal-container-wrapper {
-            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            border: 1px solid #bfdbfe; padding: 18px; border-radius: 18px;
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.08);
-        }
+        .log-container-wrapper { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 1px solid #bbf7d0; padding: 18px; border-radius: 18px; box-shadow: 0 8px 20px rgba(21, 128, 61, 0.08); }
+        .jadwal-container-wrapper { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 1px solid #bfdbfe; padding: 18px; border-radius: 18px; box-shadow: 0 8px 20px rgba(37, 99, 235, 0.08); }
 
         table.rekap-table { width: 100%; border-collapse: collapse; font-size: 12px; white-space: nowrap; }
         table.rekap-table th, table.rekap-table td { border: 1px solid #cbd5e1; padding: 9px 12px; text-align: center; background: #ffffff; vertical-align: middle; }
-        
         table.rekap-table th { background: #1e293b !important; color: #ffffff !important; font-weight: 600; letter-spacing: 0.3px; position: sticky; z-index: 5; }
         table.rekap-table tr:nth-child(1) th { top: 0; z-index: 7; }
         table.rekap-table tr:nth-child(2) th { top: 32px; z-index: 6; }
 
-        table.rekap-table th:first-child, table.rekap-table td:first-child { 
-            position: static; background: #f1f5f9; width: 85px; min-width: 85px; max-width: 100px; border-right: 1px solid #cbd5e1; 
-        }
+        table.rekap-table th:first-child, table.rekap-table td:first-child { position: static; background: #f1f5f9; width: 85px; min-width: 85px; max-width: 100px; border-right: 1px solid #cbd5e1; }
         table.rekap-table tr:nth-child(1) th:first-child { background: #1e293b !important; }
         table.rekap-table tr:nth-child(2) th:first-child { background: #1e293b !important; }
 
-        table.rekap-table th:nth-child(2), table.rekap-table td:nth-child(2) { 
-            position: sticky; left: 0; z-index: 3; background: #f8fafc; border-right: 2px solid #cbd5e1; font-weight: 600; text-align: left; box-shadow: 2px 0 5px rgba(0,0,0,0.05); 
-        }
+        table.rekap-table th:nth-child(2), table.rekap-table td:nth-child(2) { position: sticky; left: 0; z-index: 3; background: #f8fafc; border-right: 2px solid #cbd5e1; font-weight: 600; text-align: left; box-shadow: 2px 0 5px rgba(0,0,0,0.05); }
         table.rekap-table tr:nth-child(1) th:nth-child(2) { z-index: 9; background: #1e293b !important; }
         table.rekap-table tr:nth-child(2) th:nth-child(2) { z-index: 8; background: #1e293b !important; }
         
@@ -346,6 +321,10 @@
             }
             document.getElementById('scannerArea').style.display = 'none';
             document.getElementById('pilihanLokasi').style.display = 'block';
+
+            // Aktifkan kembali tombol lokasi agar bisa diklik ulang dengan mulus
+            const btnLokasi = document.querySelectorAll('.btnLokasi');
+            btnLokasi.forEach(btn => btn.disabled = false);
         }
 
         function mulaiScanner() {
@@ -527,6 +506,10 @@
                         overlay.classList.remove("show");
                         setTimeout(() => {
                             overlay.style.display = "none";
+                            // Aktifkan kembali tombol lokasi setelah selesai
+                            const btnLokasi = document.querySelectorAll('.btnLokasi');
+                            btnLokasi.forEach(b => b.disabled = false);
+                            
                             mulaiScanner();
                             sedangProses = false;
                         }, 350);
@@ -609,6 +592,10 @@
                 overlay.classList.remove("show");
                 setTimeout(() => {
                     overlay.style.display = "none";
+                    // Aktifkan kembali tombol lokasi
+                    const btnLokasi = document.querySelectorAll('.btnLokasi');
+                    btnLokasi.forEach(b => b.disabled = false);
+
                     mulaiScanner();
                     sedangProses = false;
                 }, 350);
@@ -735,7 +722,6 @@
         function renderLogTable(rows) {
             const container = document.getElementById('logContent');
             let html = '<table class="rekap-table" id="tabelLogIsi">';
-            rows.rows.forEach((row, idx) => { ... }) // (Bagian render log tetap terjaga)
             rows.forEach((row, idx) => {
                 html += '<tr>';
                 row.forEach((cell, colIdx) => {
