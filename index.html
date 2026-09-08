@@ -430,10 +430,14 @@ fetch(API, {
                     const tglFormat = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " | " + nowWib.toLocaleTimeString("id-ID");
                     const overlay = document.getElementById("fullScreenOverlay");
                     
+                    // Putar Suara Tring Jernih
                     playTringBellSound();
 
                     let teksUcapkan = "";
-                    // Pengecekan statusAbsen dari Google Apps Script
+                    
+                    // ========================================================
+                    // BAGIAN INI YANG SEBELUMNYA KURANG / BELUM TERSIMPAN DI KODEMU
+                    // ========================================================
                     if (res.statusAbsen && res.statusAbsen.toUpperCase() === "PULANG") {
                         overlay.className = "theme-pulang"; // Tema Hijau Zamrud & Ikon Rumah
                         document.getElementById("overlayIcon").innerText = "🏡";
@@ -447,12 +451,13 @@ fetch(API, {
                         document.getElementById("overlayMsg").innerHTML = `Selamat bekerja, semoga harinya menyenangkan! <span class="waving-hand">👋</span>`;
                         teksUcapkan = "Absen Masuk Berhasil";
                     }
+                    // ========================================================
 
                     document.getElementById("overlayName").innerText = res.nama;
                     document.getElementById("overlayTime").innerText = "📅 " + tglFormat;
                     overlay.style.display = "flex";
 
-                    // Suara manusia
+                    // Suara Notifikasi Manusia
                     if ('speechSynthesis' in window) {
                         window.speechSynthesis.cancel();
                         setTimeout(() => {
@@ -464,7 +469,7 @@ fetch(API, {
                         }, 400);
                     }
 
-                    // Tampil 5 detik sebelum kembali ke kamera
+                    // Tampil 7 detik sebelum kembali ke kamera
                     setTimeout(() => {
                         overlay.style.display = "none";
                         mulaiScanner();
@@ -474,6 +479,12 @@ fetch(API, {
                     tampilkanPesanError(res.pesan);
                 }
             })
+            .catch(err => {
+                tutupLoading();
+                btn.disabled = false;
+                btn.innerHTML = "<span>📸</span> Ambil Foto & Kirim Absen";
+                tampilkanPesanError("Gagal mengirim data ke server.");
+            });
             .catch(err => {
                 tutupLoading();
                 btn.disabled = false;
