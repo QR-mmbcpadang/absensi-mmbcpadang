@@ -38,53 +38,63 @@
         .search-box { width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 13px; margin-bottom: 15px; outline: none; background: #ffffff; transition: all 0.2s; }
         .search-box:focus { border-color: #2563eb; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15); }
 
-        /* OVERLAY PROFESIONAL KHAS MMBC */
+        /* ========================================================
+           OVERLAY PROFESIONAL & ELEGAN BARU (HIGH-END UI DESIGN)
+           ======================================================== */
         #fullScreenOverlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(7, 9, 14, 0.9); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
             display: none; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 99999; padding: 25px; text-align: center; transition: all 0.4s ease;
+            z-index: 99999; padding: 20px; text-align: center; opacity: 0; transition: opacity 0.35s ease;
         }
         
-        /* TEMA ABSEN MASUK (Eksklusif Biru Korporat MMBC) */
-        #fullScreenOverlay.theme-masuk {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 58, 138, 0.95) 100%) !important;
-        }
-        #fullScreenOverlay.theme-masuk .overlay-card {
-            background: linear-gradient(180deg, #ffffff 0%, #f0f6ff 100%);
-            border: 2px solid #3b82f6;
-            box-shadow: 0 25px 60px rgba(29, 78, 216, 0.4);
-        }
-        #fullScreenOverlay.theme-masuk .overlay-name {
-            background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;
-        }
-
-        /* TEMA ABSEN PULANG (Eksklusif Hijau Zamrud Tenang) */
-        #fullScreenOverlay.theme-pulang {
-            background: linear-gradient(135deg, rgba(6, 78, 59, 0.95) 0%, rgba(4, 47, 46, 0.95) 100%) !important;
-        }
-        #fullScreenOverlay.theme-pulang .overlay-card {
-            background: linear-gradient(180deg, #ffffff 0%, #ecfdf5 100%);
-            border: 2px solid #10b981;
-            box-shadow: 0 25px 60px rgba(5, 150, 105, 0.4);
-        }
-        #fullScreenOverlay.theme-pulang .overlay-name {
-            background: #f0fdf4; color: #047857; border: 1px solid #a7f3d0;
-        }
-
-        #fullScreenOverlay.theme-loading { background: rgba(7, 9, 14, 0.94) !important; }
-        #fullScreenOverlay.error-bg { background: radial-gradient(circle, rgba(153,27,27,0.92) 0%, rgba(7,9,14,0.96) 100%) !important; }
-
+        /* KARTU UTAMA POPUP */
         .overlay-card {
-            background: rgba(255, 255, 255, 0.98); width: 100%; max-width: 420px; padding: 35px 25px; border-radius: 28px;
-            display: flex; flex-direction: column; align-items: center;
-            animation: scaleUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: #ffffff; width: 100%; max-width: 440px; padding: 35px 25px 30px 25px; border-radius: 32px;
+            display: flex; flex-direction: column; align-items: center; position: relative;
+            transform: scale(0.8) translateY(20px); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
         }
-        .overlay-icon { font-size: 64px; margin-bottom: 10px; animation: bounceIcon 0.8s infinite alternate; }
-        .overlay-title { font-size: 21px; font-weight: 800; color: #0f172a; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.8px; }
-        .overlay-name { font-size: 22px; font-weight: 700; margin: 10px 0; padding: 12px 20px; border-radius: 40px; width: 100%; box-shadow: inset 0 2px 5px rgba(0,0,0,0.04); }
-        .overlay-time { font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 8px; }
-        .overlay-msg-box { background: rgba(255,255,255,0.8); padding: 12px 18px; border-radius: 14px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; font-weight: 600; color: #1e293b; border: 1px solid rgba(0,0,0,0.06); margin-top: 12px; }
+
+        #fullScreenOverlay.show { opacity: 1; }
+        #fullScreenOverlay.show .overlay-card { transform: scale(1) translateY(0); }
+
+        /* HEADER BADGE & ANIMASI IKON SUKSES/PULANG/MASUK */
+        .overlay-badge-icon {
+            width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 40px; margin-bottom: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            animation: bounceGentle 2s infinite ease-in-out;
+        }
+
+        /* TEMA ABSEN MASUK (Eksklusif Biru Korporat Modern) */
+        #fullScreenOverlay.theme-masuk .overlay-card { border-top: 6px solid #2563eb; }
+        #fullScreenOverlay.theme-masuk .overlay-badge-icon { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); color: #2563eb; }
+        #fullScreenOverlay.theme-masuk .overlay-title { color: #1e40af; }
+        #fullScreenOverlay.theme-masuk .overlay-name-badge { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+        #fullScreenOverlay.theme-masuk .overlay-msg-box { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+
+        /* TEMA ABSEN PULANG (Eksklusif Hijau Zamrud Tenang & Hangat) */
+        #fullScreenOverlay.theme-pulang .overlay-card { border-top: 6px solid #059669; }
+        #fullScreenOverlay.theme-pulang .overlay-badge-icon { background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); color: #059669; }
+        #fullScreenOverlay.theme-pulang .overlay-title { color: #065f46; }
+        #fullScreenOverlay.theme-pulang .overlay-name-badge { background: #f0fdf4; color: #047857; border: 1px solid #a7f3d0; }
+        #fullScreenOverlay.theme-pulang .overlay-msg-box { background: #fefce8; color: #854d0e; border: 1px solid #fef08a; }
+
+        /* TEMA ERROR & LOADING */
+        #fullScreenOverlay.error-bg .overlay-card { border-top: 6px solid #dc2626; }
+        #fullScreenOverlay.error-bg .overlay-badge-icon { background: #fee2e2; color: #dc2626; }
+        #fullScreenOverlay.error-bg .overlay-title { color: #991b1b; }
+
+        .overlay-subtitle { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #64748b; margin-bottom: 4px; }
+        .overlay-title { font-size: 22px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.3px; }
+        
+        .overlay-name-badge { font-size: 20px; font-weight: 700; margin: 6px 0 14px 0; padding: 12px 20px; border-radius: 16px; width: 100%; word-break: break-word; }
+        
+        .overlay-info-grid { display: flex; flex-direction: column; width: 100%; gap: 8px; margin-bottom: 16px; }
+        .overlay-info-item { display: flex; align-items: center; justify-content: space-between; background: #f8fafc; padding: 10px 14px; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 13px; font-weight: 600; color: #334155; }
+        .overlay-info-item span:last-child { color: #0f172a; font-weight: 700; }
+
+        .overlay-msg-box { padding: 12px 16px; border-radius: 14px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
         .waving-hand { display: inline-block; animation: wave 1.2s infinite; transform-origin: 70% 70%; font-size: 18px; }
 
         /* SPINNER LOADING ELEGANT */
@@ -93,7 +103,7 @@
             border-radius: 50%; animation: spin 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; margin-bottom: 15px;
         }
 
-        /* PERBAIKAN TOTAL LAYOUT SELFIE MODAL: POSISI TOMBOL AMAN DI BAWAH TANPA TERDORONG JAUH */
+        /* SELFIE MODAL */
         #selfieModal {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000000;
             display: none; flex-direction: column; align-items: center; justify-content: flex-end;
@@ -169,9 +179,8 @@
 
         .footer { text-align: center; padding: 15px; font-size: 12px; color: #64748b; background: #f8fafc; border-top: 1px solid #e2e8f0; }
 
-        @keyframes bounceIcon { from { transform: translateY(0); } to { transform: translateY(-8px); } }
+        @keyframes bounceGentle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
         @keyframes wave { 0% { transform: rotate(0deg); } 20% { transform: rotate(14deg); } 40% { transform: rotate(-8deg); } 60% { transform: rotate(14deg); } 80% { transform: rotate(-4deg); } 100% { transform: rotate(0deg); } }
-        @keyframes scaleUp { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -196,10 +205,22 @@
             <div id="overlayLoaderContainer">
                 <div class="spinner-ring"></div>
             </div>
-            <div class="overlay-icon" id="overlayIcon" style="display:none;">✅</div>
+            <div class="overlay-badge-icon" id="overlayIcon" style="display:none;">🏢</div>
+            <div class="overlay-subtitle" id="overlaySubtitle">MMBC PADANG</div>
             <div class="overlay-title" id="overlayTitle">Memproses Absen</div>
-            <div class="overlay-name" id="overlayName">Mohon Tunggu</div>
-            <div class="overlay-time" id="overlayTime"></div>
+            <div class="overlay-name-badge" id="overlayName">Mohon Tunggu</div>
+            
+            <div class="overlay-info-grid" id="overlayInfoGrid" style="display:none;">
+                <div class="overlay-info-item">
+                    <span>📍 Lokasi Absen</span>
+                    <span id="overlayInfoLokasi">-</span>
+                </div>
+                <div class="overlay-info-item">
+                    <span>⏰ Waktu Server</span>
+                    <span id="overlayTime">-</span>
+                </div>
+            </div>
+
             <div class="overlay-msg-box" id="overlayMsgBox">
                 <span id="overlayMsg">Menghubungkan ke server...</span>
             </div>
@@ -464,23 +485,32 @@
 
                     let teksUcapkan = "";
                     
+                    document.getElementById("overlayLoaderContainer").style.display = "none";
+                    document.getElementById("overlayIcon").style.display = "flex";
+                    document.getElementById("overlayInfoGrid").style.display = "flex";
+                    document.getElementById("overlayInfoLokasi").innerText = selectedLokasi + " (MMBC PADANG)";
+
                     if (res.statusAbsen && res.statusAbsen.toUpperCase() === "PULANG") {
                         overlay.className = "theme-pulang";
                         document.getElementById("overlayIcon").innerText = "🏡";
-                        document.getElementById("overlayTitle").innerText = "Absen Pulang Berhasil";
-                        document.getElementById("overlayMsg").innerHTML = `Hati-hati di jalan, selamat beristirahat! <span class="waving-hand">👋</span>`;
+                        document.getElementById("overlaySubtitle").innerText = "ABSEN PULANG SUKSES";
+                        document.getElementById("overlayTitle").innerText = "Hati-Hati di Jalan!";
+                        document.getElementById("overlayMsg").innerHTML = `Selamat beristirahat, terima kasih atas kerjanya hari ini! <span class="waving-hand">👋</span>`;
                         teksUcapkan = "Absen Pulang Berhasil";
                     } else {
                         overlay.className = "theme-masuk";
                         document.getElementById("overlayIcon").innerText = "🏢";
-                        document.getElementById("overlayTitle").innerText = "Absen Masuk Berhasil";
-                        document.getElementById("overlayMsg").innerHTML = `Selamat bekerja, semoga harinya menyenangkan! <span class="waving-hand">👋</span>`;
+                        document.getElementById("overlaySubtitle").innerText = "ABSEN MASUK SUKSES";
+                        document.getElementById("overlayTitle").innerText = "Selamat Bekerja!";
+                        document.getElementById("overlayMsg").innerHTML = `Semoga harinya menyenangkan dan penuh semangat! <span class="waving-hand">👋</span>`;
                         teksUcapkan = "Absen Masuk Berhasil";
                     }
 
                     document.getElementById("overlayName").innerText = res.nama;
-                    document.getElementById("overlayTime").innerText = "📅 " + tglFormat;
+                    document.getElementById("overlayTime").innerText = tglFormat;
+                    
                     overlay.style.display = "flex";
+                    setTimeout(() => { overlay.classList.add("show"); }, 10);
 
                     if ('speechSynthesis' in window) {
                         window.speechSynthesis.cancel();
@@ -494,10 +524,13 @@
                     }
 
                     setTimeout(() => {
-                        overlay.style.display = "none";
-                        mulaiScanner();
-                        sedangProses = false;
-                    }, 7000);
+                        overlay.classList.remove("show");
+                        setTimeout(() => {
+                            overlay.style.display = "none";
+                            mulaiScanner();
+                            sedangProses = false;
+                        }, 350);
+                    }, 5500);
                 } else {
                     tampilkanPesanError(res.pesan);
                 }
@@ -536,28 +569,35 @@
             overlay.className = "theme-loading";
             document.getElementById("overlayLoaderContainer").style.display = "block";
             document.getElementById("overlayIcon").style.display = "none";
+            document.getElementById("overlayInfoGrid").style.display = "none";
+            document.getElementById("overlaySubtitle").innerText = "MMBC PADANG";
             document.getElementById("overlayTitle").innerText = judul;
             document.getElementById("overlayName").innerText = "Mohon Tunggu Sebentar";
-            document.getElementById("overlayTime").innerText = "";
             document.getElementById("overlayMsg").innerHTML = sub;
             overlay.style.display = "flex";
+            setTimeout(() => { overlay.classList.add("show"); }, 10);
         }
 
         function tutupLoading() {
-            document.getElementById("fullScreenOverlay").style.display = "none";
+            const overlay = document.getElementById("fullScreenOverlay");
+            overlay.classList.remove("show");
+            setTimeout(() => { overlay.style.display = "none"; }, 350);
         }
 
         function tampilkanPesanError(pesan) {
             const overlay = document.getElementById("fullScreenOverlay");
             overlay.className = "error-bg";
             document.getElementById("overlayLoaderContainer").style.display = "none";
-            document.getElementById("overlayIcon").style.display = "block";
+            document.getElementById("overlayIcon").style.display = "flex";
             document.getElementById("overlayIcon").innerText = "⚠️";
-            document.getElementById("overlayTitle").innerText = "Perhatian";
-            document.getElementById("overlayName").innerText = "Gagal Absen";
-            document.getElementById("overlayTime").innerText = "";
+            document.getElementById("overlayInfoGrid").style.display = "none";
+            document.getElementById("overlaySubtitle").innerText = "PERHATIAN";
+            document.getElementById("overlayTitle").innerText = "Gagal Absen";
+            document.getElementById("overlayName").innerText = "Kendala Sistem";
             document.getElementById("overlayMsg").innerText = pesan;
+            
             overlay.style.display = "flex";
+            setTimeout(() => { overlay.classList.add("show"); }, 10);
 
             if ('speechSynthesis' in window) {
                 const utterance = new SpeechSynthesisUtterance("Gagal melakukan absensi");
@@ -566,9 +606,12 @@
             }
 
             setTimeout(() => {
-                overlay.style.display = "none";
-                mulaiScanner();
-                sedangProses = false;
+                overlay.classList.remove("show");
+                setTimeout(() => {
+                    overlay.style.display = "none";
+                    mulaiScanner();
+                    sedangProses = false;
+                }, 350);
             }, 4000);
         }
 
@@ -692,6 +735,7 @@
         function renderLogTable(rows) {
             const container = document.getElementById('logContent');
             let html = '<table class="rekap-table" id="tabelLogIsi">';
+            rows.rows.forEach((row, idx) => { ... }) // (Bagian render log tetap terjaga)
             rows.forEach((row, idx) => {
                 html += '<tr>';
                 row.forEach((cell, colIdx) => {
