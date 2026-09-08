@@ -416,8 +416,7 @@
             document.getElementById("selfieModal").style.display = "none";
 
             tampilkanLoading("MENYIMPAN ABSEN", "Sedang mengunggah foto dan memproses data...");
-
-            fetch(API, {
+fetch(API, {
                 method: "POST",
                 body: JSON.stringify({ action: "simpanAbsensi", id: activeStaffId, foto: base64Image, lokasi: selectedLokasi })
             })
@@ -434,14 +433,15 @@
                     playTringBellSound();
 
                     let teksUcapkan = "";
-                    if (res.statusAbsen === "PULANG") {
-                        overlay.className = "theme-pulang";
+                    // Pengecekan statusAbsen dari Google Apps Script
+                    if (res.statusAbsen && res.statusAbsen.toUpperCase() === "PULANG") {
+                        overlay.className = "theme-pulang"; // Tema Hijau Zamrud & Ikon Rumah
                         document.getElementById("overlayIcon").innerText = "🏡";
                         document.getElementById("overlayTitle").innerText = "Absen Pulang Berhasil";
                         document.getElementById("overlayMsg").innerHTML = `Hati-hati di jalan, selamat beristirahat! <span class="waving-hand">👋</span>`;
                         teksUcapkan = "Absen Pulang Berhasil";
                     } else {
-                        overlay.className = "theme-masuk";
+                        overlay.className = "theme-masuk"; // Tema Biru Korporat & Ikon Kantor
                         document.getElementById("overlayIcon").innerText = "🏢";
                         document.getElementById("overlayTitle").innerText = "Absen Masuk Berhasil";
                         document.getElementById("overlayMsg").innerHTML = `Selamat bekerja, semoga harinya menyenangkan! <span class="waving-hand">👋</span>`;
@@ -452,6 +452,7 @@
                     document.getElementById("overlayTime").innerText = "📅 " + tglFormat;
                     overlay.style.display = "flex";
 
+                    // Suara manusia
                     if ('speechSynthesis' in window) {
                         window.speechSynthesis.cancel();
                         setTimeout(() => {
@@ -463,11 +464,12 @@
                         }, 400);
                     }
 
+                    // Tampil 5 detik sebelum kembali ke kamera
                     setTimeout(() => {
                         overlay.style.display = "none";
                         mulaiScanner();
                         sedangProses = false;
-                    }, 5000);
+                    }, 7000);
                 } else {
                     tampilkanPesanError(res.pesan);
                 }
