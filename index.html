@@ -64,19 +64,19 @@
             animation: bounceGentle 2s infinite ease-in-out;
         }
 
-        /* TEMA LOADING (PROSES MENYIMPAN) - ELEGAN DENGAN GRADIENT HALUS */
-        #fullScreenOverlay.theme-loading { background: rgba(15, 23, 42, 0.92); }
+        /* TEMA LOADING (PROSES MENYIMPAN) - SOLID & ELEGAN */
+        #fullScreenOverlay.theme-loading { background: rgba(15, 23, 42, 0.98); }
         #fullScreenOverlay.theme-loading .overlay-card { 
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            border-top: 6px solid #38bdf8; 
-            box-shadow: 0 25px 60px rgba(15, 23, 42, 0.8);
+            background: #ffffff; 
+            border-top: 6px solid #2563eb; 
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
         }
-        #fullScreenOverlay.theme-loading .overlay-subtitle { color: #38bdf8; }
-        #fullScreenOverlay.theme-loading .overlay-title { color: #ffffff; }
-        #fullScreenOverlay.theme-loading .overlay-name-badge { background: rgba(56, 189, 248, 0.1); color: #e2e8f0; border: 1px solid rgba(56, 189, 248, 0.2); }
-        #fullScreenOverlay.theme-loading .overlay-msg-box { background: rgba(255, 255, 255, 0.05); color: #94a3b8; border: 1px solid rgba(255, 255, 255, 0.1); }
-
+        #fullScreenOverlay.theme-loading .overlay-subtitle { color: #64748b; }
+        #fullScreenOverlay.theme-loading .overlay-title { color: #0f172a; }
+        #fullScreenOverlay.theme-loading .overlay-name-badge { background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; }
+        #fullScreenOverlay.theme-loading .overlay-msg-box { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+        #fullScreenOverlay.theme-loading .spinner-ring { border: 5px solid rgba(37, 99, 235, 0.15); border-top: 5px solid #2563eb; }
+        
         /* TEMA ABSEN MASUK (BACKGROUND TERANG BIRU SEGAR) */
         #fullScreenOverlay.theme-masuk { background: rgba(30, 58, 138, 0.7); }
         #fullScreenOverlay.theme-masuk .overlay-card { 
@@ -475,6 +475,7 @@
             }
             document.getElementById("selfieModal").style.display = "none";
 
+            // Tampilkan loading solid
             tampilkanLoading("MENYIMPAN ABSEN", "Sedang mengunggah foto dan memproses data...");
 
             fetch(API, {
@@ -483,7 +484,6 @@
             })
             .then(r => r.json())
             .then(res => {
-                tutupLoading();
                 btn.disabled = false;
                 btn.innerHTML = "<span>📸</span> Ambil Foto & Kirim Absen";
                 
@@ -519,6 +519,7 @@
                     document.getElementById("overlayName").innerText = res.nama;
                     document.getElementById("overlayTime").innerText = tglFormat;
                     
+                    // Pastikan overlay tetap muncul dengan mulus
                     overlay.style.display = "flex";
                     setTimeout(() => { overlay.classList.add("show"); }, 10);
 
@@ -533,7 +534,7 @@
                         }, 400);
                     }
 
-                    // Waktu jeda diperpanjang menjadi 6.5 detik agar staff bisa melihat informasi dengan jelas
+                    // Jeda waktu sukses tepat 6.5 detik (6500ms) baru ditutup
                     setTimeout(() => {
                         overlay.classList.remove("show");
                         setTimeout(() => {
@@ -550,7 +551,6 @@
                 }
             })
             .catch(err => {
-                tutupLoading();
                 btn.disabled = false;
                 btn.innerHTML = "<span>📸</span> Ambil Foto & Kirim Absen";
                 tampilkanPesanError("Gagal mengirim data ke server.");
