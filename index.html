@@ -175,8 +175,8 @@
         table.rekap-table td:nth-child(2) { 
             position: sticky !important;
             left: 0 !important;
-            min-width: 150px;
-            max-width: 180px;
+            min-width: 140px;
+            max-width: 160px;
             z-index: 10;
         }
 
@@ -202,20 +202,6 @@
             color: #0f172a !important;
             border-right: 2px solid #cbd5e1; 
             z-index: 10;
-        }
-
-        /* Style Kapsul Khusus Nama Staff di Log Harian agar Besar & Menonjol */
-        .badge-nama-log {
-            display: inline-block;
-            padding: 6px 14px;
-            border-radius: 50px;
-            background: #e0f2fe;
-            color: #0369a1;
-            font-size: 13.5px;
-            font-weight: 700;
-            border: 1px solid #bae6fd;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-            white-space: nowrap;
         }
 
         /* Pengaturan warna latar belakang baris genap/ganjil untuk tabel jadwal */
@@ -823,15 +809,13 @@
                     return;
                 }
 
-                // Pemetaan akurat dari Google Sheets:
-                // Tanggal(0), ID Staff(1), Nama(2), Masuk(3), Pulang(4), Keterangan(5), Foto(6), Thumbnail(7 dibuang), Hasil(8)
                 rawLogData = originalRows.map((row, index) => {
                     let namaStaff = row[2];
                     let masuk = row[3];
                     let pulang = row[4];
                     let keterangan = row[5];
                     let foto = row[6];
-                    let hasil = row[8] !== undefined ? row[8] : ""; // Kolom Hasil diambil dari indeks ke-8
+                    let hasil = row[8] !== undefined ? row[8] : "";
                     
                     let newRow = [namaStaff, masuk, pulang, keterangan, foto, hasil];
                     
@@ -865,9 +849,9 @@
                         let upper = cellContent.toUpperCase();
                         let badgeStyleClass = "badge-log-cell"; 
 
-                        // Bungkus Nama Staff (colIdx 1) dengan kapsul khusus berukuran lebih besar
+                        // Nama Staff (colIdx 1) dibungkus kapsul standar .badge-log-cell supaya konsisten adem
                         if (colIdx === 1) {
-                            cellContent = `<span class="badge-nama-log">${cellContent}</span>`;
+                            cellContent = `<span class="badge-log-cell">${cellContent}</span>`;
                         }
 
                         // Keterangan ada di colIdx 4
