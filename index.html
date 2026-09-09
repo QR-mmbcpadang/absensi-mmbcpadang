@@ -150,7 +150,8 @@
         table.rekap-table tr:nth-child(1) th { top: 0; z-index: 7; }
         table.rekap-table tr:nth-child(2) th { top: 32px; z-index: 6; }
 
-        table.rekap-table th:first-child, table.rekap-table td:first-child { position: static; background: #f1f5f9; width: 85px; min-width: 85px; max-width: 100px; border-right: 1px solid #cbd5e1; }
+        /* MEMPERKECIL LEBAR KOLOM NO DI TAB JADWAL KERJA */
+        table.rekap-table th:first-child, table.rekap-table td:first-child { position: static; background: #f1f5f9; width: 45px !important; min-width: 45px !important; max-width: 55px !important; border-right: 1px solid #cbd5e1; text-align: center; }
         table.rekap-table tr:nth-child(1) th:first-child { background: #1e293b !important; }
         table.rekap-table tr:nth-child(2) th:first-child { background: #1e293b !important; }
 
@@ -161,13 +162,10 @@
         table.rekap-table tr:not(:first-child):not(:nth-child(2)):nth-child(even) td { background-color: #f1f5f9 !important; }
         table.rekap-table tr:not(:first-child):not(:nth-child(2)):nth-child(odd) td { background-color: #ffffff !important; }
 
-        /* ========================================================
-            GAYA KAPSUL (PILL BADGE) TIPIS & ELEGAN
-            ======================================================== */
         .badge-shift { 
             display: inline-block; 
             padding: 5px 12px; 
-            border-radius: 50px; /* Membuat bentuk kapsul penuh */
+            border-radius: 50px; 
             font-weight: 600; 
             font-size: 11px; 
             text-align: center; 
@@ -175,27 +173,37 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
         
-        /* Warna Tipis-Tipis / Soft Background sesuai permintaan */
-        .badge-s1 { background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }       /* Biru Sangat Tipis */
-        .badge-s2 { background: #f5f3ff; color: #6d28d9; border: 1px solid #ede9fe; }       /* Ungu Sangat Tipis */
-        .badge-off { background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; }      /* Merah Sangat Tipis (Libur) */
-        .badge-cuti { background: #fffbeb; color: #d97706; border: 1px solid #fef3c7; }     /* Kuning/Amber Sangat Tipis */
-        .badge-tlt { background: #fff7ed; color: #ea580c; border: 1px solid #ffedd5; }      /* Oranye Sangat Tipis */
+        .badge-s1 { background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }       
+        .badge-s2 { background: #f5f3ff; color: #6d28d9; border: 1px solid #ede9fe; }       
+        .badge-off { background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; }      
+        .badge-cuti { background: #fffbeb; color: #d97706; border: 1px solid #fef3c7; }     
+        .badge-tlt { background: #fff7ed; color: #ea580c; border: 1px solid #ffedd5; }      
         .badge-jmlon { background: #f0f9ff; color: #0284c7; border: 1px solid #e0f2fe; font-weight: 700; }
         .badge-uangmakan { background: #f0fdf4; color: #16a34a; border: 1px solid #dcfce7; font-weight: 700; }
 
-        /* Style Kapsul untuk Tabel Log Harian (Status, Lokasi, dll) */
-        .badge-log {
+        /* ========================================================
+            GAYA KAPSUL ELEGAN UNTUK SEMUA ISI KOLOM DI LOG HARIAN
+            ======================================================== */
+        .badge-log-cell {
             display: inline-block;
-            padding: 4px 10px;
+            padding: 5px 12px;
             border-radius: 50px;
             font-size: 11px;
             font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            text-align: center;
         }
-        .badge-log-masuk { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
-        .badge-log-pulang { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
-        .badge-log-lokasi { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
-        .badge-log-status { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+        /* Warna tipis-tipis lembut per jenis kolom */
+        .badge-log-tgl { background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; }       /* Tanggal */
+        .badge-log-nama { background: #f0fdf4; color: #166534; border: 1px solid #dcfce7; font-weight: 700; } /* Nama Karyawan */
+        .badge-log-masuk { background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }     /* Jam Masuk */
+        .badge-log-pulang { background: #faf5ff; color: #7e22ce; border: 1px solid #f3e8ff; }    /* Jam Pulang */
+        .badge-log-lokasi { background: #fffbeb; color: #b45309; border: 1px solid #fef3c7; }    /* Lokasi */
+        
+        /* Khusus Keterangan/Hasil */
+        .badge-ket-sukses { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; font-weight: 700; } 
+        .badge-ket-terlambat { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; font-weight: 700; } 
+        .badge-ket-absen { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; font-weight: 700; } 
 
         .footer { text-align: center; padding: 15px; font-size: 12px; color: #64748b; background: #f8fafc; border-top: 1px solid #e2e8f0; }
 
@@ -768,18 +776,40 @@
                     let tag = idx === 0 ? 'th' : 'td';
                     let cellContent = cell !== null ? String(cell).trim() : '';
 
-                    // Menambahkan Kapsul / Badge Elegan di Log Harian untuk kolom tertentu (contoh: Status/Keterangan atau Lokasi jika ada)
+                    // MEMBERIKAN BENTUK KAPSUL UNTUK SEMUA ISI DATA DI TABEL LOG HARIAN (KECUALI HEADER & FOTO)
                     if (idx > 0 && cellContent !== '') {
                         let upper = cellContent.toUpperCase();
-                        if (colIdx === 3 || upper.includes("MASUK")) {
-                            // Jika kolom Status Masuk/Pulang
-                            let badgeType = upper.includes("PULANG") ? "badge-log-pulang" : "badge-log-masuk";
-                            cellContent = `<span class="badge-log ${badgeType}">${cellContent}</span>`;
-                        } else if (upper === "KANTOR" || upper === "LAPANGAN") {
-                            cellContent = `<span class="badge-log badge-log-lokasi">${cellContent}</span>`;
+                        let badgeStyleClass = "badge-log-tgl"; // default
+
+                        if (colIdx === 0) {
+                            badgeStyleClass = "badge-log-tgl"; // Tanggal
+                        } else if (colIdx === 1) {
+                            badgeStyleClass = "badge-log-nama"; // Nama Karyawan
+                        } else if (colIdx === 2) {
+                            badgeStyleClass = "badge-log-masuk"; // Jam Masuk
+                        } else if (colIdx === 3) {
+                            badgeStyleClass = "badge-log-pulang"; // Jam Pulang (jika kosong, tidak di-wrap kapsul kosong agar rapi)
+                            if (cellContent === "") badgeStyleClass = "";
+                        } else if (colIdx === 4) {
+                            badgeStyleClass = "badge-log-lokasi"; // Lokasi
+                        } else if (colIdx === (row.length - 1)) {
+                            // Kolom Keterangan / Hasil Shift
+                            if (upper.includes("TERLAMBAT") || upper.includes("TLT")) {
+                                badgeStyleClass = "badge-ket-terlambat";
+                            } else if (upper.includes("TIDAK") || upper.includes("PULANG ❌") || upper.includes("❌")) {
+                                badgeStyleClass = "badge-ket-absen";
+                            } else {
+                                badgeStyleClass = "badge-ket-sukses";
+                            }
+                        }
+
+                        // Bungkus dengan kapsul jika cell tidak kosong dan bukan kolom foto
+                        if (badgeStyleClass !== "" && colIdx !== 5) {
+                            cellContent = `<span class="badge-log-cell ${badgeStyleClass}">${cellContent}</span>`;
                         }
                     }
 
+                    // Penanganan kolom Foto Selfie (index 5)
                     if (idx > 0 && colIdx === 5 && cellContent !== '') {
                         let match = cellContent.match(/[-\w]{25,}/);
                         if (match) {
