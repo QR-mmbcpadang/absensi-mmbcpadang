@@ -150,7 +150,6 @@
         /* HEADER STICKY KE ATAS (VERTIKAL) */
         table.rekap-table th { background: #1e293b !important; color: #ffffff !important; font-weight: 600; letter-spacing: 0.3px; position: sticky; z-index: 20; }
         table.rekap-table tr:nth-child(1) th { top: 0; z-index: 22; }
-        table.rekap-table tr:nth-child(2) th { top: 32px; z-index: 21; }
 
         /* ========================================================
             KOLOM 1 (NO) BERGERAK NORMAL (TIDAK STICKY)
@@ -184,7 +183,7 @@
             z-index: 30 !important; /* Paling tinggi agar tidak tertutup */
         }
 
-        table.rekap-table tr:not(:first-child):not(:nth-child(2)) td:nth-child(2) { 
+        table.rekap-table tr:not(:first-child) td:nth-child(2) { 
             background: #f8fafc !important; 
             color: #0f172a !important;
             font-weight: 600; 
@@ -193,8 +192,8 @@
         }
 
         /* Pengaturan warna latar belakang baris genap/ganjil untuk kolom lainnya */
-        table.rekap-table tr:not(:first-child):not(:nth-child(2)):nth-child(even) td:not(:nth-child(2)) { background-color: #f1f5f9 !important; }
-        table.rekap-table tr:not(:first-child):not(:nth-child(2)):nth-child(odd) td:not(:nth-child(2)) { background-color: #ffffff !important; }
+        table.rekap-table tr:not(:first-child):nth-child(even) td:not(:nth-child(2)) { background-color: #f1f5f9 !important; }
+        table.rekap-table tr:not(:first-child):nth-child(odd) td:not(:nth-child(2)) { background-color: #ffffff !important; }
 
         .badge-shift { 
             display: inline-block; 
@@ -211,7 +210,7 @@
         .badge-s2 { background: #f5f3ff; color: #6d28d9; border: 1px solid #ede9fe; }        
         .badge-off { background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; }       
         .badge-cuti { background: #fffbeb; color: #d97706; border: 1px solid #fef3c7; }      
-        .badge-tlt { background: #fff7ed; color: #ea580c; border: 1px solid #ffedd5; }       
+        .badge-tlt { background: #fff7ed; color: #ea580c; border: 1px solid #ffedd5; }        
         .badge-jmlon { background: #f0f9ff; color: #0284c7; border: 1px solid #e0f2fe; font-weight: 700; }
         .badge-uangmakan { background: #f0fdf4; color: #16a34a; border: 1px solid #dcfce7; font-weight: 700; }
 
@@ -708,14 +707,14 @@
             rows.forEach((row, idx) => {
                 html += '<tr>';
                 row.forEach((cell, colIdx) => {
-                    let tag = idx === 0 || idx === 1 ? 'th' : 'td';
+                    let tag = idx === 0 ? 'th' : 'td';
                     let cellText = cell !== null ? String(cell).trim() : '';
 
-                    if (idx >= 2 && (colIdx === 1 || colIdx >= row.length - 3) && cellText !== '') {
+                    if (idx >= 1 && (colIdx === 1 || colIdx >= row.length - 3) && cellText !== '') {
                         cellText = `<span class="badge-log-cell">${cellText}</span>`;
                     }
 
-                    if (idx >= 2 && colIdx > 1 && cellText !== '') {
+                    if (idx >= 1 && colIdx > 1 && cellText !== '') {
                         let upperVal = cellText.toUpperCase();
                         let badgeClass = "";
                         
@@ -753,15 +752,14 @@
             const keyword = document.getElementById('searchJadwal').value.toLowerCase();
             if (rawJadwalData.length === 0) return;
 
-            let header1 = rawJadwalData[0];
-            let header2 = rawJadwalData[1];
-            let bodyRows = rawJadwalData.slice(2);
+            let header = rawJadwalData[0];
+            let bodyRows = rawJadwalData.slice(1);
 
             let filteredBody = bodyRows.filter(row => {
                 return row.some(cell => String(cell).toLowerCase().includes(keyword));
             });
 
-            renderJadwalTable([header1, header2, ...filteredBody], "Hasil Pencarian");
+            renderJadwalTable([header, ...filteredBody], "Hasil Pencarian");
         }
 
         function loadLogHarian() {
@@ -785,21 +783,24 @@
                     return;
                 }
 
-                /* Mengatur urutan kolom Log Harian agar kolom Nama Staff ada di posisi ke-2 (sticky),
-                   dan baris header menyesuaikan dengan benar (Tanggal, Nama, ID Staff, Masuk, Pulang, Keterangan, Foto, Hasil)
+                /* Menyaring dan menyusun ulang kolom Log Harian:
+                   Asal Google Sheets: [Tanggal, ID Staff, Nama, Masuk, Pulang, Keterangan, Foto, Hasil]
+                   Permintaan: Sembunyikan Tanggal, ID Staff, THUMBNAIL. Tampilkan Hasil.
+                   Urutan Baru: [No, Nama Staff, Masuk, Pulang, Keterangan, Foto Selfi, Hasil]
                 */
                 rawLogData = originalRows.map((row, index) => {
-                    let tgl = row[0];
-                    let idStaff = row[1];
                     let namaStaff = row[2];
-                    let sisaKolom = [row[3], row[4], row[5], row[6], row[7]]; // Masuk, Pulang, Keterangan, Foto, Hasil
+                    let masuk = row[3];
+                    let pulang = row[4];
+                    let keterangan = row[5];
+                    let foto = row[6];
+                    let hasil = row[7]; // Kolom Hasil dikembalikan
                     
-                    let newRow = [namaStaff, tgl, idStaff, ...sisaKolom];
+                    let newRow = [namaStaff, masuk, pulang, keterangan, foto, hasil];
                     
                     if (index === 0) {
                         newRow.unshift("No");
                         newRow[1] = "Nama Staff";
-                        newRow[2] = "Tanggal";
                     } else {
                         newRow.unshift(index);
                     }
@@ -826,6 +827,7 @@
                         let upper = cellContent.toUpperCase();
                         let badgeStyleClass = "badge-log-cell"; 
 
+                        // Indeks kolom Keterangan sekarang ada di colIdx 4 (setelah No, Nama Staff, Masuk, Pulang) atau Hasil di indeks terakhir
                         if (colIdx === (row.length - 1)) {
                             if (upper.includes("TERLAMBAT") || upper.includes("TLT")) {
                                 badgeStyleClass = "badge-ket-terlambat";
@@ -836,12 +838,13 @@
                             }
                         }
 
-                        if (cellContent !== "" && colIdx !== 0 && colIdx !== 1 && colIdx !== 7) {
+                        if (cellContent !== "" && colIdx !== 0 && colIdx !== 1 && colIdx !== 5) {
                             cellContent = `<span class="${badgeStyleClass}">${cellContent}</span>`;
                         }
                     }
 
-                    if (idx > 0 && colIdx === 7 && cellContent !== '') {
+                    // Render Foto Selfi pada kolom Foto (indeks ke-5)
+                    if (idx > 0 && colIdx === 5 && cellContent !== '') {
                         let match = cellContent.match(/[-\w]{25,}/);
                         if (match) {
                             let imgUrl = "https://lh3.googleusercontent.com/d/" + match[0];
