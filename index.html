@@ -785,19 +785,21 @@
                     return;
                 }
 
-                /* Menyesuaikan susunan kolom Log Harian:
-                   Asli Sheet: [Tanggal, ID Staff, Nama, Masuk, Pulang, Keterangan, Foto, Hasil]
-                   Kita atur ulang posisinya agar Nama Staff berada di Kolom ke-2, dan Tanggal di Kolom ke-3.
+                /* Mengatur urutan kolom Log Harian agar kolom Nama Staff ada di posisi ke-2 (sticky),
+                   dan baris header menyesuaikan dengan benar (Tanggal, Nama, ID Staff, Masuk, Pulang, Keterangan, Foto, Hasil)
                 */
                 rawLogData = originalRows.map((row, index) => {
                     let tgl = row[0];
+                    let idStaff = row[1];
                     let namaStaff = row[2];
-                    let sisaKolom = [row[1], row[3], row[4], row[5], row[6], row[7]]; // ID, Masuk, Pulang, Ket, Foto, Hasil
+                    let sisaKolom = [row[3], row[4], row[5], row[6], row[7]]; // Masuk, Pulang, Keterangan, Foto, Hasil
                     
-                    let newRow = [tgl, namaStaff, ...sisaKolom];
+                    let newRow = [namaStaff, tgl, idStaff, ...sisaKolom];
                     
                     if (index === 0) {
                         newRow.unshift("No");
+                        newRow[1] = "Nama Staff";
+                        newRow[2] = "Tanggal";
                     } else {
                         newRow.unshift(index);
                     }
@@ -834,7 +836,7 @@
                             }
                         }
 
-                        if (cellContent !== "" && colIdx !== 0 && colIdx !== 2 && colIdx !== 7) {
+                        if (cellContent !== "" && colIdx !== 0 && colIdx !== 1 && colIdx !== 7) {
                             cellContent = `<span class="${badgeStyleClass}">${cellContent}</span>`;
                         }
                     }
