@@ -146,19 +146,31 @@
 
         table.rekap-table { width: 100%; border-collapse: collapse; font-size: 12px; white-space: nowrap; }
         table.rekap-table th, table.rekap-table td { border: 1px solid #cbd5e1; padding: 9px 12px; text-align: center; background: #ffffff; vertical-align: middle; }
-        table.rekap-table th { background: #1e293b !important; color: #ffffff !important; font-weight: 600; letter-spacing: 0.3px; position: sticky; z-index: 5; }
-        table.rekap-table tr:nth-child(1) th { top: 0; z-index: 7; }
-        table.rekap-table tr:nth-child(2) th { top: 32px; z-index: 6; }
+        
+        /* MEMPERBAIKI POSISI TANGGAL & HEADER SUPAYA TIDAK TEMBUS KE ATAS */
+        table.rekap-table th { background: #1e293b !important; color: #ffffff !important; font-weight: 600; letter-spacing: 0.3px; position: sticky; z-index: 20; }
+        table.rekap-table tr:nth-child(1) th { top: 0; z-index: 22; }
+        table.rekap-table tr:nth-child(2) th { top: 32px; z-index: 21; }
 
         /* MEMPERKECIL LEBAR KOLOM NO DI TAB JADWAL KERJA */
-        table.rekap-table th:first-child, table.rekap-table td:first-child { position: static; background: #f1f5f9; width: 45px !important; min-width: 45px !important; max-width: 55px !important; border-right: 1px solid #cbd5e1; text-align: center; }
-        table.rekap-table tr:nth-child(1) th:first-child { background: #1e293b !important; }
-        table.rekap-table tr:nth-child(2) th:first-child { background: #1e293b !important; }
+        table.rekap-table th:first-child, table.rekap-table td:first-child { 
+            position: static !important; 
+            background: #f1f5f9; 
+            width: 40px !important; 
+            min-width: 40px !important; 
+            max-width: 45px !important; 
+            border-right: 1px solid #cbd5e1; 
+            text-align: center; 
+        }
+        table.rekap-table tr:nth-child(1) th:first-child { background: #1e293b !important; z-index: 25 !important; position: sticky !important; left: 0; }
+        table.rekap-table tr:nth-child(2) th:first-child { background: #1e293b !important; z-index: 24 !important; position: sticky !important; left: 0; }
 
-        /* Diubah dari text-align: left menjadi text-align: center agar kolom Nama sejajar di tengah */
-        table.rekap-table th:nth-child(2), table.rekap-table td:nth-child(2) { position: sticky; left: 0; z-index: 3; background: #f8fafc; border-right: 2px solid #cbd5e1; font-weight: 600; text-align: center; box-shadow: 2px 0 5px rgba(0,0,0,0.05); }
-        table.rekap-table tr:nth-child(1) th:nth-child(2) { z-index: 9; background: #1e293b !important; }
-        table.rekap-table tr:nth-child(2) th:nth-child(2) { z-index: 8; background: #1e293b !important; }
+        /* KOLOM NAMA (KOLOM 2) */
+        table.rekap-table th:nth-child(2), table.rekap-table td:nth-child(2) { 
+            position: sticky; left: 40px; z-index: 15; background: #f8fafc; border-right: 2px solid #cbd5e1; font-weight: 600; text-align: center; box-shadow: 2px 0 5px rgba(0,0,0,0.05); 
+        }
+        table.rekap-table tr:nth-child(1) th:nth-child(2) { z-index: 27 !important; background: #1e293b !important; }
+        table.rekap-table tr:nth-child(2) th:nth-child(2) { z-index: 26 !important; background: #1e293b !important; }
         
         table.rekap-table tr:not(:first-child):not(:nth-child(2)):nth-child(even) td { background-color: #f1f5f9 !important; }
         table.rekap-table tr:not(:first-child):not(:nth-child(2)):nth-child(odd) td { background-color: #ffffff !important; }
@@ -187,7 +199,7 @@
             ======================================================== */
         .badge-log-cell {
             display: inline-block;
-            padding: 6px 14px;
+            padding: 5px 12px;
             border-radius: 50px;
             font-size: 11px;
             font-weight: 600;
@@ -201,8 +213,8 @@
 
         /* Lebar kolom Tanggal diperlebar agar tidak sesak */
         table.rekap-table th:first-child, table.rekap-table td:first-child {
-            min-width: 120px !important;
-            max-width: 150px !important;
+            min-width: 40px !important;
+            max-width: 50px !important;
         }
 
         /* Khusus Keterangan/Hasil tetap diberikan warna status yang jelas */
@@ -688,6 +700,11 @@
                     let tag = idx === 0 || idx === 1 ? 'th' : 'td';
                     let cellText = cell !== null ? String(cell).trim() : '';
 
+                    // BUNGKUS NAMA (colIdx === 1) DAN KOLOM REKAP AKHIR (SISA CUTI & TOTAL TELAT) DENGAN KAPSUL
+                    if (idx >= 2 && (colIdx === 1 || colIdx >= row.length - 3) && cellText !== '') {
+                        cellText = `<span class="badge-log-cell">${cellText}</span>`;
+                    }
+
                     if (idx >= 2 && colIdx > 1 && cellText !== '') {
                         let upperVal = cellText.toUpperCase();
                         let badgeClass = "";
@@ -781,12 +798,10 @@
                     let tag = idx === 0 ? 'th' : 'td';
                     let cellContent = cell !== null ? String(cell).trim() : '';
 
-                    // MEMBERIKAN BENTUK KAPSUL UNTUK SEMUA ISI DATA DI TABEL LOG HARIAN (KECUALI HEADER & FOTO)
                     if (idx > 0 && cellContent !== '') {
                         let upper = cellContent.toUpperCase();
-                        let badgeStyleClass = "badge-log-cell"; // Seragam semua abu-abu & hitam
+                        let badgeStyleClass = "badge-log-cell";
 
-                        // Kolom Keterangan / Hasil Shift tetap mengikuti status
                         if (colIdx === (row.length - 1)) {
                             if (upper.includes("TERLAMBAT") || upper.includes("TLT")) {
                                 badgeStyleClass = "badge-ket-terlambat";
@@ -797,13 +812,11 @@
                             }
                         }
 
-                        // Bungkus dengan kapsul jika cell tidak kosong dan bukan kolom foto
                         if (cellContent !== "" && colIdx !== 5) {
                             cellContent = `<span class="${badgeStyleClass}">${cellContent}</span>`;
                         }
                     }
 
-                    // Penanganan kolom Foto Selfie (index 5)
                     if (idx > 0 && colIdx === 5 && cellContent !== '') {
                         let match = cellContent.match(/[-\w]{25,}/);
                         if (match) {
