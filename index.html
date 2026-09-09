@@ -39,7 +39,7 @@
         .search-box:focus { border-color: #2563eb; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15); }
 
         /* ========================================================
-            OVERLAY PROFESIONAL & ELEGAN (GRADIENT & BACKGROUND TERANG)
+            OVERLAY PROFESIONAL & ELEGAN
             ======================================================== */
         #fullScreenOverlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -64,44 +64,30 @@
             animation: bounceGentle 2s infinite ease-in-out;
         }
 
-        /* TEMA LOADING (PROSES MENYIMPAN) - SOLID & ELEGAN */
         #fullScreenOverlay.theme-loading { background: rgba(15, 23, 42, 0.98); }
-        #fullScreenOverlay.theme-loading .overlay-card { 
-            background: #ffffff; 
-            border-top: 6px solid #2563eb; 
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-        }
+        #fullScreenOverlay.theme-loading .overlay-card { background: #ffffff; border-top: 6px solid #2563eb; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5); }
         #fullScreenOverlay.theme-loading .overlay-subtitle { color: #64748b; }
         #fullScreenOverlay.theme-loading .overlay-title { color: #0f172a; }
         #fullScreenOverlay.theme-loading .overlay-name-badge { background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; }
         #fullScreenOverlay.theme-loading .overlay-msg-box { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
         #fullScreenOverlay.theme-loading .spinner-ring { border: 5px solid rgba(37, 99, 235, 0.15); border-top: 5px solid #2563eb; }
         
-        /* TEMA ABSEN MASUK (BACKGROUND TERANG BIRU SEGAR) */
         #fullScreenOverlay.theme-masuk { background: rgba(30, 58, 138, 0.7); }
-        #fullScreenOverlay.theme-masuk .overlay-card { 
-            background: linear-gradient(180deg, #f0f7ff 0%, #ffffff 100%);
-            border-top: 6px solid #2563eb; 
-        }
+        #fullScreenOverlay.theme-masuk .overlay-card { background: linear-gradient(180deg, #f0f7ff 0%, #ffffff 100%); border-top: 6px solid #2563eb; }
         #fullScreenOverlay.theme-masuk .overlay-badge-icon { background: linear-gradient(135deg, #dbeafe 100%, #bfdbfe 0%); color: #2563eb; }
         #fullScreenOverlay.theme-masuk .overlay-subtitle { color: #2563eb; }
         #fullScreenOverlay.theme-masuk .overlay-title { color: #1e40af; }
         #fullScreenOverlay.theme-masuk .overlay-name-badge { background: #dbeafe; color: #1d4ed8; border: 1px solid #93c5fd; }
         #fullScreenOverlay.theme-masuk .overlay-msg-box { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
 
-        /* TEMA ABSEN PULANG (BACKGROUND TERANG HIJAU ZAMRUD) */
         #fullScreenOverlay.theme-pulang { background: rgba(6, 78, 59, 0.7); }
-        #fullScreenOverlay.theme-pulang .overlay-card { 
-            background: linear-gradient(180deg, #ecfdf5 0%, #ffffff 100%);
-            border-top: 6px solid #059669; 
-        }
+        #fullScreenOverlay.theme-pulang .overlay-card { background: linear-gradient(180deg, #ecfdf5 0%, #ffffff 100%); border-top: 6px solid #059669; }
         #fullScreenOverlay.theme-pulang .overlay-badge-icon { background: linear-gradient(135deg, #d1fae5 100%, #a7f3d0 0%); color: #059669; }
         #fullScreenOverlay.theme-pulang .overlay-subtitle { color: #059669; }
         #fullScreenOverlay.theme-pulang .overlay-title { color: #065f46; }
         #fullScreenOverlay.theme-pulang .overlay-name-badge { background: #d1fae5; color: #047857; border: 1px solid #6ee7b7; }
         #fullScreenOverlay.theme-pulang .overlay-msg-box { background: #f0fdf4; color: #065f46; border: 1px solid #bbf7d0; }
 
-        /* TEMA ERROR */
         #fullScreenOverlay.error-bg { background: rgba(127, 29, 29, 0.8); }
         #fullScreenOverlay.error-bg .overlay-card { background: #fff5f5; border-top: 6px solid #dc2626; }
         #fullScreenOverlay.error-bg .overlay-badge-icon { background: #fee2e2; color: #dc2626; }
@@ -175,14 +161,41 @@
         table.rekap-table tr:not(:first-child):not(:nth-child(2)):nth-child(even) td { background-color: #f1f5f9 !important; }
         table.rekap-table tr:not(:first-child):not(:nth-child(2)):nth-child(odd) td { background-color: #ffffff !important; }
 
-        .badge-shift { display: inline-block; padding: 3px 8px; border-radius: 6px; font-weight: 600; font-size: 11px; text-align: center; min-width: 32px; }
-        .badge-s1 { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
-        .badge-s2 { background: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe; }
-        .badge-off { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-        .badge-cuti { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
-        .badge-tlt { background: #ffedd5; color: #c2410c; border: 1px solid #fed7aa; }
-        .badge-jmlon { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-weight: 700; }
-        .badge-uangmakan { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; font-weight: 700; }
+        /* ========================================================
+            GAYA KAPSUL (PILL BADGE) TIPIS & ELEGAN
+            ======================================================== */
+        .badge-shift { 
+            display: inline-block; 
+            padding: 5px 12px; 
+            border-radius: 50px; /* Membuat bentuk kapsul penuh */
+            font-weight: 600; 
+            font-size: 11px; 
+            text-align: center; 
+            min-width: 42px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        
+        /* Warna Tipis-Tipis / Soft Background sesuai permintaan */
+        .badge-s1 { background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }       /* Biru Sangat Tipis */
+        .badge-s2 { background: #f5f3ff; color: #6d28d9; border: 1px solid #ede9fe; }       /* Ungu Sangat Tipis */
+        .badge-off { background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; }      /* Merah Sangat Tipis (Libur) */
+        .badge-cuti { background: #fffbeb; color: #d97706; border: 1px solid #fef3c7; }     /* Kuning/Amber Sangat Tipis */
+        .badge-tlt { background: #fff7ed; color: #ea580c; border: 1px solid #ffedd5; }      /* Oranye Sangat Tipis */
+        .badge-jmlon { background: #f0f9ff; color: #0284c7; border: 1px solid #e0f2fe; font-weight: 700; }
+        .badge-uangmakan { background: #f0fdf4; color: #16a34a; border: 1px solid #dcfce7; font-weight: 700; }
+
+        /* Style Kapsul untuk Tabel Log Harian (Status, Lokasi, dll) */
+        .badge-log {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .badge-log-masuk { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+        .badge-log-pulang { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+        .badge-log-lokasi { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+        .badge-log-status { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
 
         .footer { text-align: center; padding: 15px; font-size: 12px; color: #64748b; background: #f8fafc; border-top: 1px solid #e2e8f0; }
 
@@ -475,7 +488,6 @@
             }
             document.getElementById("selfieModal").style.display = "none";
 
-            // Tampilkan loading solid
             tampilkanLoading("MENYIMPAN ABSEN", "Sedang mengunggah foto dan memproses data...");
 
             fetch(API, {
@@ -519,7 +531,6 @@
                     document.getElementById("overlayName").innerText = res.nama;
                     document.getElementById("overlayTime").innerText = tglFormat;
                     
-                    // Pastikan overlay tetap muncul dengan mulus
                     overlay.style.display = "flex";
                     setTimeout(() => { overlay.classList.add("show"); }, 10);
 
@@ -534,7 +545,6 @@
                         }, 400);
                     }
 
-                    // Jeda waktu sukses tepat 6.5 detik (6500ms) baru ditutup
                     setTimeout(() => {
                         overlay.classList.remove("show");
                         setTimeout(() => {
@@ -757,6 +767,18 @@
                 row.forEach((cell, colIdx) => {
                     let tag = idx === 0 ? 'th' : 'td';
                     let cellContent = cell !== null ? String(cell).trim() : '';
+
+                    // Menambahkan Kapsul / Badge Elegan di Log Harian untuk kolom tertentu (contoh: Status/Keterangan atau Lokasi jika ada)
+                    if (idx > 0 && cellContent !== '') {
+                        let upper = cellContent.toUpperCase();
+                        if (colIdx === 3 || upper.includes("MASUK")) {
+                            // Jika kolom Status Masuk/Pulang
+                            let badgeType = upper.includes("PULANG") ? "badge-log-pulang" : "badge-log-masuk";
+                            cellContent = `<span class="badge-log ${badgeType}">${cellContent}</span>`;
+                        } else if (upper === "KANTOR" || upper === "LAPANGAN") {
+                            cellContent = `<span class="badge-log badge-log-lokasi">${cellContent}</span>`;
+                        }
+                    }
 
                     if (idx > 0 && colIdx === 5 && cellContent !== '') {
                         let match = cellContent.match(/[-\w]{25,}/);
