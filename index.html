@@ -351,6 +351,7 @@
                 <div class="page-icon">📋</div>
                 <h2>LOG HARIAN</h2>
                 <p>Riwayat absensi karyawan hari ini</p>
+                <p id="logCurrentDate" style="font-size: 13px; font-weight: 600; color: #2563eb; margin-top: 4px;"></p>
             </div>
             <input type="text" id="searchLog" class="search-box" placeholder="🔍 Cari nama karyawan, status, atau lokasi..." onkeyup="filterTabelLog()">
             <div class="log-container-wrapper">
@@ -380,8 +381,16 @@
         function updateClock(){
             const now = new Date();
             const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-            document.getElementById("tanggal").innerText = hari[now.getDay()] + ", " + now.getDate() + " " + namaBulanArr[now.getMonth()] + " " + now.getFullYear();
+            const tanggalStr = hari[now.getDay()] + ", " + now.getDate() + " " + namaBulanArr[now.getMonth()] + " " + now.getFullYear();
+            
+            document.getElementById("tanggal").innerText = tanggalStr;
             document.getElementById("jam").innerText = now.toLocaleTimeString("id-ID");
+            
+            // Update tanggal & waktu live di bawah judul Log Harian
+            const logDateEl = document.getElementById("logCurrentDate");
+            if (logDateEl) {
+                logDateEl.innerText = "📅 " + tanggalStr + " | ⏰ " + now.toLocaleTimeString("id-ID") + " WIB";
+            }
         }
         setInterval(updateClock, 1000);
         updateClock();
@@ -802,7 +811,9 @@
                     return;
                 }
 
-                // Log Harian: Sembunyikan Tanggal (idx 0) & ID Staff (idx 1). Tampilkan Hasil (idx 7).
+                // Kolom asli Google Sheets: [Tanggal(0), ID Staff(1), Nama(2), Masuk(3), Pulang(4), Keterangan(5), Foto(6), Hasil(7)]
+                // Kita ambil: Nama(2), Masuk(3), Pulang(4), Keterangan(5), Foto(6), Hasil(7). 
+                // Kolom Thumbnail dibuang, Tanggal & ID Staff tidak ditampilkan, Kolom Hasil ditampilkan di ujung.
                 rawLogData = originalRows.map((row, index) => {
                     let namaStaff = row[2];
                     let masuk = row[3];
@@ -816,6 +827,7 @@
                     if (index === 0) {
                         newRow.unshift("No");
                         newRow[1] = "Nama Staff";
+                        newRow[newRow.length - 1] = "Hasil"; // Pastikan header terakhir "Hasil"
                     } else {
                         newRow.unshift(index);
                     }
@@ -842,7 +854,7 @@
                         let upper = cellContent.toUpperCase();
                         let badgeStyleClass = "badge-log-cell"; 
 
-                        // Indeks Keterangan ada di colIdx 4
+                        // Bagian Keterangan ada di colIdx 4
                         if (colIdx === 4) {
                             if (upper.includes("TERLAMBAT") || upper.includes("TLT")) {
                                 badgeStyleClass = "badge-ket-terlambat";
