@@ -40,7 +40,7 @@
 
         /* ========================================================
             OVERLAY PROFESIONAL & ELEGAN
-            ================================================-------- */
+            ======================================================== */
         #fullScreenOverlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -153,40 +153,35 @@
         table.rekap-table tr:nth-child(2) th { top: 32px; z-index: 21; }
 
         /* ========================================================
-            KOLOM STICKY KE SAMPING (HORIZONTAL) UNTUK HP
+            KOLOM 1 (NO) BERGERAK NORMAL (TIDAK STICKY)
             ======================================================== */
-        /* Lebar Kolom 1 (NO) */
         table.rekap-table th:first-child, 
         table.rekap-table td:first-child { 
-            position: sticky !important;
-            left: 0 !important;
             width: 45px !important; 
             min-width: 45px !important; 
             max-width: 45px !important; 
-            z-index: 10;
+            background: #f1f5f9; 
+            border-right: 1px solid #cbd5e1; 
+            text-align: center; 
         }
 
-        /* Lebar Kolom 2 (NAMA STAFF) */
+        /* ========================================================
+            HANYA KOLOM 2 (NAMA STAFF) YANG STICKY KE SAMPING (LEFT: 0)
+            ======================================================== */
         table.rekap-table th:nth-child(2), 
         table.rekap-table td:nth-child(2) { 
             position: sticky !important;
-            left: 45px !important; /* Menggeser setelah kolom No (lebar 45px) */
+            left: 0 !important;
             min-width: 140px;
             max-width: 160px;
             z-index: 10;
         }
 
-        /* Warna Latar Belakang Khusus Kolom Sticky di Tabel Biasa / Baris Genap & Ganjil */
-        table.rekap-table tr th:first-child,
+        /* Warna Latar Belakang Khusus Kolom Nama Staff (Sticky) */
         table.rekap-table tr th:nth-child(2) {
             background: #1e293b !important;
             color: #ffffff !important;
-            z-index: 30 !important; /* Paling tinggi agar pas pojok kiri atas tidak tertutup */
-        }
-
-        table.rekap-table tr:not(:first-child):not(:nth-child(2)) td:first-child { 
-            background: #f1f5f9 !important; 
-            color: #0f172a !important;
+            z-index: 30 !important; /* Paling tinggi agar tidak tertutup */
         }
 
         table.rekap-table tr:not(:first-child):not(:nth-child(2)) td:nth-child(2) { 
@@ -194,11 +189,12 @@
             color: #0f172a !important;
             font-weight: 600; 
             border-right: 2px solid #cbd5e1; 
+            z-index: 10;
         }
 
-        /* Pengaturan warna latar belakang baris genap/ganjil agar konsisten di balik kolom sticky */
-        table.rekap-table tr:not(:first-child):not(:nth-child(2)):nth-child(even) td:not(:first-child):not(:nth-child(2)) { background-color: #f1f5f9 !important; }
-        table.rekap-table tr:not(:first-child):not(:nth-child(2)):nth-child(odd) td:not(:first-child):not(:nth-child(2)) { background-color: #ffffff !important; }
+        /* Pengaturan warna latar belakang baris genap/ganjil untuk kolom lainnya */
+        table.rekap-table tr:not(:first-child):not(:nth-child(2)):nth-child(even) td:not(:nth-child(2)) { background-color: #f1f5f9 !important; }
+        table.rekap-table tr:not(:first-child):not(:nth-child(2)):nth-child(odd) td:not(:nth-child(2)) { background-color: #ffffff !important; }
 
         .badge-shift { 
             display: inline-block; 
