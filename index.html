@@ -785,10 +785,16 @@
                     return;
                 }
 
+                /* Menyesuaikan susunan kolom Log Harian:
+                   Asli Sheet: [Tanggal, ID Staff, Nama, Masuk, Pulang, Keterangan, Foto, Hasil]
+                   Kita atur ulang posisinya agar Nama Staff berada di Kolom ke-2, dan Tanggal di Kolom ke-3.
+                */
                 rawLogData = originalRows.map((row, index) => {
-                    let newRow = [...row];
-                    newRow.splice(7, 1);
-                    newRow.splice(1, 1);
+                    let tgl = row[0];
+                    let namaStaff = row[2];
+                    let sisaKolom = [row[1], row[3], row[4], row[5], row[6], row[7]]; // ID, Masuk, Pulang, Ket, Foto, Hasil
+                    
+                    let newRow = [tgl, namaStaff, ...sisaKolom];
                     
                     if (index === 0) {
                         newRow.unshift("No");
@@ -828,12 +834,12 @@
                             }
                         }
 
-                        if (cellContent !== "" && colIdx !== 0 && colIdx !== 6) {
+                        if (cellContent !== "" && colIdx !== 0 && colIdx !== 2 && colIdx !== 7) {
                             cellContent = `<span class="${badgeStyleClass}">${cellContent}</span>`;
                         }
                     }
 
-                    if (idx > 0 && colIdx === 6 && cellContent !== '') {
+                    if (idx > 0 && colIdx === 7 && cellContent !== '') {
                         let match = cellContent.match(/[-\w]{25,}/);
                         if (match) {
                             let imgUrl = "https://lh3.googleusercontent.com/d/" + match[0];
