@@ -545,26 +545,30 @@ function ambilFotoDanKirim() {
             btn.disabled = true;
             btn.innerHTML = "<span>⏳</span> Mengirim Absen...";
 
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
+            // Batasi ukuran gambar agar file ringan dan terkirim dalam 1 detik
+            let maxWidth = 640;
+            let scaleFactor = maxWidth / video.videoWidth;
+            canvas.width = maxWidth;
+            canvas.height = video.videoHeight * scaleFactor;
+
             const ctx = canvas.getContext("2d");
-            
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
             const nowWib = new Date();
             const tglStr = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " - " + nowWib.toLocaleTimeString("id-ID");
             
             ctx.fillStyle = "rgba(0, 0, 0, 0.65)";
-            ctx.fillRect(0, canvas.height - 100, canvas.width, 100);
-            ctx.font = "bold 20px Arial";
+            ctx.fillRect(0, canvas.height - 70, canvas.width, 70);
+            ctx.font = "bold 15px Arial";
             ctx.fillStyle = "#38bdf8";
-            ctx.fillText("👤 " + activeStaffName, 20, canvas.height - 65);
-            ctx.font = "15px Arial";
+            ctx.fillText("👤 " + activeStaffName, 15, canvas.height - 45);
+            ctx.font = "12px Arial";
             ctx.fillStyle = "#ffffff";
-            ctx.fillText("📅 " + tglStr, 20, canvas.height - 40);
-            ctx.fillText("📍 Lokasi: " + selectedLokasi + " (MMBC PADANG)", 20, canvas.height - 15);
+            ctx.fillText("📅 " + tglStr, 15, canvas.height - 25);
+            ctx.fillText("📍 Lokasi: " + selectedLokasi + " (MMBC PADANG)", 15, canvas.height - 10);
 
-            const base64Image = canvas.toDataURL("image/jpeg", 0.8);
+            // Kompres foto ke JPEG 0.65 (sangat ringan namun tetap jernih)
+            const base64Image = canvas.toDataURL("image/jpeg", 0.65);
 
             if (streamSelfie) {
                 streamSelfie.getTracks().forEach(track => track.stop());
