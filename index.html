@@ -479,7 +479,10 @@
             });
         }
 
+        let isSubmitting = false; // Pengaman anti dobel klik
+
         function prosesQRData(idStaff) {
+            if (isSubmitting) return; // Cegah jika sedang proses
             activeStaffId = idStaff;
             document.getElementById("selfieStaffName").innerText = "Memeriksa ID: " + idStaff + "...";
             const modal = document.getElementById("selfieModal");
@@ -501,7 +504,6 @@
                 bukaKameraSelfieStream();
             });
         }
-
         function bukaKameraSelfieStream() {
             navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false })
                 .then(stream => {
@@ -518,12 +520,16 @@
                 });
         }
 
-        function ambilFotoDanKirim() {
+function ambilFotoDanKirim() {
+            if (isSubmitting) return; // Mencegah dobel kirim jika diklik berkali-kali
+            isSubmitting = true;
+
             const video = document.getElementById("selfieVideo");
             const canvas = document.getElementById("canvas");
             
             if (video.videoWidth === 0 || video.videoHeight === 0) {
                 alert("Kamera sedang bersiap, silakan coba ketuk tombol ambil foto sekali lagi.");
+                isSubmitting = false;
                 return;
             }
 
@@ -565,6 +571,7 @@
             })
             .then(r => r.json())
             .then(res => {
+                isSubmitting = false; // Buka kunci setelah selesai
                 btn.disabled = false;
                 btn.innerHTML = "<span>📸</span> Ambil Foto & Kirim Absen";
                 
@@ -630,12 +637,12 @@
                 }
             })
             .catch(err => {
+                isSubmitting = false; // Buka kunci jika error
                 btn.disabled = false;
                 btn.innerHTML = "<span>📸</span> Ambil Foto & Kirim Absen";
                 tampilkanPesanError("Gagal mengirim data ke server.");
             });
         }
-
         function playTringBellSound() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
