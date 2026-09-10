@@ -481,28 +481,30 @@
 
         let isSubmitting = false; // Pengaman anti dobel klik
 
-        function prosesQRData(idStaff) {
-            if (isSubmitting) return; // Cegah jika sedang proses
+       function prosesQRData(idStaff) {
+            if (isSubmitting) return;
             activeStaffId = idStaff;
-            document.getElementById("selfieStaffName").innerText = "Memeriksa ID: " + idStaff + "...";
-            const modal = document.getElementById("selfieModal");
-            modal.style.display = "flex";
+            
+            // Langsung set nama sementara berdasarkan ID agar kamera instan terbuka tanpa nunggu server
+            activeStaffName = "Staff (" + idStaff + ")";
+            document.getElementById("selfieStaffName").innerText = "👤 Staff ID: " + idStaff;
+            
+            // Kamera depan langsung menyala seketika dalam milidetik!
+            bukaKameraSelfieStream();
 
+            // Opsional: Cek nama asli di latar belakang (background) untuk mempercantik teks di foto nanti
             fetch(API, {
                 method: "POST",
                 body: JSON.stringify({ action: "cekNama", id: idStaff })
             })
             .then(r => r.json())
             .then(res => {
-                activeStaffName = res.status ? res.nama : "Staff (" + idStaff + ")";
-                document.getElementById("selfieStaffName").innerText = "👤 " + activeStaffName;
-                bukaKameraSelfieStream();
+                if (res.status) {
+                    activeStaffName = res.nama;
+                    document.getElementById("selfieStaffName").innerText = "👤 " + activeStaffName;
+                }
             })
-            .catch(err => {
-                activeStaffName = "Staff (" + idStaff + ")";
-                document.getElementById("selfieStaffName").innerText = "👤 " + activeStaffName;
-                bukaKameraSelfieStream();
-            });
+            .catch(err => {});
         }
         function bukaKameraSelfieStream() {
             navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false })
