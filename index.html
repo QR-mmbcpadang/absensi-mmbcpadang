@@ -484,18 +484,16 @@ function prosesQRData(idStaff) {
             if (isSubmitting) return;
             activeStaffId = idStaff;
             
-            // Langsung set nama sementara berdasarkan ID agar kamera instan terbuka tanpa nunggu server
-            activeStaffName = "Staff (" + idStaff + ")";
-            document.getElementById("selfieStaffName").innerText = "👤 Staff ID: " + idStaff;
+            // Set tampilan awal sambil menunggu data server
+            activeStaffName = "Memuat nama...";
+            document.getElementById("selfieStaffName").innerText = "👤 Sedang memuat nama...";
             
-            // 🔥 INI YANG KETINGGALAN: Perintah untuk memunculkan modal selfie di layar HP!
             const modal = document.getElementById("selfieModal");
             modal.style.display = "flex";
             
-            // Kamera depan langsung menyala seketika dalam milidetik!
             bukaKameraSelfieStream();
 
-            // Cek nama asli di latar belakang (background) untuk mempercantik teks di foto nanti
+            // Panggil cekNama dengan aman
             fetch(API, {
                 method: "POST",
                 body: JSON.stringify({ action: "cekNama", id: idStaff })
@@ -505,9 +503,15 @@ function prosesQRData(idStaff) {
                 if (res.status) {
                     activeStaffName = res.nama;
                     document.getElementById("selfieStaffName").innerText = "👤 " + activeStaffName;
+                } else {
+                    activeStaffName = "Staff (" + idStaff + ")";
+                    document.getElementById("selfieStaffName").innerText = "👤 Staff ID: " + idStaff;
                 }
             })
-            .catch(err => {});
+            .catch(err => {
+                activeStaffName = "Staff (" + idStaff + ")";
+                document.getElementById("selfieStaffName").innerText = "👤 Staff ID: " + idStaff;
+            });
         }
         function bukaKameraSelfieStream() {
             navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false })
@@ -524,9 +528,8 @@ function prosesQRData(idStaff) {
                     sedangProses = false;
                 });
         }
-
 function ambilFotoDanKirim() {
-            if (isSubmitting) return; // Mencegah dobel kirim jika diklik berkali-kali
+            if (isSubmitting) return; 
             isSubmitting = true;
 
             const video = document.getElementById("selfieVideo");
@@ -561,14 +564,14 @@ function ambilFotoDanKirim() {
             ctx.fillText("📅 " + tglStr, 20, canvas.height - 40);
             ctx.fillText("📍 Lokasi: " + selectedLokasi + " (MMBC PADANG)", 20, canvas.height - 15);
 
-            const base64Image = canvas.toDataURL("image/jpeg", 0.85);
+            const base64Image = canvas.toDataURL("image/jpeg", 0.8);
 
             if (streamSelfie) {
                 streamSelfie.getTracks().forEach(track => track.stop());
             }
             document.getElementById("selfieModal").style.display = "none";
 
-            tampilkanLoading("MENYIMPAN ABSEN", "Sedang mengunggah foto dan memproses data...");
+            tampilkanLoading("MENYIMPAN ABSEN", "Sedang memproses data ke server...");
 
             fetch(API, {
                 method: "POST",
@@ -576,7 +579,7 @@ function ambilFotoDanKirim() {
             })
             .then(r => r.json())
             .then(res => {
-                isSubmitting = false; // Buka kunci setelah selesai
+                isSubmitting = false; 
                 btn.disabled = false;
                 btn.innerHTML = "<span>📸</span> Ambil Foto & Kirim Absen";
                 
@@ -642,7 +645,7 @@ function ambilFotoDanKirim() {
                 }
             })
             .catch(err => {
-                isSubmitting = false; // Buka kunci jika error
+                isSubmitting = false; 
                 btn.disabled = false;
                 btn.innerHTML = "<span>📸</span> Ambil Foto & Kirim Absen";
                 tampilkanPesanError("Gagal mengirim data ke server.");
