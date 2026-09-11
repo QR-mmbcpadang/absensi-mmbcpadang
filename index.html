@@ -465,38 +465,112 @@
         }
 
         function prosesQRData(idStaff) {
-            if (isSubmitting) return;
-            activeStaffId = idStaff;
-            
-            activeStaffName = "Memuat nama...";
-            document.getElementById("selfieStaffName").innerText = "👤 Sedang memuat nama...";
-            
-            const modal = document.getElementById("selfieModal");
-            modal.style.display = "flex";
-            
-            bukaKameraSelfieStream();
+    if (isSubmitting) return;
+    activeStaffId = idStaff;
 
-            fetch(API, {
-                method: "POST",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({ action: "cekNama", id: idStaff })
-            })
-            .then(r => r.json())
-            .then(res => {
-                if (res.status) {
-                    activeStaffName = res.nama;
-                    document.getElementById("selfieStaffName").innerText = "👤 " + activeStaffName;
-                } else {
-                    activeStaffName = "Staff (" + idStaff + ")";
-                    document.getElementById("selfieStaffName").innerText = "👤 Staff ID: " + idStaff;
-                }
-            })
-            .catch(err => {
-                activeStaffName = "Staff (" + idStaff + ")";
-                document.getElementById("selfieStaffName").innerText = "👤 Staff ID: " + idStaff;
-            });
+    tampilkanLoading("MENGECEK DATA", "Memeriksa status absensi...");
+
+    // Cek apakah karyawan akan Absen Masuk atau Absen Pulang
+    fetch(API, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "cekStatusAbsen", id: idStaff })
+    })
+    .then(r => r.json())
+    .then(res => {
+        if (!res.status) {
+            tampilkanPesanError(res.pesan);
+            return;
         }
 
+        activeStaffName = res.nama;
+
+        // Tutup overlay loading
+        const overlay = document.getElementById("fullScreenOverlay");
+        overlay.classList.remove("show");
+        overlay.style.display = "none";
+
+        if (res.tipeAbsen === "PULANG") {
+            // ABSEN PULANG: Langsung proses tanpa selfie
+            prosesAbsenLangsung(idStaff, "", selectedLokasi);
+        } else {
+            // ABSEN MASUK: Buka kamera selfie
+            document.getElementById("selfieStaffName").innerText = "👤 " + activeStaffName;
+            const modal = document.getElementById("selfieModal");
+            modal.style.display = "flex";
+            bukaKameraSelfieStream();
+        }
+    })
+    .catch(err => {
+        tampilkanPesanError("Gagal menghubungkan ke server.");
+    });
+}
+     // Helper untuk mengirim absen langsung (khusus PULANG atau tanpa foto)
+function prosesAbsenLangsung(idStaff, foto, lokasi) {
+    if (isSubmitting) return;
+    isSubmitting = true;
+
+    tampilkanLoading("MENYIMPAN ABSEN", "Sedang memproses data ke server...");
+
+    fetch(API, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "simpanAbsensi", id: idStaff, foto: foto, lokasi: lokasi })
+    })
+    .then(r => r.json())
+    .then(res => {
+        isSubmitting = false;
+        if (res.status) {
+            const nowWib = new Date();
+            const tglFormat = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " | " + nowWib.toLocaleTimeString("id-ID");
+            const overlay = document.getElementById("fullScreenOverlay");
+            
+            playTringBellSound();
+
+            document.getElementById("overlayLoaderContainer").style.display = "none";
+            document.getElementById("overlayIcon").style.display = "flex";
+            document.getElementById("overlayInfoGrid").style.display = "flex";
+            document.getElementById("overlayInfoLokasi").innerText = lokasi + " (MMBC PADANG)";
+
+            overlay.className = "theme-pulang";
+            document.getElementById("overlayIcon").innerText = "🏡";
+            document.getElementById("overlaySubtitle").innerText = "ABSEN PULANG SUKSES";
+            document.getElementById("overlayTitle").innerText = "Hati-Hati di Jalan!";
+            document.getElementById("overlayMsg").innerHTML = `Selamat beristirahat, terima kasih atas kerjanya hari ini! <span class="waving-hand">👋</span>`;
+
+            document.getElementById("overlayName").innerText = res.nama;
+            document.getElementById("overlayTime").innerText = tglFormat;
+            
+            overlay.style.display = "flex";
+            setTimeout(() => { overlay.classList.add("show"); }, 10);
+
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                setTimeout(() => {
+                    const utterance = new SpeechSynthesisUtterance("Absen Pulang Berhasil");
+                    utterance.lang = 'id-ID';
+                    window.speechSynthesis.speak(utterance);
+                }, 400);
+            }
+
+            setTimeout(() => {
+                overlay.classList.remove("show");
+                setTimeout(() => {
+                    overlay.style.display = "none";
+                    const btnLokasi = document.querySelectorAll('.btnLokasi');
+                    btnLokasi.forEach(b => b.disabled = false);
+                    mulaiScanner();
+                }, 350);
+            }, 6500);
+        } else {
+            tampilkanPesanError(res.pesan);
+        }
+    })
+    .catch(err => {
+        isSubmitting = false;
+        tampilkanPesanError("Gagal mengirim data ke server.");
+    });
+}   
         function bukaKameraSelfieStream() {
             navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false })
                 .then(stream => {
