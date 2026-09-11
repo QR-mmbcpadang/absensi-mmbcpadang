@@ -488,7 +488,7 @@
                 overlay.style.display = "none";
 
                 if (res.tipeAbsen === "PULANG") {
-                    // ABSEN PULANG: Langsung simpan tanpa minta foto selfie
+                    // ABSEN PULANG: Langsung simpan tanpa selfie (sesuai permintaan)
                     isSubmitting = false;
                     prosesAbsenLangsung(idStaff, "", selectedLokasi);
                 } else {
@@ -886,20 +886,20 @@
                 }
                 
                 let originalRows = res.data;
-                if (originalRows.length <= 1) {
+                if (!originalRows || originalRows.length <= 1) {
                     container.innerHTML = "<div style='text-align:center; padding:20px; color:#64748b;'>Belum ada karyawan yang absen hari ini.</div>";
                     return;
                 }
 
                 rawLogData = originalRows.map((row, index) => {
-                    let namaStaff = row[2];
-                    let masuk = row[3];
-                    let pulang = row[4];
-                    let keterangan = row[5];
-                    let foto = row[6];
-                    let hasil = row[8] !== undefined ? row[8] : "";
+                    let namaStaff = row[2] || "-";
+                    let masuk = row[3] || "-";
+                    let pulang = (row[4] && row[4] !== "") ? row[4] : "-";
+                    let lokasi = row[5] || "-";
+                    let foto = row[6] || "";
+                    let hasil = row[8] || "-";
                     
-                    let newRow = [namaStaff, masuk, pulang, keterangan, foto, hasil];
+                    let newRow = [namaStaff, masuk, pulang, lokasi, foto, hasil];
                     
                     if (index === 0) {
                         newRow.unshift("No");
