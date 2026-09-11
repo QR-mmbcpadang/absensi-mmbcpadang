@@ -217,7 +217,7 @@
         
         .badge-s1 { background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }        
         .badge-s2 { background: #f5f3ff; color: #6d28d9; border: 1px solid #ede9fe; }        
-        .badge-off { background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; }       
+        .badge-off { background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; }        
         .badge-cuti { background: #fffbeb; color: #d97706; border: 1px solid #fef3c7; }      
         .badge-tlt { background: #fff7ed; color: #ea580c; border: 1px solid #ffedd5; }        
         .badge-jmlon { background: #f0f9ff; color: #0284c7; border: 1px solid #e0f2fe; font-weight: 700; padding: 3px 6px; font-size: 10.5px; }
@@ -362,7 +362,7 @@
         let selectedLokasi = "";
         let html5QrCode = null;
         let sedangProses = false;
-        let isSubmitting = false; // Pengaman anti double submit
+        let isSubmitting = false; 
         let activeStaffId = "";
         let activeStaffName = "";
         let streamSelfie = null;
@@ -478,6 +478,7 @@
 
             fetch(API, {
                 method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
                 body: JSON.stringify({ action: "cekNama", id: idStaff })
             })
             .then(r => r.json())
@@ -561,6 +562,7 @@
 
             fetch(API, {
                 method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
                 body: JSON.stringify({ action: "simpanAbsensi", id: activeStaffId, foto: base64Image, lokasi: selectedLokasi })
             })
             .then(r => r.json())
@@ -709,6 +711,7 @@
 
             fetch(API, {
                 method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
                 body: JSON.stringify({ action: "getJadwal" })
             })
             .then(r => r.json())
@@ -795,6 +798,7 @@
 
             fetch(API, {
                 method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
                 body: JSON.stringify({ action: "getLogHarian" })
             })
             .then(r => r.json())
