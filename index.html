@@ -40,7 +40,7 @@
 
         /* ========================================================
             OVERLAY PROFESIONAL & ELEGAN
-            ======================================================== */
+           ======================================================== */
         #fullScreenOverlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -146,25 +146,18 @@
 
         table.rekap-table { width: 100%; border-collapse: collapse; font-size: 12px; white-space: nowrap; table-layout: auto; }
         
-        /* Padding sel tabel diperkecil khusus untuk Jadwal Kerja supaya makin compact */
         #jadwalContent table.rekap-table th, 
         #jadwalContent table.rekap-table td { border: 1px solid #cbd5e1; padding: 5px 6px; text-align: center; background: #ffffff; vertical-align: middle; }
 
-        /* Padding normal untuk Log Harian */
         #logContent table.rekap-table th, 
         #logContent table.rekap-table td { border: 1px solid #cbd5e1; padding: 9px 12px; text-align: center; background: #ffffff; vertical-align: middle; }
         
-        /* HEADER STICKY KE ATAS (VERTIKAL) KHUSUS JADWAL KERJA */
         #jadwalContent table.rekap-table th { background: #1e293b !important; color: #ffffff !important; font-weight: 600; letter-spacing: 0.3px; position: sticky; z-index: 20; }
         #jadwalContent table.rekap-table tr:nth-child(1) th { top: 0; z-index: 22; }
         #jadwalContent table.rekap-table tr:nth-child(2) th { top: 26px; z-index: 21; }
 
-        /* HEADER STICKY LOG HARIAN */
         #logContent table.rekap-table th { background: #1e293b !important; color: #ffffff !important; font-weight: 600; letter-spacing: 0.3px; position: sticky; z-index: 20; top: 0; }
 
-        /* ========================================================
-            KOLOM 1 (NO) BERGERAK NORMAL (TIDAK STICKY)
-            ======================================================== */
         table.rekap-table th:first-child, 
         table.rekap-table td:first-child { 
             width: 40px !important; 
@@ -175,9 +168,6 @@
             text-align: center; 
         }
 
-        /* ========================================================
-            HANYA KOLOM 2 (NAMA STAFF) YANG STICKY KE SAMPING (LEFT: 0)
-            ======================================================== */
         table.rekap-table th:nth-child(2), 
         table.rekap-table td:nth-child(2) { 
             position: sticky !important;
@@ -187,14 +177,12 @@
             z-index: 10;
         }
 
-        /* Warna Latar Belakang Khusus Kolom Nama Staff (Sticky) */
         table.rekap-table tr th:nth-child(2) {
             background: #1e293b !important;
             color: #ffffff !important;
-            z-index: 30 !important; /* Paling tinggi agar tidak tertutup */
+            z-index: 30 !important;
         }
 
-        /* Sticky khusus baris di Jadwal Kerja */
         #jadwalContent table.rekap-table tr:not(:first-child):not(:nth-child(2)) td:nth-child(2) { 
             background: #f8fafc !important; 
             color: #0f172a !important;
@@ -203,7 +191,6 @@
             z-index: 10;
         }
 
-        /* Sticky khusus baris di Log Harian */
         #logContent table.rekap-table tr:not(:first-child) td:nth-child(2) { 
             background: #f8fafc !important; 
             color: #0f172a !important;
@@ -211,15 +198,12 @@
             z-index: 10;
         }
 
-        /* Pengaturan warna latar belakang baris genap/ganjil untuk tabel jadwal */
         #jadwalContent table.rekap-table tr:not(:first-child):not(:nth-child(2)):nth-child(even) td:not(:nth-child(2)) { background-color: #f1f5f9 !important; }
         #jadwalContent table.rekap-table tr:not(:first-child):not(:nth-child(2)):nth-child(odd) td:not(:nth-child(2)) { background-color: #ffffff !important; }
 
-        /* Pengaturan warna latar belakang baris genap/ganjil untuk tabel log */
         #logContent table.rekap-table tr:not(:first-child):nth-child(even) td:not(:nth-child(2)) { background-color: #f1f5f9 !important; }
         #logContent table.rekap-table tr:not(:first-child):nth-child(odd) td:not(:nth-child(2)) { background-color: #ffffff !important; }
 
-        /* Badge Shift (Kotak Keterangan S1, S2, Cuti, dll di Jadwal) diperkecil */
         .badge-shift { 
             display: inline-block; 
             padding: 3px 6px; 
@@ -239,7 +223,6 @@
         .badge-jmlon { background: #f0f9ff; color: #0284c7; border: 1px solid #e0f2fe; font-weight: 700; padding: 3px 6px; font-size: 10.5px; }
         .badge-uangmakan { background: #f0fdf4; color: #16a34a; border: 1px solid #dcfce7; font-weight: 700; padding: 3px 6px; font-size: 10.5px; }
 
-        /* Kapsul standar ukuran normal untuk Log Harian (Nama Staff & Hasil) */
         .badge-log-cell {
             display: inline-block;
             padding: 5px 12px;
@@ -379,6 +362,7 @@
         let selectedLokasi = "";
         let html5QrCode = null;
         let sedangProses = false;
+        let isSubmitting = false; // Pengaman anti double submit
         let activeStaffId = "";
         let activeStaffName = "";
         let streamSelfie = null;
@@ -442,6 +426,7 @@
 
         function mulaiScanner() {
             sedangProses = false;
+            isSubmitting = false;
             setTimeout(() => {
                 if (!html5QrCode) {
                     html5QrCode = new Html5Qrcode("reader");
@@ -479,12 +464,10 @@
             });
         }
 
-        let isSubmitting = false; // Pengaman anti dobel klik
-function prosesQRData(idStaff) {
+        function prosesQRData(idStaff) {
             if (isSubmitting) return;
             activeStaffId = idStaff;
             
-            // Set tampilan awal sambil menunggu data server
             activeStaffName = "Memuat nama...";
             document.getElementById("selfieStaffName").innerText = "👤 Sedang memuat nama...";
             
@@ -493,7 +476,6 @@ function prosesQRData(idStaff) {
             
             bukaKameraSelfieStream();
 
-            // Panggil cekNama dengan aman
             fetch(API, {
                 method: "POST",
                 body: JSON.stringify({ action: "cekNama", id: idStaff })
@@ -513,6 +495,7 @@ function prosesQRData(idStaff) {
                 document.getElementById("selfieStaffName").innerText = "👤 Staff ID: " + idStaff;
             });
         }
+
         function bukaKameraSelfieStream() {
             navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false })
                 .then(stream => {
@@ -528,7 +511,8 @@ function prosesQRData(idStaff) {
                     sedangProses = false;
                 });
         }
-function ambilFotoDanKirim() {
+
+        function ambilFotoDanKirim() {
             if (isSubmitting) return; 
             isSubmitting = true;
 
@@ -545,7 +529,6 @@ function ambilFotoDanKirim() {
             btn.disabled = true;
             btn.innerHTML = "<span>⏳</span> Mengirim Absen...";
 
-            // Batasi ukuran gambar agar file ringan dan terkirim dalam 1 detik
             let maxWidth = 640;
             let scaleFactor = maxWidth / video.videoWidth;
             canvas.width = maxWidth;
@@ -567,7 +550,6 @@ function ambilFotoDanKirim() {
             ctx.fillText("📅 " + tglStr, 15, canvas.height - 25);
             ctx.fillText("📍 Lokasi: " + selectedLokasi + " (MMBC PADANG)", 15, canvas.height - 10);
 
-            // Kompres foto ke JPEG 0.65 (sangat ringan namun tetap jernih)
             const base64Image = canvas.toDataURL("image/jpeg", 0.65);
 
             if (streamSelfie) {
@@ -583,7 +565,6 @@ function ambilFotoDanKirim() {
             })
             .then(r => r.json())
             .then(res => {
-                isSubmitting = false; 
                 btn.disabled = false;
                 btn.innerHTML = "<span>📸</span> Ambil Foto & Kirim Absen";
                 
@@ -641,7 +622,6 @@ function ambilFotoDanKirim() {
                             btnLokasi.forEach(b => b.disabled = false);
                             
                             mulaiScanner();
-                            sedangProses = false;
                         }, 350);
                     }, 6500);
                 } else {
@@ -649,12 +629,12 @@ function ambilFotoDanKirim() {
                 }
             })
             .catch(err => {
-                isSubmitting = false; 
                 btn.disabled = false;
                 btn.innerHTML = "<span>📸</span> Ambil Foto & Kirim Absen";
                 tampilkanPesanError("Gagal mengirim data ke server.");
             });
         }
+
         function playTringBellSound() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -690,12 +670,6 @@ function ambilFotoDanKirim() {
             setTimeout(() => { overlay.classList.add("show"); }, 10);
         }
 
-        function tutupLoading() {
-            const overlay = document.getElementById("fullScreenOverlay");
-            overlay.classList.remove("show");
-            setTimeout(() => { overlay.style.display = "none"; }, 350);
-        }
-
         function tampilkanPesanError(pesan) {
             const overlay = document.getElementById("fullScreenOverlay");
             overlay.className = "error-bg";
@@ -725,7 +699,6 @@ function ambilFotoDanKirim() {
                     btnLokasi.forEach(b => b.disabled = false);
 
                     mulaiScanner();
-                    sedangProses = false;
                 }, 350);
             }, 4000);
         }
@@ -881,7 +854,7 @@ function ambilFotoDanKirim() {
                             cellContent = `<span class="badge-log-cell">${cellContent}</span>`;
                         }
 
-                        if (colIdx === 4) {
+                        if (colIdx === 6) {
                             if (upper.includes("TERLAMBAT") || upper.includes("TLT")) {
                                 badgeStyleClass = "badge-ket-terlambat";
                             } else if (upper.includes("TIDAK") || upper.includes("PULANG ❌") || upper.includes("❌")) {
@@ -914,19 +887,18 @@ function ambilFotoDanKirim() {
             container.innerHTML = html;
         }
 
-        function filterTabelJadwal() {
-            const keyword = document.getElementById('searchJadwal').value.toLowerCase();
-            if (rawJadwalData.length === 0) return;
+        function filterTabelLog() {
+            const keyword = document.getElementById('searchLog').value.toLowerCase();
+            if (rawLogData.length === 0) return;
 
-            let header1 = rawJadwalData[0];
-            let header2 = rawJadwalData[1];
-            let bodyRows = rawJadwalData.slice(2);
+            let header = rawLogData[0];
+            let bodyRows = rawLogData.slice(1);
 
             let filteredBody = bodyRows.filter(row => {
                 return row.some(cell => String(cell).toLowerCase().includes(keyword));
             });
 
-            renderJadwalTable([header1, header2, ...filteredBody], "Hasil Pencarian");
+            renderLogTable([header, ...filteredBody]);
         }
     </script>
 </body>
