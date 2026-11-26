@@ -35,8 +35,43 @@
         .scan-box { background: #000; border-radius: 14px; overflow: hidden; margin-top: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.2); max-width: 500px; margin-left: auto; margin-right: auto; }
         #reader { width: 100% !important; border: none !important; }
 
-        .search-box { width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 13px; margin-bottom: 15px; outline: none; background: #ffffff; transition: all 0.2s; }
+        .search-box { width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 13px; margin-bottom: 12px; outline: none; background: #ffffff; transition: all 0.2s; }
         .search-box:focus { border-color: #2563eb; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15); }
+
+        .log-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+        .admin-status-bar { font-size: 12px; color: #475569; background: #ffffff; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+        .admin-status-bar.aktif { background: #ecfdf5; border-color: #6ee7b7; color: #065f46; }
+        .btn-admin-mode { background: #1e293b; color: #ffffff; border: none; padding: 7px 14px; border-radius: 999px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .btn-admin-mode:hover { background: #0f172a; }
+        .btn-admin-logout { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; cursor: pointer; }
+
+        .btn-privasi-lock { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; border-radius: 999px; padding: 5px 11px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .btn-privasi-lock:hover { background: #e2e8f0; color: #0f172a; }
+
+        #previewModal {
+            position: fixed; inset: 0; background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(8px);
+            display: none; align-items: center; justify-content: center; z-index: 99998; padding: 16px;
+        }
+        #previewModal.show { display: flex; }
+        .preview-card {
+            background: #ffffff; border-radius: 22px; max-width: 400px; width: 100%; padding: 22px;
+            text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.4); position: relative; color: #0f172a;
+        }
+        .preview-close {
+            position: absolute; top: 12px; right: 14px; width: 32px; height: 32px; border-radius: 50%;
+            border: none; background: #f1f5f9; color: #334155; font-weight: bold; font-size: 15px; cursor: pointer;
+        }
+        .preview-close:hover { background: #e2e8f0; }
+        .preview-input {
+            width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 10px;
+            font-size: 13px; margin-bottom: 10px; outline: none;
+        }
+        .preview-input:focus { border-color: #2563eb; }
+        .btn-modal-primary {
+            width: 100%; padding: 11px 16px; border: none; border-radius: 12px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #ffffff;
+            font-weight: 700; font-size: 13px; cursor: pointer;
+        }
 
         #fullScreenOverlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -261,6 +296,14 @@
         </div>
     </div>
 
+    <!-- Modal Preview Foto Selfie Admin / Info Privasi Staff / Login Admin -->
+    <div id="previewModal" onclick="tutupPreviewModal(event)">
+        <div class="preview-card" onclick="event.stopPropagation()">
+            <button type="button" class="preview-close" onclick="tutupPreviewModal()">✕</button>
+            <div id="previewModalBody"></div>
+        </div>
+    </div>
+
     <div id="fullScreenOverlay">
         <div class="overlay-card">
             <div id="overlayLoaderContainer">
@@ -303,7 +346,7 @@
         <div id="absensiPage" class="tab-page active-page">
             <div id="tanggal" class="tanggal">Memuat tanggal...</div>
             <div id="jam" class="jam">00:00:00</div>
-<!-- INFORMASI / MARQUEE -->
+            <!-- INFORMASI / MARQUEE -->
             <div style="background: #eff6ff; color: #1e40af; padding: 10px 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #dbeafe; font-size: 13px; font-weight: 600;">
                 <marquee behavior="scroll" direction="left">
                     📢 <b>Informasi:</b> Selamat datang di Absensi MMBC Padang. jika respon Absensi Error cukup Lakukan refresh ya, tarik k bawah halaman Absensinya!
@@ -346,7 +389,13 @@
                 <p>Riwayat absensi karyawan hari ini</p>
                 <p id="logCurrentDate" style="font-size: 13px; font-weight: 600; color: #2563eb; margin-top: 4px;"></p>
             </div>
-            <input type="text" id="searchLog" class="search-box" placeholder="🔍 Cari nama karyawan, status, atau lokasi..." onkeyup="filterTabelLog()">
+            <input type="text" id="searchLog" class="search-box" placeholder="🔍 Cari nama karyawan (tampil 1 s.d. hari ini), status, atau lokasi..." onkeyup="filterTabelLog()">
+            <div class="log-toolbar">
+                <span id="adminStatusBadge" class="admin-status-bar">🔒 Mode Staf (Foto Privat)</span>
+                <div id="adminActionButtons">
+                    <button type="button" class="btn-admin-mode" onclick="bukaFormLoginAdmin()">🔐 Login Admin</button>
+                </div>
+            </div>
             <div class="log-container-wrapper">
                 <div class="rekap-wrapper" id="logContent">
                     <div style="text-align:center; padding:20px; color:#64748b;">Memuat log absensi...</div>
@@ -371,6 +420,158 @@
 
         let rawJadwalData = [];
         let rawLogData = [];
+        let searchLogTimer = null;
+
+        function getAdminSession() {
+            return {
+                username: sessionStorage.getItem("mmbc_padang_admin_user") || "",
+                password: sessionStorage.getItem("mmbc_padang_admin_pass") || "",
+                namaAdmin: sessionStorage.getItem("mmbc_padang_admin_nama") || ""
+            };
+        }
+
+        function updateAdminToolbarUI() {
+            const sess = getAdminSession();
+            const badge = document.getElementById("adminStatusBadge");
+            const btns = document.getElementById("adminActionButtons");
+            if (!badge || !btns) return;
+
+            if (sess.username && sess.password) {
+                badge.className = "admin-status-bar aktif";
+                badge.innerHTML = `🔓 Admin: <b>${sess.namaAdmin || sess.username}</b>`;
+                btns.innerHTML = `<button type="button" class="btn-admin-logout" onclick="logoutAdminLog()">Keluar Admin</button>`;
+            } else {
+                badge.className = "admin-status-bar";
+                badge.innerHTML = `🔒 Mode Staf (Foto Privat)`;
+                btns.innerHTML = `<button type="button" class="btn-admin-mode" onclick="bukaFormLoginAdmin()">🔐 Login Admin</button>`;
+            }
+        }
+
+        function bukaFormLoginAdmin() {
+            const sess = getAdminSession();
+            document.getElementById("previewModalBody").innerHTML = `
+                <div style="font-size:32px; margin-bottom:8px;">🔐</div>
+                <h3 style="font-size:16px; margin-bottom:6px;">Login Admin Log Selfie</h3>
+                <p style="font-size:12px; color:#64748b; margin-bottom:14px;">Masuk menggunakan akun Admin aktif untuk melihat foto selfie di aplikasi.</p>
+                <input type="text" id="adminLoginUser" class="preview-input" placeholder="Username Admin" value="${escapeAttr(sess.username)}">
+                <input type="password" id="adminLoginPass" class="preview-input" placeholder="Password Admin">
+                <div id="adminLoginError" style="color:#dc2626; font-size:12px; font-weight:600; margin-bottom:10px; min-height:16px;"></div>
+                <button type="button" id="btnSubmitAdminLogin" class="btn-modal-primary" onclick="submitLoginAdmin()">Masuk Mode Admin</button>
+            `;
+            document.getElementById("previewModal").classList.add("show");
+        }
+
+        function submitLoginAdmin() {
+            const userInput = document.getElementById("adminLoginUser");
+            const passInput = document.getElementById("adminLoginPass");
+            const errEl = document.getElementById("adminLoginError");
+            const btnEl = document.getElementById("btnSubmitAdminLogin");
+
+            const username = userInput ? userInput.value.trim() : "";
+            const password = passInput ? passInput.value.trim() : "";
+
+            if (!username || !password) {
+                if (errEl) errEl.innerText = "Username dan password wajib diisi.";
+                return;
+            }
+
+            if (btnEl) {
+                btnEl.disabled = true;
+                btnEl.innerText = "Memverifikasi...";
+            }
+            if (errEl) errEl.innerText = "";
+
+            fetch(API, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ action: "loginAdminLog", username: username, password: password })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (!res.status) {
+                    if (btnEl) {
+                        btnEl.disabled = false;
+                        btnEl.innerText = "Masuk Mode Admin";
+                    }
+                    if (errEl) errEl.innerText = res.pesan || "Login gagal.";
+                    return;
+                }
+
+                sessionStorage.setItem("mmbc_padang_admin_user", username);
+                sessionStorage.setItem("mmbc_padang_admin_pass", password);
+                sessionStorage.setItem("mmbc_padang_admin_nama", res.namaAdmin || username);
+
+                updateAdminToolbarUI();
+                tutupPreviewModal();
+
+                const kw = document.getElementById("searchLog").value.trim();
+                if (kw !== "") {
+                    filterTabelLog();
+                } else {
+                    loadLogHarian();
+                }
+            })
+            .catch(() => {
+                if (btnEl) {
+                    btnEl.disabled = false;
+                    btnEl.innerText = "Masuk Mode Admin";
+                }
+                if (errEl) errEl.innerText = "Gagal menghubungi server.";
+            });
+        }
+
+        function logoutAdminLog() {
+            sessionStorage.removeItem("mmbc_padang_admin_user");
+            sessionStorage.removeItem("mmbc_padang_admin_pass");
+            sessionStorage.removeItem("mmbc_padang_admin_nama");
+            updateAdminToolbarUI();
+
+            const kw = document.getElementById("searchLog").value.trim();
+            if (kw !== "") {
+                filterTabelLog();
+            } else {
+                loadLogHarian();
+            }
+        }
+
+        function bukaModalPrivasi(namaStaf) {
+            document.getElementById("previewModalBody").innerHTML = `
+                <div style="font-size:34px; margin-bottom:8px;">🔒</div>
+                <h3 style="font-size:16px; margin-bottom:8px;">Foto Selfie Terkunci</h3>
+                <p style="font-size:13px; color:#475569; line-height:1.5; margin-bottom:16px;">
+                    Untuk menjaga privasi masing-masing staf, foto selfie <b>${escapeHtml(namaStaf)}</b> hanya dapat dilihat oleh Admin di dalam aplikasi.
+                </p>
+                <button type="button" class="btn-modal-primary" onclick="bukaFormLoginAdmin()">🔐 Login sebagai Admin</button>
+            `;
+            document.getElementById("previewModal").classList.add("show");
+        }
+
+        function bukaModalFotoAdmin(imgUrl, namaStaf, jamMasuk, lokasi) {
+            document.getElementById("previewModalBody").innerHTML = `
+                <h3 style="font-size:16px; margin-bottom:2px;">${escapeHtml(namaStaf)}</h3>
+                <p style="font-size:12px; color:#64748b; margin-bottom:12px;">Masuk: ${escapeHtml(jamMasuk)} • ${escapeHtml(lokasi)}</p>
+                <img src="${escapeAttr(imgUrl)}" alt="Selfie ${escapeAttr(namaStaf)}" style="width:100%; max-height:380px; object-fit:contain; border-radius:14px; border:1px solid #e2e8f0; background:#f8fafc;">
+            `;
+            document.getElementById("previewModal").classList.add("show");
+        }
+
+        function tutupPreviewModal(event) {
+            if (!event || event.target.id === "previewModal") {
+                document.getElementById("previewModal").classList.remove("show");
+            }
+        }
+
+        function escapeHtml(str) {
+            return String(str || "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;");
+        }
+
+        function escapeAttr(str) {
+            return escapeHtml(str).replace(/'/g, "&#39;");
+        }
 
         function updateClock(){
             const now = new Date();
@@ -387,6 +588,7 @@
         }
         setInterval(updateClock, 1000);
         updateClock();
+        updateAdminToolbarUI();
 
         function switchTab(tabName, btn) {
             document.querySelectorAll('.tab-page').forEach(el => el.classList.remove('active-page'));
@@ -399,6 +601,7 @@
                 loadJadwalKerja();
             } else if(tabName === 'log') {
                 document.getElementById('logPage').classList.add('active-page');
+                updateAdminToolbarUI();
                 loadLogHarian();
             }
             btn.classList.add('active');
@@ -493,11 +696,9 @@
                 overlay.style.display = "none";
 
                 if (res.tipeAbsen === "PULANG") {
-                    // ABSEN PULANG: Langsung simpan tanpa selfie (sesuai permintaan)
                     isSubmitting = false;
                     prosesAbsenLangsung(idStaff, "", selectedLokasi);
                 } else {
-                    // ABSEN MASUK: Membuka kamera selfie
                     isSubmitting = false;
                     document.getElementById("selfieStaffName").innerText = "👤 " + activeStaffName;
                     const modal = document.getElementById("selfieModal");
@@ -874,21 +1075,28 @@
             renderJadwalTable([header1, header2, ...filteredBody], "Hasil Pencarian");
         }
 
-        let searchLogTimer = null;
-
         function loadLogHarian() {
             const container = document.getElementById('logContent');
             container.innerHTML = "<div style='text-align:center; padding:20px; color:#64748b;'>Memuat log absensi hari ini...</div>";
+            const sess = getAdminSession();
 
             fetch(API, {
                 method: "POST",
                 headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({ action: "getLogHarian" })
+                body: JSON.stringify({
+                    action: "getLogHarian",
+                    username: sess.username,
+                    password: sess.password
+                })
             })
             .then(r => r.json())
             .then(res => {
                 if (!res.status) {
                     container.innerHTML = `<div style='text-align:center; padding:20px; color:#dc2626;'>${res.pesan}</div>`;
+                    return;
+                }
+                if (res.isAdmin === false && sess.username) {
+                    logoutAdminLog();
                     return;
                 }
                 
@@ -929,9 +1137,10 @@
             const container = document.getElementById('logContent');
             let html = '<table class="rekap-table" id="tabelLogIsi">';
             
-            // Saat mode pencarian bulan berjalan, ada kolom TANGGAL di indeks 2
             const colFotoIdx = isModePencarian ? 6 : 5;
             const colHasilIdx = isModePencarian ? 7 : 6;
+            const sess = getAdminSession();
+            const isAdminLoggedIn = Boolean(sess.username && sess.password);
 
             rows.forEach((row, idx) => {
                 html += '<tr>';
@@ -944,7 +1153,7 @@
                         let badgeStyleClass = "badge-log-cell"; 
 
                         if (colIdx === 1) {
-                            cellContent = `<span class="badge-log-cell">${cellContent}</span>`;
+                            cellContent = `<span class="badge-log-cell">${escapeHtml(cellContent)}</span>`;
                         }
 
                         if (colIdx === colHasilIdx) {
@@ -958,17 +1167,23 @@
                         }
 
                         if (cellContent !== "" && colIdx !== 0 && colIdx !== 1 && colIdx !== colFotoIdx) {
-                            cellContent = `<span class="${badgeStyleClass}">${cellContent}</span>`;
+                            cellContent = `<span class="${badgeStyleClass}">${escapeHtml(cellContent)}</span>`;
                         }
                     }
 
-                    if (idx > 0 && colIdx === colFotoIdx && cellContent !== '') {
-                        let match = cellContent.match(/[-\w]{25,}/);
-                        if (match) {
-                            let imgUrl = "https://lh3.googleusercontent.com/d/" + match[0];
-                            cellContent = `<a href="${cellContent}" target="_blank"><img src="${imgUrl}" style="width:36px; height:36px; border-radius:50%; object-fit:cover; border:1px solid #cbd5e1; box-shadow:0 2px 4px rgba(0,0,0,0.1);" title="Klik untuk lihat foto asli"></a>`;
-                        } else if (cellContent.startsWith("http")) {
-                            cellContent = `<a href="${cellContent}" target="_blank" style="color:#2563eb; text-decoration:underline;">Lihat Foto</a>`;
+                    if (idx > 0 && colIdx === colFotoIdx) {
+                        const namaStafPolos = String(row[1] || "Staf").trim();
+                        const jamMasukPolos = String(row[isModePencarian ? 3 : 2] || "-").trim();
+                        const lokasiPolos = String(row[isModePencarian ? 5 : 4] || "-").trim();
+
+                        if (!isAdminLoggedIn || cellContent === "LOCKED") {
+                            cellContent = `<button type="button" class="btn-privasi-lock" onclick="bukaModalPrivasi('${escapeAttr(namaStafPolos)}')">🔒 Privat</button>`;
+                        } else if (cellContent !== "") {
+                            let match = cellContent.match(/[-\w]{25,}/);
+                            let imgUrl = match ? ("https://lh3.googleusercontent.com/d/" + match[0]) : cellContent;
+                            cellContent = `<img src="${escapeAttr(imgUrl)}" onclick="bukaModalFotoAdmin('${escapeAttr(imgUrl)}', '${escapeAttr(namaStafPolos)}', '${escapeAttr(jamMasukPolos)}', '${escapeAttr(lokasiPolos)}')" style="width:36px; height:36px; border-radius:50%; object-fit:cover; border:1px solid #cbd5e1; box-shadow:0 2px 4px rgba(0,0,0,0.1); cursor:pointer;" title="Klik untuk buka foto di aplikasi">`;
+                        } else {
+                            cellContent = `<span style="color:#94a3b8; font-size:11px;">-</span>`;
                         }
                     }
 
@@ -984,7 +1199,6 @@
             const keyword = document.getElementById('searchLog').value.trim();
             clearTimeout(searchLogTimer);
 
-            // Jika input pencarian dikosongkan, kembali tampilkan log hari ini
             if (keyword === "") {
                 if (rawLogData.length > 0) {
                     renderLogTable(rawLogData, false);
@@ -994,15 +1208,20 @@
                 return;
             }
 
-            // Tunggu 400ms setelah user selesai mengetik baru panggil server
             searchLogTimer = setTimeout(() => {
                 const container = document.getElementById('logContent');
-                container.innerHTML = `<div style='text-align:center; padding:20px; color:#64748b;'>🔍 Mencari riwayat "${keyword}" bulan ini...</div>`;
+                container.innerHTML = `<div style='text-align:center; padding:20px; color:#64748b;'>🔍 Mencari riwayat "${escapeHtml(keyword)}" bulan ini...</div>`;
+                const sess = getAdminSession();
 
                 fetch(API, {
                     method: "POST",
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({ action: "cariRiwayatBulanIni", keyword: keyword })
+                    body: JSON.stringify({
+                        action: "cariRiwayatBulanIni",
+                        keyword: keyword,
+                        username: sess.username,
+                        password: sess.password
+                    })
                 })
                 .then(r => r.json())
                 .then(res => {
@@ -1013,7 +1232,7 @@
 
                     let rows = res.data;
                     if (!rows || rows.length <= 1) {
-                        container.innerHTML = `<div style='text-align:center; padding:20px; color:#64748b;'>Tidak ditemukan riwayat absensi "${keyword}" pada bulan ini.</div>`;
+                        container.innerHTML = `<div style='text-align:center; padding:20px; color:#64748b;'>Tidak ditemukan riwayat absensi "${escapeHtml(keyword)}" pada bulan ini.</div>`;
                         return;
                     }
 
