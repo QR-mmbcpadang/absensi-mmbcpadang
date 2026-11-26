@@ -874,6 +874,8 @@
             renderJadwalTable([header1, header2, ...filteredBody], "Hasil Pencarian");
         }
 
+        let searchLogTimer = null;
+
         function loadLogHarian() {
             const container = document.getElementById('logContent');
             container.innerHTML = "<div style='text-align:center; padding:20px; color:#64748b;'>Memuat log absensi hari ini...</div>";
@@ -916,16 +918,21 @@
                     return newRow;
                 });
 
-                renderLogTable(rawLogData);
+                renderLogTable(rawLogData, false);
             })
             .catch(err => {
                 container.innerHTML = "<div style='text-align:center; padding:20px; color:#dc2626;'>Gagal memuat log harian.</div>";
             });
         }
 
-        function renderLogTable(rows) {
+        function renderLogTable(rows, isModePencarian = false) {
             const container = document.getElementById('logContent');
             let html = '<table class="rekap-table" id="tabelLogIsi">';
+            
+            // Saat mode pencarian bulan berjalan, ada kolom TANGGAL di indeks 2
+            const colFotoIdx = isModePencarian ? 6 : 5;
+            const colHasilIdx = isModePencarian ? 7 : 6;
+
             rows.forEach((row, idx) => {
                 html += '<tr>';
                 row.forEach((cell, colIdx) => {
@@ -940,7 +947,7 @@
                             cellContent = `<span class="badge-log-cell">${cellContent}</span>`;
                         }
 
-                        if (colIdx === 6) {
+                        if (colIdx === colHasilIdx) {
                             if (upper.includes("TERLAMBAT") || upper.includes("TLT")) {
                                 badgeStyleClass = "badge-ket-terlambat";
                             } else if (upper.includes("TIDAK") || upper.includes("PULANG ❌") || upper.includes("❌")) {
@@ -950,12 +957,12 @@
                             }
                         }
 
-                        if (cellContent !== "" && colIdx !== 0 && colIdx !== 1 && colIdx !== 5) {
+                        if (cellContent !== "" && colIdx !== 0 && colIdx !== 1 && colIdx !== colFotoIdx) {
                             cellContent = `<span class="${badgeStyleClass}">${cellContent}</span>`;
                         }
                     }
 
-                    if (idx > 0 && colIdx === 5 && cellContent !== '') {
+                    if (idx > 0 && colIdx === colFotoIdx && cellContent !== '') {
                         let match = cellContent.match(/[-\w]{25,}/);
                         if (match) {
                             let imgUrl = "https://lh3.googleusercontent.com/d/" + match[0];
@@ -974,17 +981,63 @@
         }
 
         function filterTabelLog() {
-            const keyword = document.getElementById('searchLog').value.toLowerCase();
-            if (rawLogData.length === 0) return;
+            const keyword = document.getElementById('searchLog').value.trim();
+            clearTimeout(searchLogTimer);
 
-            let header = rawLogData[0];
-            let bodyRows = rawLogData.slice(1);
+            // Jika input pencarian dikosongkan, kembali tampilkan log hari ini
+            if (keyword === "") {
+                if (rawLogData.length > 0) {
+                    renderLogTable(rawLogData, false);
+                } else {
+                    loadLogHarian();
+                }
+                return;
+            }
 
-            let filteredBody = bodyRows.filter(row => {
-                return row.some(cell => String(cell).toLowerCase().includes(keyword));
-            });
+            // Tunggu 400ms setelah user selesai mengetik baru panggil server
+            searchLogTimer = setTimeout(() => {
+                const container = document.getElementById('logContent');
+                container.innerHTML = `<div style='text-align:center; padding:20px; color:#64748b;'>🔍 Mencari riwayat "${keyword}" bulan ini...</div>`;
 
-            renderLogTable([header, ...filteredBody]);
+                fetch(API, {
+                    method: "POST",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify({ action: "cariRiwayatBulanIni", keyword: keyword })
+                })
+                .then(r => r.json())
+                .then(res => {
+                    if (!res.status) {
+                        container.innerHTML = `<div style='text-align:center; padding:20px; color:#dc2626;'>${res.pesan}</div>`;
+                        return;
+                    }
+
+                    let rows = res.data;
+                    if (!rows || rows.length <= 1) {
+                        container.innerHTML = `<div style='text-align:center; padding:20px; color:#64748b;'>Tidak ditemukan riwayat absensi "${keyword}" pada bulan ini.</div>`;
+                        return;
+                    }
+
+                    let formattedRows = rows.map((row, index) => {
+                        let tanggal = row[0] || "-";
+                        let namaStaff = row[2] || "-";
+                        let masuk = row[3] || "-";
+                        let pulang = (row[4] && row[4] !== "") ? row[4] : "-";
+                        let lokasi = row[5] || "-";
+                        let foto = row[6] || "";
+                        let hasil = row[8] || "-";
+
+                        if (index === 0) {
+                            return ["No", "Nama Staff", "Tanggal", "MASUK", "PULANG", "KETERANGAN", "FOTO SELFI", "Hasil"];
+                        }
+                        return [index, namaStaff, tanggal, masuk, pulang, lokasi, foto, hasil];
+                    });
+
+                    renderLogTable(formattedRows, true);
+                })
+                .catch(err => {
+                    container.innerHTML = "<div style='text-align:center; padding:20px; color:#dc2626;'>Gagal mencari riwayat bulan ini.</div>";
+                });
+            }, 400);
         }
     </script>
 </body>
